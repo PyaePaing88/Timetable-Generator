@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="600.0" minWidth="1000.0"
+            prefHeight="600.0" prefWidth="1000.0"
+            stylesheets="@../style/styles.css" styleClass="body"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.timetablegenerator.controller.mainLayoutController">
+
+    <top>
+        <HBox fx:id="header" spacing="15" alignment="CENTER_LEFT" styleClass="main-header">
+            <Label text="Timetable Generator" styleClass="main-logo"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="nameLabel" text="Admin" styleClass="main-username"/>
+            <Button text="Logout" onAction="#onLogout" styleClass="btn-logout"/>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox fx:id="sidebar" spacing="5" styleClass="sidebar">
+            <Button text="Dashboard" onAction="#showDashboard" styleClass="menu-btn"/>
+            <Button text="Professor" onAction="#showUser" styleClass="menu-btn"/>
+            <Button text="Department" onAction="#showDepartments" styleClass="menu-btn"/>
+            <Button text="Class" onAction="#showClasses" styleClass="menu-btn"/>
+            <Button text="Course" onAction="#showCourse" styleClass="menu-btn"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" styleClass="main-content"/>
+    </center>
+
+</BorderPane>

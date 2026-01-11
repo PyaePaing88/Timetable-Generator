@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" prefWidth="450" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timetablegenerator.controller.user.userEditController">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label text="Edit User Information" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+
+        <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Phone:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="phoneField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Role:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="roleComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="200"/>
+
+        <Label text="Options:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <HBox spacing="20" GridPane.rowIndex="4" GridPane.columnIndex="1">
+            <CheckBox fx:id="activeCheckBox" text="Is Active"/>
+            <CheckBox fx:id="changePassCheckBox" text="Force Password Change"/>
+        </HBox>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel"/>
+        <Button text="Save Changes" onAction="#handleSave" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+</VBox>

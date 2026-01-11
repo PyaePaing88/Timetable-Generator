@@ -1,0 +1,104 @@
+package com.timetablegenerator.repository;
+
+import com.timetablegenerator.model.classModel;
+import com.timetablegenerator.util.dbConnection;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class classRepo {
+    private final Connection connection;
+
+    public classRepo() {
+        this.connection = dbConnection.getConnection();
+    }
+
+    public void create(classModel clas) throws SQLException {
+        String sql = "INSERT INTO classes (class_name,department_id, is_delete, created_by, created_date) VALUES (?,?, ?, ?, ?)";
+        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+            st.setString(1, clas.getClass_name());
+            st.setInt(2,clas.getDepartment_id());
+            st.setBoolean(3, false);
+            st.setInt(4, clas.getCreated_by());
+            st.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            st.executeUpdate();
+        }
+    }
+
+    public int getTotalCount(String search) throws Exception {
+        String sql = "SELECT COUNT(*) FROM classes WHERE (class_name LIKE ?) AND is_delete = 0";
+        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+            st.setString(1, "%" + search + "%");
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    public List<classModel> findAll(int limit, int offset, String search) throws SQLException {
+        List<classModel> clas = new ArrayList<>();
+        String sql = "SELECT * FROM classes WHERE is_delete = false AND (class_name LIKE ?) LIMIT ? OFFSET ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, "%" + search + "%");
+            st.setInt(2, limit);
+            st.setInt(3, offset);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) { clas.add(mapResultSetToModel(rs)); }
+        }
+        return clas;
+    }
+
+    public List<classModel> findAllForCombo() throws SQLException {
+        List<classModel> clas = new ArrayList<>();
+        String sql = "SELECT * FROM classes WHERE is_delete = false";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) { clas.add(mapResultSetToModel(rs)); }
+        }
+        return clas;
+    }
+
+    public void update(classModel clas) throws SQLException {
+        String sql = "UPDATE classes SET class_name=?, department_id=?, modify_by=?, modify_date=? WHERE id=?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, clas.getClass_name());
+            st.setInt(2,clas.getDepartment_id());
+            st.setInt(3, clas.getModify_by());
+            st.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            st.setInt(5, clas.getId());
+            st.executeUpdate();
+        }
+    }
+
+    public void softDelete(int id) throws SQLException {
+        String sql = "UPDATE classes SET is_delete = true WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            st.executeUpdate();
+        }
+    }
+
+    public classModel findById(int id) throws SQLException {
+        String sql = "SELECT * FROM classes WHERE id = ? AND is_delete = false";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) return mapResultSetToModel(rs);
+        }
+        return null;
+    }
+
+    private classModel mapResultSetToModel(ResultSet rs) throws SQLException {
+        classModel c = new classModel();
+        c.setId(rs.getInt("id"));
+        c.setClass_name(rs.getString("class_name"));
+        c.setDepartment_id(rs.getInt("department_id"));
+        c.setIs_delete(rs.getBoolean("is_delete"));
+        c.setCreated_by(rs.getInt("created_by"));
+        c.setCreated_date(rs.getTimestamp("created_date"));
+        c.setModify_by(rs.getInt("modify_by"));
+        c.setModify_date(rs.getTimestamp("modify_date"));
+        return c;
+    }
+}
