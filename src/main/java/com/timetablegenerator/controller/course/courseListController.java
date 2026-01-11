@@ -26,6 +26,7 @@ public class courseListController {
 
     @FXML private TableColumn<courseModel, Integer> colId;
     @FXML private TableColumn<courseModel, String> colName;
+    @FXML private TableColumn<courseModel, String> colDept;
     @FXML private TableColumn<courseModel, Void> colActions;
 
     private courseService service;
@@ -40,6 +41,9 @@ public class courseListController {
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCourse_name()));
+
+        colDept.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDepartment_name()));
 
         setupActionColumn();
 
@@ -174,6 +178,7 @@ public class courseListController {
             stage.setTitle("Course Details");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
             stage.showAndWait();
             handleSearch();
@@ -196,6 +201,7 @@ public class courseListController {
             stage.setTitle("Edit Class");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
             stage.showAndWait();
             handleSearch();

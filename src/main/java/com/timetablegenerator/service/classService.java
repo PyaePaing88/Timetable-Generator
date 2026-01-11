@@ -30,10 +30,14 @@ public class classService {
     }
 
     public void saveClass(classModel classes) throws Exception {
-        if (classes.getId() > 0) {
-            repo.update(classes);
-        } else {
+        if (classes.getId() == 0) {
+            boolean exists = repo.existsByNameAndDept(classes.getClass_name(), classes.getDepartment_id());
+            if (exists) {
+                throw new Exception("The class '" + classes.getClass_name() + "' already exists for this department.");
+            }
             repo.create(classes);
+        } else {
+            repo.update(classes);
         }
     }
 

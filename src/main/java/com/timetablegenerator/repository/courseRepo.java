@@ -37,7 +37,11 @@ public class courseRepo {
 
     public List<courseModel> findAll(int limit, int offset, String search) throws SQLException {
         List<courseModel> course = new ArrayList<>();
-        String sql = "SELECT * FROM courses WHERE is_delete = false AND (course_name LIKE ?) LIMIT ? OFFSET ?";
+        String sql = "SELECT c.*, d.department_name " +
+                "FROM courses c " +
+                "INNER JOIN departments d ON c.department_id = d.id " +
+                "WHERE c.is_delete = false AND (c.course_name LIKE ?) " +
+                "LIMIT ? OFFSET ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setInt(2, limit);
@@ -80,7 +84,9 @@ public class courseRepo {
     }
 
     public courseModel findById(int id) throws SQLException {
-        String sql = "SELECT * FROM courses WHERE id = ? AND is_delete = false";
+        String sql = "SELECT c.*, d.department_name FROM courses c " +
+                "INNER JOIN departments d ON c.department_id = d.id " +
+                "WHERE c.id = ? AND c.is_delete = false";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -94,6 +100,11 @@ public class courseRepo {
         c.setId(rs.getInt("id"));
         c.setCourse_name(rs.getString("course_name"));
         c.setDepartment_id(rs.getInt("department_id"));
+        try {
+            c.setDepartment_name(rs.getString("department_name"));
+        } catch (SQLException e) {
+            c.setDepartment_name("N/A");
+        }
         c.setIs_delete(rs.getBoolean("is_delete"));
         c.setCreated_by(rs.getInt("created_by"));
         c.setCreated_date(rs.getTimestamp("created_date"));

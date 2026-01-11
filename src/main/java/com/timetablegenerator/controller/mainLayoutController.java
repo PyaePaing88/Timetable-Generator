@@ -60,6 +60,16 @@ public class mainLayoutController {
         loadView("/view/course/courseList.fxml", event);
     }
 
+    @FXML
+    private void showTimeSlot(javafx.event.ActionEvent event) {
+        loadView("/view/TimeSlot/timeSlotList.fxml", event);
+    }
+
+    @FXML
+    private void showAcademicLevel(javafx.event.ActionEvent event) {
+        loadView("/view/academicLevel/academicLevelList.fxml", event);
+    }
+
     private void loadView(String fxml, javafx.event.ActionEvent event) {
         try {
             java.net.URL url = getClass().getResource(fxml);

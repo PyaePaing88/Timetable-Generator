@@ -22,6 +22,7 @@
                     <ComboBox fx:id="rowsPerPageCombo" prefWidth="80"/>
 
                     <Button text="Add New Class" onAction="#openCreateForm" styleClass="btn-primary"/>
+                    <Button text="Generate Class" onAction="#openGenerateForm" styleClass="btn-secondary"/>
                 </HBox>
             </children>
         </VBox>
@@ -35,7 +36,8 @@
                 <TableView fx:id="classTable" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colId" text="ID" prefWidth="40" />
-                        <TableColumn fx:id="colName" text="Name" prefWidth="150" />
+                        <TableColumn fx:id="colName" text="Class Name" prefWidth="150" />
+                        <TableColumn fx:id="colDept" text="Department Name" prefWidth="150" />
                         <TableColumn fx:id="colActions" text="Actions" prefWidth="100" />
                     </columns>
                 </TableView>

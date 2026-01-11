@@ -1,8 +1,8 @@
-package com.timetablegenerator.controller.classes;
+package com.timetablegenerator.controller.academicLevel;
 
-import com.timetablegenerator.model.classModel;
-import com.timetablegenerator.repository.classRepo;
-import com.timetablegenerator.service.classService;
+import com.timetablegenerator.model.academicLevelModel;
+import com.timetablegenerator.repository.academicLevelRepo;
+import com.timetablegenerator.service.academicLevelService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,35 +15,32 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-public class classListController {
+public class academicLevelListController {
 
     @FXML
-    private TableView<classModel> classTable;
+    private TableView<academicLevelModel> academicLevelTable;
     @FXML private TextField searchField;
     @FXML private Pagination pagination;
     @FXML private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<classModel, Integer> colId;
-    @FXML private TableColumn<classModel, String> colName;
-    @FXML private TableColumn<classModel, String> colDept;
-    @FXML private TableColumn<classModel, Void> colActions;
+    @FXML private TableColumn<academicLevelModel, Integer> colId;
+    @FXML private TableColumn<academicLevelModel, String> colName;
+    @FXML private TableColumn<academicLevelModel, Void> colActions;
 
-    private classService service;
+    private academicLevelService service;
 
     @FXML
     public void initialize() {
-        classRepo repo = new classRepo();
-        this.service = new classService(repo);
+        academicLevelRepo repo = new academicLevelRepo();
+        this.service = new academicLevelService(repo);
 
         colId.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
 
         colName.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClass_name()));
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getYear()));
 
-        colDept.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDepartment_name()));
 
         setupActionColumn();
 
@@ -65,9 +62,9 @@ public class classListController {
     private void loadTableData(int pageIndex) {
         try {
             String searchText = (searchField.getText() == null) ? "" : searchField.getText().trim();
-            List<classModel> classes = service.getClasses(pageIndex + 1, rowsPerPage, searchText);
+            List<academicLevelModel> al = service.getAcademicLevel(pageIndex + 1, rowsPerPage, searchText);
 
-            classTable.getItems().setAll(classes);
+            academicLevelTable.getItems().setAll(al);
 
         } catch (Exception e) {
             System.err.println("Error loading table data: " + e.getMessage());
@@ -78,7 +75,7 @@ public class classListController {
     private void updatePaginationCount() {
         try {
             String searchText = (searchField.getText() == null) ? "" : searchField.getText().trim();
-            int totalRecords = service.getTotalClassCount(searchText);
+            int totalRecords = service.getTotalAcademicLevelCount(searchText);
 
             int pageCount = (int) Math.ceil((double) totalRecords / rowsPerPage);
             if (pageCount <= 0) pageCount = 1;
@@ -112,18 +109,18 @@ public class classListController {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
 
                 viewItem.setOnAction(event -> {
-                    classModel classes = getTableView().getItems().get(getIndex());
-                    handleView(classes.getId());
+                    academicLevelModel al = getTableView().getItems().get(getIndex());
+                    handleView(al.getId());
                 });
 
                 editItem.setOnAction(event -> {
-                    classModel classes = getTableView().getItems().get(getIndex());
-                    handleEdit(classes.getId());
+                    academicLevelModel al = getTableView().getItems().get(getIndex());
+                    handleEdit(al.getId());
                 });
 
                 deleteItem.setOnAction(event -> {
-                    classModel classes = getTableView().getItems().get(getIndex());
-                    handleDelete(classes.getId());
+                    academicLevelModel al = getTableView().getItems().get(getIndex());
+                    handleDelete(al.getId());
                 });
             }
 
@@ -142,11 +139,11 @@ public class classListController {
     @FXML
     private void openCreateForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/class/classCreate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/academicLevel/academicLevelCreate.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
-            stage.setTitle("Create New Class");
+            stage.setTitle("Create New Academic Level");
 
             stage.initModality(Modality.APPLICATION_MODAL);
 
@@ -165,43 +162,17 @@ public class classListController {
         }
     }
 
-    @FXML
-    private void openGenerateForm() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/class/classGenerate.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Create New Class");
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            stage.initOwner(searchField.getScene().getWindow());
-
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-
-            stage.showAndWait();
-
-            handleSearch();
-
-        } catch (IOException e) {
-            System.err.println("Error loading Generate Form: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     private void handleView(int id) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/class/classDetail.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/academicLevel/academicLevelDetail.fxml"));
             Parent root = loader.load();
 
-            classDetailController controller = loader.getController();
+            academicLevelDetailController controller = loader.getController();
 
-            controller.loadClassData(id);
+            controller.loadAcademicLevel(id);
 
             Stage stage = new Stage();
-            stage.setTitle("Class Details");
+            stage.setTitle("Academic Level Details");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.setResizable(false);
@@ -210,21 +181,21 @@ public class classListController {
             handleSearch();
 
         } catch (IOException e) {
-            System.err.println("Error loading Class Detail View: " + e.getMessage());
+            System.err.println("Error loading Academic Level Detail View: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void handleEdit(int id) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/class/classEdit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/academicLevel/academicLevelEdit.fxml"));
             Parent root = loader.load();
 
-            classEditController controller = loader.getController();
-            controller.loadClassData(id);
+            academicLevelEditController controller = loader.getController();
+            controller.loadAcademicLevel(id);
 
             Stage stage = new Stage();
-            stage.setTitle("Edit Class");
+            stage.setTitle("Edit Department");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.setResizable(false);
@@ -238,11 +209,11 @@ public class classListController {
     }
 
     private void handleDelete(int id) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete this Class?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete this Academic Level?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 try {
-                    service.deleteClass(id);
+                    service.deleteAcademicLevel(id);
                     handleSearch();
                 } catch (Exception e) {
                     e.printStackTrace();

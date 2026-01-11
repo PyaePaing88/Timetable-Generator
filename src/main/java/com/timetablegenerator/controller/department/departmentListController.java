@@ -103,10 +103,11 @@ public class departmentListController {
             private final MenuButton actionMenu = new MenuButton("Options");
             private final MenuItem viewItem = new MenuItem("View More");
             private final MenuItem editItem = new MenuItem("Edit");
+            private final MenuItem addUser = new MenuItem("Add User");
             private final MenuItem deleteItem = new MenuItem("Delete");
 
             {
-                actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getItems().addAll(viewItem, editItem, addUser, deleteItem);
 
                 viewItem.setOnAction(event -> {
                     departmentModel dept = getTableView().getItems().get(getIndex());
@@ -116,6 +117,11 @@ public class departmentListController {
                 editItem.setOnAction(event -> {
                     departmentModel dept = getTableView().getItems().get(getIndex());
                     handleEdit(dept.getId());
+                });
+
+                addUser.setOnAction(event -> {
+                    departmentModel dept = getTableView().getItems().get(getIndex());
+                    handleAddUserToDepartment(dept.getId());
                 });
 
                 deleteItem.setOnAction(event -> {
@@ -175,6 +181,7 @@ public class departmentListController {
             stage.setTitle("department Details");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
             stage.showAndWait();
             handleSearch();
@@ -197,11 +204,35 @@ public class departmentListController {
             stage.setTitle("Edit Department");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
             stage.showAndWait();
             handleSearch();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleAddUserToDepartment(int id) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/department/addUserToDepartment.fxml"));
+            Parent root = loader.load();
+
+            addUserToDeptController controller = loader.getController();
+            controller.loadDepartmentUser(id);
+
+            Stage stage = new Stage();
+            stage.setTitle("Add User To Department");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+
+            stage.showAndWait();
+            handleSearch();
+
+        } catch (IOException e) {
+            System.err.println("Error loading Add User to Department View: " + e.getMessage());
             e.printStackTrace();
         }
     }

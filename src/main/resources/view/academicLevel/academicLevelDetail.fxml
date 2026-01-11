@@ -7,9 +7,9 @@
 <VBox spacing="20.0"
       prefWidth="500.0" style="-fx-background-color: white;"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.timetablegenerator.controller.course.courseDetailController">
+      fx:controller="com.timetablegenerator.controller.academicLevel.academicLevelDetailController">
     <children>
-        <Label text="Course Details">
+        <Label text="Academic Level Details">
             <font><Font name="System Bold" size="18.0" /></font>
         </Label>
         <Separator />
@@ -19,14 +19,11 @@
                 <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
             </columnConstraints>
             <children>
-                <Label text="Class ID:" GridPane.rowIndex="0" />
+                <Label text="ID:" GridPane.rowIndex="0" />
                 <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Full Name:" GridPane.rowIndex="1" />
+                <Label text="Year:" GridPane.rowIndex="1" />
                 <TextField fx:id="txtName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                <Label text="Full Name:" GridPane.rowIndex="2" />
-                <TextField fx:id="txtDepartment" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
         <HBox alignment="CENTER_RIGHT">

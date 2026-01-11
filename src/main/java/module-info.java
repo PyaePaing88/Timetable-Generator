@@ -12,4 +12,6 @@ module com.timetablegenerator {
     opens com.timetablegenerator.controller.department to javafx.fxml;
     opens com.timetablegenerator.controller.classes to javafx.fxml;
     opens com.timetablegenerator.controller.course to javafx.fxml;
+    opens com.timetablegenerator.controller.academicLevel to javafx.fxml;
+
 }

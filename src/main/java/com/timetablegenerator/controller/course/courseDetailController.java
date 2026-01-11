@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class courseDetailController {
     @FXML
-    private TextField txtId, txtName;
+    private TextField txtId, txtName, txtDepartment;
 
     private courseService service = new courseService(new courseRepo());
 
@@ -19,6 +19,7 @@ public class courseDetailController {
             if (course != null) {
                 txtId.setText(String.valueOf(course.getId()));
                 txtName.setText(course.getCourse_name());
+                txtDepartment.setText(course.getDepartment_name());
             }
         } catch (Exception e) {
             e.printStackTrace();

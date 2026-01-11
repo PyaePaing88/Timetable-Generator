@@ -57,6 +57,27 @@ public class userRepo {
         return users;
     }
 
+    public List<userModel> findAllForDept() throws SQLException {
+        List<userModel> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE is_delete = false AND is_active = true AND role='professor' AND department_id=0";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) { users.add(mapResultSetToModel(rs)); }
+        }
+        return users;
+    }
+
+    public List<userModel> findAllByDeptId(int id) throws SQLException {
+        List<userModel> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE department_id = ? AND is_delete = false AND is_active=true AND role='professor'";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) { users.add(mapResultSetToModel(rs)); }
+        }
+        return users;
+    }
+
     public void update(userModel user) throws SQLException {
         String sql = "UPDATE users SET name=?, phone=?, email=?, department_id=?, role=?, is_active=?, modify_by=?, modify_date=? WHERE id=?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {

@@ -24,10 +24,12 @@
     <left>
         <VBox fx:id="sidebar" spacing="5" styleClass="sidebar">
             <Button text="Dashboard" onAction="#showDashboard" styleClass="menu-btn"/>
-            <Button text="Professor" onAction="#showUser" styleClass="menu-btn"/>
+            <Button text="User" onAction="#showUser" styleClass="menu-btn"/>
             <Button text="Department" onAction="#showDepartments" styleClass="menu-btn"/>
             <Button text="Class" onAction="#showClasses" styleClass="menu-btn"/>
             <Button text="Course" onAction="#showCourse" styleClass="menu-btn"/>
+            <Button text="Time Slot" onAction="#showTimeSlot" styleClass="menu-btn"/>
+            <Button text="Academic Level" onAction="#showAcademicLevel" styleClass="menu-btn"/>
         </VBox>
     </left>
 

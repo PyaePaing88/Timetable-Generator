@@ -26,6 +26,14 @@ public class userService {
         return repo.findById(id);
     }
 
+    public List<userModel> getUsersForDept() throws Exception {
+        return repo.findAllForDept();
+    }
+
+    public List<userModel> getUserByDepartmentId(int id) throws Exception {
+        return repo.findAllByDeptId(id);
+    }
+
     public void saveUser(userModel user) throws Exception {
         if (user.getId() > 0) {
             repo.update(user);

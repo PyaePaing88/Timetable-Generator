@@ -190,6 +190,7 @@ public class userListController {
             stage.setTitle("User Details");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
             stage.showAndWait();
             handleSearch();
@@ -213,6 +214,7 @@ public class userListController {
             stage.setTitle("User Edit");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
 
             stage.showAndWait();
             handleSearch();

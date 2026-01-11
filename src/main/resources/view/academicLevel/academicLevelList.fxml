@@ -7,21 +7,21 @@
             prefHeight="500.0" prefWidth="800.0"
             stylesheets="@../../style/styles.css" styleClass="body"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.timetablegenerator.controller.course.courseListController">
+            fx:controller="com.timetablegenerator.controller.academicLevel.academicLevelListController">
     <top>
         <VBox prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER" spacing="10">
             <padding>
                 <javafx.geometry.Insets top="20" right="20" bottom="10" left="20"/>
             </padding>
             <children>
-                <Label text="Course List" styleClass="content-header"/>
+                <Label text="Academic Level List" styleClass="content-header"/>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <TextField fx:id="searchField" prefWidth="300" promptText="Search..." onKeyReleased="#handleSearch"/>
 
                     <Label text="Rows:"/>
                     <ComboBox fx:id="rowsPerPageCombo" prefWidth="80"/>
 
-                    <Button text="Add New Class" onAction="#openCreateForm" styleClass="btn-primary"/>
+                    <Button text="Add New Department" onAction="#openCreateForm" styleClass="btn-primary"/>
                 </HBox>
             </children>
         </VBox>
@@ -32,11 +32,10 @@
                 <javafx.geometry.Insets top="0" right="20" bottom="20" left="20"/>
             </padding>
             <children>
-                <TableView fx:id="courseTable" VBox.vgrow="ALWAYS">
+                <TableView fx:id="academicLevelTable" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colId" text="ID" prefWidth="40" />
-                        <TableColumn fx:id="colName" text="Course Name" prefWidth="150" />
-                        <TableColumn fx:id="colDept" text="Department Name" prefWidth="150" />
+                        <TableColumn fx:id="colName" text="Year" prefWidth="150" />
                         <TableColumn fx:id="colActions" text="Actions" prefWidth="100" />
                     </columns>
                 </TableView>

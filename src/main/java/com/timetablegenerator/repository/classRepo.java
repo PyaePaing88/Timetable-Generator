@@ -1,6 +1,7 @@
 package com.timetablegenerator.repository;
 
 import com.timetablegenerator.model.classModel;
+import com.timetablegenerator.service.departmentService;
 import com.timetablegenerator.util.dbConnection;
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,9 +9,11 @@ import java.util.List;
 
 public class classRepo {
     private final Connection connection;
+    private departmentService deptService;
 
     public classRepo() {
         this.connection = dbConnection.getConnection();
+        this.deptService = new departmentService(new departmentRepo());
     }
 
     public void create(classModel clas) throws SQLException {
@@ -37,13 +40,20 @@ public class classRepo {
 
     public List<classModel> findAll(int limit, int offset, String search) throws SQLException {
         List<classModel> clas = new ArrayList<>();
-        String sql = "SELECT * FROM classes WHERE is_delete = false AND (class_name LIKE ?) LIMIT ? OFFSET ?";
+        String sql = "SELECT c.*, d.department_name " +
+                "FROM classes c " +
+                "INNER JOIN departments d ON c.department_id = d.id " +
+                "WHERE c.is_delete = false AND (c.class_name LIKE ?) " +
+                "LIMIT ? OFFSET ?";
+
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setInt(2, limit);
             st.setInt(3, offset);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { clas.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                clas.add(mapResultSetToModel(rs));
+            }
         }
         return clas;
     }
@@ -80,7 +90,9 @@ public class classRepo {
     }
 
     public classModel findById(int id) throws SQLException {
-        String sql = "SELECT * FROM classes WHERE id = ? AND is_delete = false";
+        String sql = "SELECT c.*, d.department_name FROM classes c " +
+                "INNER JOIN departments d ON c.department_id = d.id " +
+                "WHERE c.id = ? AND c.is_delete = false";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -89,11 +101,31 @@ public class classRepo {
         return null;
     }
 
+    public boolean existsByNameAndDept(String name, int deptId) {
+        String sql = "SELECT 1 FROM classes WHERE class_name = ? AND department_id = ? AND is_delete = 0 LIMIT 1";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, name);
+            st.setInt(2, deptId);
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private classModel mapResultSetToModel(ResultSet rs) throws SQLException {
         classModel c = new classModel();
         c.setId(rs.getInt("id"));
         c.setClass_name(rs.getString("class_name"));
         c.setDepartment_id(rs.getInt("department_id"));
+        try {
+            c.setDepartment_name(rs.getString("department_name"));
+        } catch (SQLException e) {
+            c.setDepartment_name("N/A");
+        }
         c.setIs_delete(rs.getBoolean("is_delete"));
         c.setCreated_by(rs.getInt("created_by"));
         c.setCreated_date(rs.getTimestamp("created_date"));
