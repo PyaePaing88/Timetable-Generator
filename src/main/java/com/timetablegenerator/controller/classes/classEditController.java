@@ -18,13 +18,12 @@ import java.sql.Timestamp;
 
 public class classEditController {
 
-    @FXML
-    private TextField nameField;
+    @FXML private TextField nameField;
     @FXML private ComboBox<departmentModel> deptComboBox;
 
-    private classService service;
+    private final classService service;
+    private final departmentService deptService;
     private classModel currentClass;
-    private departmentService deptService;
 
     public classEditController() {
         this.service = new classService(new classRepo());
@@ -34,7 +33,7 @@ public class classEditController {
     @FXML
     public void initialize() {
         try {
-            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getDepartmentsForCombo()));
+            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getMajorDepartments()));
 
             deptComboBox.setConverter(new StringConverter<departmentModel>() {
                 @Override

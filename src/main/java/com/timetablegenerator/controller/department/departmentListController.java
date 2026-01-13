@@ -11,14 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.List;
 
 public class departmentListController {
 
-    @FXML
-    private TableView<departmentModel> departmentTable;
+    @FXML private TableView<departmentModel> departmentTable;
     @FXML private TextField searchField;
     @FXML private Pagination pagination;
     @FXML private ComboBox<Integer> rowsPerPageCombo;
@@ -26,6 +24,7 @@ public class departmentListController {
 
     @FXML private TableColumn<departmentModel, Integer> colId;
     @FXML private TableColumn<departmentModel, String> colName;
+    @FXML private TableColumn<departmentModel, String> colMinor;
     @FXML private TableColumn<departmentModel, Void> colActions;
 
     private departmentService service;
@@ -40,6 +39,10 @@ public class departmentListController {
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDepartment_name()));
+
+        colMinor.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().isIs_minor() ? "Minor" : "Major"));
 
 
         setupActionColumn();

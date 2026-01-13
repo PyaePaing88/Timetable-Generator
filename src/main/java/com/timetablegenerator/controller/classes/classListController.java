@@ -17,8 +17,7 @@ import java.util.List;
 
 public class classListController {
 
-    @FXML
-    private TableView<classModel> classTable;
+    @FXML private TableView<classModel> classTable;
     @FXML private TextField searchField;
     @FXML private Pagination pagination;
     @FXML private ComboBox<Integer> rowsPerPageCombo;

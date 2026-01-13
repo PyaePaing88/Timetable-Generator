@@ -8,8 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class addUserToDeptController {
@@ -20,11 +18,11 @@ public class addUserToDeptController {
     @FXML private TableView<userModel> deptUsersTable;
     @FXML private TableColumn<userModel, String> colDeptUserName;
 
-    private userService service;
+    private final userService service;
     private int currentDeptId;
 
-    private ObservableList<userModel> availableUsers = FXCollections.observableArrayList();
-    private ObservableList<userModel> assignedUsers = FXCollections.observableArrayList();
+    private final ObservableList<userModel> availableUsers = FXCollections.observableArrayList();
+    private final ObservableList<userModel> assignedUsers = FXCollections.observableArrayList();
 
     public addUserToDeptController() {
         this.service = new userService(new userRepo());

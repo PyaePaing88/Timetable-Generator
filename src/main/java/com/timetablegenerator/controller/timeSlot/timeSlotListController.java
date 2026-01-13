@@ -1,8 +1,8 @@
-package com.timetablegenerator.controller.course;
+package com.timetablegenerator.controller.timeSlot;
 
-import com.timetablegenerator.model.courseModel;
-import com.timetablegenerator.repository.courseRepo;
-import com.timetablegenerator.service.courseService;
+import com.timetablegenerator.model.timeSlotModel;
+import com.timetablegenerator.repository.timeSlotRepo;
+import com.timetablegenerator.service.timeSlotService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,34 +15,43 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-public class courseListController {
+public class timeSlotListController {
 
-    @FXML private TableView<courseModel> courseTable;
+    @FXML private TableView<timeSlotModel> userTable;
     @FXML private TextField searchField;
     @FXML private Pagination pagination;
     @FXML private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<courseModel, Integer> colId;
-    @FXML private TableColumn<courseModel, String> colName;
-    @FXML private TableColumn<courseModel, String> colDept;
-    @FXML private TableColumn<courseModel, Void> colActions;
+    @FXML private TableColumn<timeSlotModel, Integer> colId;
+    @FXML private TableColumn<timeSlotModel, String> colDay;
+    @FXML private TableColumn<timeSlotModel, String> colPeriod;
+    @FXML private TableColumn<timeSlotModel, String> colStartTime;
+    @FXML private TableColumn<timeSlotModel, String> colEndTime;
+    @FXML private TableColumn<timeSlotModel, Void> colActions;
 
-    private courseService service;
+    private timeSlotService service;
 
     @FXML
     public void initialize() {
-        courseRepo repo = new courseRepo();
-        this.service = new courseService(repo);
+        timeSlotRepo repo = new timeSlotRepo();
+        this.service = new timeSlotService(repo);
 
         colId.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
 
-        colName.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCourse_name()));
+        colDay.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().getDay_of_week() != null ? cellData.getValue().getDay_of_week().name() : ""));
 
-        colDept.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDepartment_name()));
+        colPeriod.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getPeriod())));
+
+        colStartTime.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getStart_time())));
+
+        colEndTime.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getEnd_time())));
 
         setupActionColumn();
 
@@ -64,9 +73,9 @@ public class courseListController {
     private void loadTableData(int pageIndex) {
         try {
             String searchText = (searchField.getText() == null) ? "" : searchField.getText().trim();
-            List<courseModel> course = service.getCourses(pageIndex + 1, rowsPerPage, searchText);
+            List<timeSlotModel> time = service.getTimeSlot(pageIndex + 1, rowsPerPage, searchText);
 
-            courseTable.getItems().setAll(course);
+            userTable.getItems().setAll(time);
 
         } catch (Exception e) {
             System.err.println("Error loading table data: " + e.getMessage());
@@ -77,7 +86,7 @@ public class courseListController {
     private void updatePaginationCount() {
         try {
             String searchText = (searchField.getText() == null) ? "" : searchField.getText().trim();
-            int totalRecords = service.getTotalCourseCount(searchText);
+            int totalRecords = service.getTotalTimeSlotCount(searchText);
 
             int pageCount = (int) Math.ceil((double) totalRecords / rowsPerPage);
             if (pageCount <= 0) pageCount = 1;
@@ -111,18 +120,18 @@ public class courseListController {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
 
                 viewItem.setOnAction(event -> {
-                    courseModel course = getTableView().getItems().get(getIndex());
-                    handleView(course.getId());
+                    timeSlotModel time = getTableView().getItems().get(getIndex());
+                    handleView(time.getId());
                 });
 
                 editItem.setOnAction(event -> {
-                    courseModel course = getTableView().getItems().get(getIndex());
-                    handleEdit(course.getId());
+                    timeSlotModel time = getTableView().getItems().get(getIndex());
+                    handleEdit(time.getId());
                 });
 
                 deleteItem.setOnAction(event -> {
-                    courseModel course = getTableView().getItems().get(getIndex());
-                    handleDelete(course.getId());
+                    timeSlotModel time = getTableView().getItems().get(getIndex());
+                    handleDelete(time.getId());
                 });
             }
 
@@ -141,11 +150,11 @@ public class courseListController {
     @FXML
     private void openCreateForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/course/courseCreate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timeSlot/timeSlotCreate.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
-            stage.setTitle("Create New Course");
+            stage.setTitle("Create New Time Slot");
 
             stage.initModality(Modality.APPLICATION_MODAL);
 
@@ -166,15 +175,15 @@ public class courseListController {
 
     private void handleView(int id) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/course/courseDetail.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timeSlot/timeSlotDetail.fxml"));
             Parent root = loader.load();
 
-            courseDetailController controller = loader.getController();
+            timeSlotDetailController controller = loader.getController();
 
-            controller.loadCourseData(id);
+            controller.loadTimeSlotData(id);
 
             Stage stage = new Stage();
-            stage.setTitle("Course Details");
+            stage.setTitle("Time Slot Details");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.setResizable(false);
@@ -183,21 +192,22 @@ public class courseListController {
             handleSearch();
 
         } catch (IOException e) {
-            System.err.println("Error loading Course Detail View: " + e.getMessage());
+            System.err.println("Error loading Time Slot Detail View: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void handleEdit(int id) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/course/courseEdit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timeSlot/timeSlotEdit.fxml"));
             Parent root = loader.load();
 
-            courseEditController controller = loader.getController();
-            controller.loadCourseData(id);
+            timeSlotEditController controller = loader.getController();
+
+            controller.loadTimeSlotData(id);
 
             Stage stage = new Stage();
-            stage.setTitle("Edit Class");
+            stage.setTitle("Time Slot Edit");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.setResizable(false);
@@ -206,16 +216,17 @@ public class courseListController {
             handleSearch();
 
         } catch (IOException e) {
+            System.err.println("Error loading Time Slot Edit View: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void handleDelete(int id) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete this Course?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete this Time Slot?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 try {
-                    service.deleteCourse(id);
+                    service.deleteTimeSlot(id);
                     handleSearch();
                 } catch (Exception e) {
                     e.printStackTrace();

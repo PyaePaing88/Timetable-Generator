@@ -19,11 +19,14 @@
                 <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
             </columnConstraints>
             <children>
-                <Label text="Class ID:" GridPane.rowIndex="0" />
+                <Label text="Class ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                 <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Full Name:" GridPane.rowIndex="1" />
+                <Label text="Full Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                 <TextField fx:id="txtName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Is Minor:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <CheckBox fx:id="minorCheckBox" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
         <HBox alignment="CENTER_RIGHT">

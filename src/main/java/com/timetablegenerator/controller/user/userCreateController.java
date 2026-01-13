@@ -17,7 +17,7 @@ public class userCreateController {
     @FXML private CheckBox activeCheckBox, changePassCheckBox;
     @FXML private ComboBox<role> roleComboBox;
 
-    private userService service;
+    private final userService service;
 
     public userCreateController() {
         this.service = new userService(new userRepo());

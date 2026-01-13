@@ -9,10 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class userDetailController {
+
     @FXML private TextField txtId, txtName, txtEmail, txtPhone, txtRole, txtStatus;
     @FXML private CheckBox chkChangePassword;
 
-    private userService service = new userService(new userRepo());
+    private final userService service = new userService(new userRepo());
 
     public void loadUserData(int userId) {
         try {

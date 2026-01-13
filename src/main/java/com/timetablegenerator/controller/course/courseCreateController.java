@@ -1,12 +1,9 @@
 package com.timetablegenerator.controller.course;
 
-import com.timetablegenerator.model.classModel;
 import com.timetablegenerator.model.courseModel;
 import com.timetablegenerator.model.departmentModel;
-import com.timetablegenerator.repository.classRepo;
 import com.timetablegenerator.repository.courseRepo;
 import com.timetablegenerator.repository.departmentRepo;
-import com.timetablegenerator.service.classService;
 import com.timetablegenerator.service.courseService;
 import com.timetablegenerator.service.departmentService;
 import javafx.collections.FXCollections;
@@ -20,11 +17,12 @@ import javafx.stage.Stage;
 import java.sql.Timestamp;
 
 public class courseCreateController {
+
     @FXML private TextField nameField;
     @FXML private ComboBox<departmentModel> deptComboBox;
 
-    private courseService service;
-    private departmentService deptService;
+    private final courseService service;
+    private final departmentService deptService;
 
     public courseCreateController() {
         this.service = new courseService(new courseRepo());
@@ -34,7 +32,7 @@ public class courseCreateController {
     @FXML
     public void initialize() {
         try {
-            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getDepartmentsForCombo()));
+            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getMinorDepartments()));
 
             deptComboBox.setPromptText("Select Department");
 

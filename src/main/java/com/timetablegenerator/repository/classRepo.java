@@ -1,7 +1,9 @@
 package com.timetablegenerator.repository;
 
 import com.timetablegenerator.model.classModel;
+import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.service.departmentService;
+import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,13 +18,15 @@ public class classRepo {
         this.deptService = new departmentService(new departmentRepo());
     }
 
+    private final userModel currentUser = authSession.getUser();
+
     public void create(classModel clas) throws SQLException {
         String sql = "INSERT INTO classes (class_name,department_id, is_delete, created_by, created_date) VALUES (?,?, ?, ?, ?)";
         try (PreparedStatement st = this.connection.prepareStatement(sql)) {
             st.setString(1, clas.getClass_name());
             st.setInt(2,clas.getDepartment_id());
             st.setBoolean(3, false);
-            st.setInt(4, clas.getCreated_by());
+            st.setInt(4, currentUser.getId());
             st.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
             st.executeUpdate();
         }
@@ -74,7 +78,7 @@ public class classRepo {
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, clas.getClass_name());
             st.setInt(2,clas.getDepartment_id());
-            st.setInt(3, clas.getModify_by());
+            st.setInt(3, currentUser.getId());
             st.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             st.setInt(5, clas.getId());
             st.executeUpdate();

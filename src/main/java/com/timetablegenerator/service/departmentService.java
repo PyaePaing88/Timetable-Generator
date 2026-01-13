@@ -20,8 +20,13 @@ public class departmentService {
         return repo.findAll(pageSize, offset, search);
     }
 
-    public List<departmentModel> getDepartmentsForCombo() throws Exception {
-        return repo.findAllForCombo();
+
+    public List<departmentModel> getMajorDepartments() throws Exception {
+        return repo.findAllMajor();
+    }
+
+    public List<departmentModel> getMinorDepartments() throws Exception {
+        return repo.findAllMinor();
     }
 
     public departmentModel getDepartmentById(int id) throws Exception {

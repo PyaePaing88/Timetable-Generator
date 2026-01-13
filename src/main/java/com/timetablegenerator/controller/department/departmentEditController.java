@@ -5,6 +5,7 @@ import com.timetablegenerator.repository.departmentRepo;
 import com.timetablegenerator.service.departmentService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -12,10 +13,10 @@ import java.sql.Timestamp;
 
 public class departmentEditController {
 
-    @FXML
-    private TextField nameField;
+    @FXML private TextField nameField;
+    @FXML private CheckBox minorCheckBox;
 
-    private departmentService service;
+    private final departmentService service;
     private departmentModel currentDepartment;
 
     public departmentEditController() {
@@ -31,6 +32,7 @@ public class departmentEditController {
             this.currentDepartment = service.getDepartmentById(deptId);
             if (currentDepartment != null) {
                 nameField.setText(currentDepartment.getDepartment_name());
+                minorCheckBox.setSelected(currentDepartment.isIs_minor());
             }
         } catch (Exception e) {
             showAlert("Error", "Could not load uepartment data: " + e.getMessage(), Alert.AlertType.ERROR);
@@ -42,6 +44,7 @@ public class departmentEditController {
         if (validateInput()) {
             try {
                 currentDepartment.setDepartment_name(nameField.getText());
+                currentDepartment.setIs_minor(minorCheckBox.isSelected());
                 currentDepartment.setModify_by(1);
                 currentDepartment.setModify_date(new Timestamp(System.currentTimeMillis()));
 

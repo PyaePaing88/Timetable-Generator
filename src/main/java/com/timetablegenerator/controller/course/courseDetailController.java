@@ -8,10 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class courseDetailController {
-    @FXML
-    private TextField txtId, txtName, txtDepartment;
 
-    private courseService service = new courseService(new courseRepo());
+    @FXML private TextField txtId, txtName, txtDepartment;
+
+    private final courseService service = new courseService(new courseRepo());
 
     public void loadCourseData(int id) {
         try {

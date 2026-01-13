@@ -6,14 +6,14 @@ import com.timetablegenerator.service.departmentService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.sql.Timestamp;
 
 public class departmentCreateController {
+
     @FXML private TextField nameField;
+    @FXML private CheckBox minorCheckBox;
 
-
-    private departmentService service;
+    private final departmentService service;
 
     public departmentCreateController() {
         this.service = new departmentService(new departmentRepo());
@@ -30,6 +30,7 @@ public class departmentCreateController {
                 departmentModel newDept = new departmentModel();
 
                 newDept.setDepartment_name(nameField.getText().trim());
+                newDept.setIs_minor(minorCheckBox.isSelected());
                 newDept.setIs_delete(false);
 
                 newDept.setCreated_by(1);

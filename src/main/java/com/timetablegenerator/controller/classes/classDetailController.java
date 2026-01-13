@@ -11,7 +11,7 @@ public class classDetailController {
     @FXML
     private TextField txtId, txtName, txtDepartment;
 
-    private classService service = new classService(new classRepo());
+    private final classService service = new classService(new classRepo());
 
     public void loadClassData(int id) {
         try {

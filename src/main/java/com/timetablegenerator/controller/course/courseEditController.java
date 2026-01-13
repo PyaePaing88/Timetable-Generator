@@ -18,13 +18,13 @@ import java.sql.Timestamp;
 
 public class courseEditController {
 
-    @FXML
-    private TextField nameField;
+    @FXML private TextField nameField;
     @FXML private ComboBox<departmentModel> deptComboBox;
 
-    private courseService service;
+    private final courseService service;
+    private final departmentService deptService;
+
     private courseModel currentCourse;
-    private departmentService deptService;
 
     public courseEditController() {
         this.service = new courseService(new courseRepo());
@@ -34,7 +34,7 @@ public class courseEditController {
     @FXML
     public void initialize() {
         try {
-            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getDepartmentsForCombo()));
+            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getMinorDepartments()));
 
             deptComboBox.setConverter(new StringConverter<departmentModel>() {
                 @Override
@@ -59,7 +59,6 @@ public class courseEditController {
             if (currentCourse != null) {
                 nameField.setText(currentCourse.getCourse_name());
 
-                // FIX 2: Auto-select the correct department in the ComboBox
                 for (departmentModel dept : deptComboBox.getItems()) {
                     if (dept.getId() == currentCourse.getDepartment_id()) {
                         deptComboBox.setValue(dept);

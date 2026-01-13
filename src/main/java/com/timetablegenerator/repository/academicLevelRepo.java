@@ -1,6 +1,8 @@
 package com.timetablegenerator.repository;
 
 import com.timetablegenerator.model.academicLevelModel;
+import com.timetablegenerator.model.userModel;
+import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,17 +10,18 @@ import java.util.List;
 
 public class academicLevelRepo {
     private final Connection connection;
-
     public academicLevelRepo() {
         this.connection = dbConnection.getConnection();
     }
+
+    private final userModel currentUser = authSession.getUser();
 
     public void create(academicLevelModel al) throws SQLException {
         String sql = "INSERT INTO academic_levels (year, is_delete, created_by, created_date) VALUES (?, ?, ?, ?)";
         try (PreparedStatement st = this.connection.prepareStatement(sql)) {
             st.setString(1, al.getYear());
             st.setBoolean(2, false);
-            st.setInt(3, al.getCreated_by());
+            st.setInt(3, currentUser.getId());
             st.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             st.executeUpdate();
         }
@@ -61,7 +64,7 @@ public class academicLevelRepo {
         String sql = "UPDATE academic_levels SET year=?, modify_by=?, modify_date=? WHERE id=?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, al.getYear());
-            st.setInt(2, al.getModify_by());
+            st.setInt(2, currentUser.getId());
             st.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
             st.setInt(4, al.getId());
             st.executeUpdate();

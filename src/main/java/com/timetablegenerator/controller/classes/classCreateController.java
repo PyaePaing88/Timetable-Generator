@@ -20,8 +20,8 @@ public class classCreateController {
     @FXML private TextField nameField;
     @FXML private ComboBox<departmentModel> deptComboBox;
 
-    private classService service;
-    private departmentService deptService;
+    private final classService service;
+    private final departmentService deptService;
 
     public classCreateController() {
         this.service = new classService(new classRepo());
@@ -31,7 +31,7 @@ public class classCreateController {
     @FXML
     public void initialize() {
         try {
-            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getDepartmentsForCombo()));
+            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getMajorDepartments()));
 
             deptComboBox.setPromptText("Select Department");
 

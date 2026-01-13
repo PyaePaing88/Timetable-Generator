@@ -14,30 +14,25 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public class classGenerateController {
     @FXML private ComboBox<departmentModel> deptComboBox;
-    @FXML private VBox academicLevelContainer; // Container for checkboxes
-
-    private classService service;
-    private departmentService deptService;
-    private academicLevelService levelService; // New Service
-
-    // List to keep track of checkboxes
-    private List<CheckBox> levelCheckBoxes = new ArrayList<>();
+    @FXML private VBox academicLevelContainer;
+    private final List<CheckBox> levelCheckBoxes = new ArrayList<>();
+    private final classService service;
+    private final departmentService deptService;
+    private final academicLevelService levelService;
 
     public classGenerateController() {
         this.service = new classService(new classRepo());
         this.deptService = new departmentService(new departmentRepo());
-        this.levelService = new academicLevelService(new academicLevelRepo()); // Initialize your repo here
+        this.levelService = new academicLevelService(new academicLevelRepo());
     }
 
     @FXML
@@ -49,7 +44,7 @@ public class classGenerateController {
     @FXML
     public void loadDepartments() {
         try {
-            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getDepartmentsForCombo()));
+            deptComboBox.setItems(FXCollections.observableArrayList(deptService.getMajorDepartments()));
 
             deptComboBox.setPromptText("Select Department");
 
@@ -76,7 +71,7 @@ public class classGenerateController {
             List<academicLevelModel> levels = levelService.getAcademicLevelForCombo();
             for (academicLevelModel level : levels) {
                 CheckBox cb = new CheckBox(level.getYear());
-                cb.setUserData(level); // Store the object for easy retrieval
+                cb.setUserData(level);
                 academicLevelContainer.getChildren().add(cb);
                 levelCheckBoxes.add(cb);
             }
@@ -109,7 +104,6 @@ public class classGenerateController {
                 newClass.setClass_name(generatedName);
                 newClass.setDepartment_id(selectedDept.getId());
                 newClass.setIs_delete(false);
-                newClass.setCreated_by(1);
                 newClass.setCreated_date(new Timestamp(System.currentTimeMillis()));
 
                 service.saveClass(newClass);

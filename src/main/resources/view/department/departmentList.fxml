@@ -36,6 +36,7 @@
                     <columns>
                         <TableColumn fx:id="colId" text="ID" prefWidth="40" />
                         <TableColumn fx:id="colName" text="Name" prefWidth="150" />
+                        <TableColumn fx:id="colMinor" text="Status" prefWidth="100" />
                         <TableColumn fx:id="colActions" text="Actions" prefWidth="100" />
                     </columns>
                 </TableView>

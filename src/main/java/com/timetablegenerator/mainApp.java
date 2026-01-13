@@ -24,7 +24,7 @@ public class mainApp extends Application {
     public void start(Stage stage) {
         this.primaryStage = stage;
         stage.setTitle("Timetable Generator");
-        showMainLayout();
+        showLogin();
         stage.show();
     }
 
@@ -51,6 +51,14 @@ public class mainApp extends Application {
 
     public void showMainLayout() {
         setScene("/view/mainLayout.fxml");
+    }
+
+    public void showTeacherLayout() {
+        setScene("/view/teacherView/teacherLayout.fxml");
+    }
+
+    public void showChangePassword() {
+        setScene("/view/auth/changePassword.fxml");
     }
 
     public void showDashboard() {

@@ -2,6 +2,7 @@ package com.timetablegenerator.repository;
 
 import com.timetablegenerator.model.role;
 import com.timetablegenerator.model.userModel;
+import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public class userRepo {
         this.connection = dbConnection.getConnection();
     }
 
+    private final userModel currentUser = authSession.getUser();
+
+
     public void create(userModel user) throws SQLException {
         String sql = "INSERT INTO users (name, phone, email, password, department_id, role, is_active, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement st = this.connection.prepareStatement(sql)) {
@@ -26,7 +30,7 @@ public class userRepo {
             st.setString(6, user.getRole().name());
             st.setBoolean(7, true);
             st.setBoolean(8, false);
-            st.setInt(9, user.getCreated_by());
+            st.setInt(9, currentUser.getId());
             st.setTimestamp(10, new Timestamp(System.currentTimeMillis()));
             st.executeUpdate();
         }
@@ -59,7 +63,7 @@ public class userRepo {
 
     public List<userModel> findAllForDept() throws SQLException {
         List<userModel> users = new ArrayList<>();
-        String sql = "SELECT * FROM users WHERE is_delete = false AND is_active = true AND role='professor' AND department_id=0";
+        String sql = "SELECT * FROM users WHERE is_delete = false AND is_active = true AND role='teacher' AND department_id=0";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
             while (rs.next()) { users.add(mapResultSetToModel(rs)); }
@@ -69,7 +73,7 @@ public class userRepo {
 
     public List<userModel> findAllByDeptId(int id) throws SQLException {
         List<userModel> users = new ArrayList<>();
-        String sql = "SELECT * FROM users WHERE department_id = ? AND is_delete = false AND is_active=true AND role='professor'";
+        String sql = "SELECT * FROM users WHERE department_id = ? AND is_delete = false AND is_active=true AND role='teacher'";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
@@ -87,7 +91,7 @@ public class userRepo {
             st.setInt(4, user.getDepartment_id());
             st.setString(5, user.getRole().name());
             st.setBoolean(6, user.isIs_active());
-            st.setInt(7, user.getModify_by());
+            st.setInt(7, currentUser.getId());
             st.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
             st.setInt(9, user.getId());
             st.executeUpdate();

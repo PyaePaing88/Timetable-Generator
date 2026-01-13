@@ -17,8 +17,7 @@ import java.util.List;
 
 public class academicLevelListController {
 
-    @FXML
-    private TableView<academicLevelModel> academicLevelTable;
+    @FXML private TableView<academicLevelModel> academicLevelTable;
     @FXML private TextField searchField;
     @FXML private Pagination pagination;
     @FXML private ComboBox<Integer> rowsPerPageCombo;

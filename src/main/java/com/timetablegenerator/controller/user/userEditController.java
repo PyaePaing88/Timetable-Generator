@@ -16,7 +16,7 @@ public class userEditController {
     @FXML private CheckBox activeCheckBox, changePassCheckBox;
     @FXML private ComboBox<role> roleComboBox;
 
-    private userService service;
+    private final userService service;
     private userModel currentUser;
 
     public userEditController() {

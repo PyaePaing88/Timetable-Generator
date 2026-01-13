@@ -1,4 +1,5 @@
 package com.timetablegenerator.controller.user;
+
 import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.repository.userRepo;
 import com.timetablegenerator.service.userService;
@@ -10,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.List;
 

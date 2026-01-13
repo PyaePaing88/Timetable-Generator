@@ -1,0 +1,95 @@
+.root-pane {
+  -fx-background-color: #f1f1f1;
+}
+
+.login-container {
+  -fx-background-radius:12;
+  -fx-background-color: #ffffff;
+}
+
+/* New styles for split layout */
+.image-section {
+  -fx-background-image: url("../assets/image/background.jpg");
+  -fx-background-size: cover;
+  -fx-background-position: center;
+}
+
+.image-title {
+  -fx-text-fill: white;
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+}
+
+.image-description {
+  -fx-text-fill: rgba(255, 255, 255, 0.8);
+  -fx-font-size: 16px;
+}
+
+.login-section {
+
+  -fx-background-color: #ffffff;
+}
+
+.header-text {
+  -fx-font-family: "Geist", "System";
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #111827;
+}
+
+.subheader-text {
+  -fx-font-size: 14px;
+  -fx-text-fill: #6b7280;
+}
+
+.field-label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #374151;
+}
+
+.input-field {
+  -fx-background-color: #f9fafb;
+  -fx-border-color: #e5e7eb;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
+  -fx-padding: 12px;
+  -fx-text-fill: #111827;
+  -fx-prompt-text-fill: #9ca3af;
+}
+
+.input-field:focused {
+  -fx-border-color: #111827;
+}
+
+.primary-button {
+  -fx-background-color: #002e73;
+  -fx-text-fill: #ffffff;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 12px;
+  -fx-background-radius: 6px;
+  -fx-cursor: hand;
+}
+
+.primary-button:hover {
+  -fx-background-color: #012363;
+}
+
+.forgot-link,
+.footer-link {
+  -fx-text-fill: #111827;
+  -fx-font-size: 12px;
+  -fx-underline: false;
+  -fx-border-color: transparent;
+}
+
+.forgot-link:hover,
+.footer-link:hover {
+  -fx-underline: true;
+}
+
+.footer-text {
+  -fx-text-fill: #6b7280;
+  -fx-font-size: 12px;
+}

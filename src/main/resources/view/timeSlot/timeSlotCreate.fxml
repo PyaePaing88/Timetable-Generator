@@ -2,25 +2,42 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
 <VBox spacing="15" prefWidth="450" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.timetablegenerator.controller.course.courseCreateController">
+      fx:controller="com.timetablegenerator.controller.timeSlot.timeSlotCreateController">
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-    <Label text="Create New Course" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <Label text="Create New Time Slot" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
     <Separator/>
 
     <GridPane hgap="10" vgap="12">
-        <Label text="Course Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="nameField" promptText="Enter class name" GridPane.rowIndex="0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+        <Label text="Day of Week:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="dayComboBox" prefWidth="250" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Department:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="deptComboBox" prefWidth="200" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <Label text="Period Number:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Spinner fx:id="periodSpinner" prefWidth="100" editable="true"
+                 GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Start Time:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <HBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="1">
+            <Spinner fx:id="startHour" prefWidth="70" editable="true"/>
+            <Label text=":" style="-fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
+            <Spinner fx:id="startMin" prefWidth="70" editable="true"/>
+        </HBox>
+
+        <Label text="End Time:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <HBox spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1">
+            <Spinner fx:id="endHour" prefWidth="70" editable="true"/>
+            <Label text=":" style="-fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
+            <Spinner fx:id="endMin" prefWidth="70" editable="true"/>
+        </HBox>
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
         <Button text="Cancel" onAction="#handleCancel" prefWidth="80"/>
-        <Button text="Create Department" onAction="#handleSave" prefWidth="120"
+        <Button text="Save Time Slot" onAction="#handleSave" prefWidth="130"
                 style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
 </VBox>

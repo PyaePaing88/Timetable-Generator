@@ -1,6 +1,8 @@
 package com.timetablegenerator.repository;
 
 import com.timetablegenerator.model.departmentModel;
+import com.timetablegenerator.model.userModel;
+import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
 
 import java.sql.*;
@@ -14,13 +16,16 @@ public class departmentRepo {
         this.connection = dbConnection.getConnection();
     }
 
+    private final userModel currentUser = authSession.getUser();
+
     public void create(departmentModel dept) throws SQLException {
-        String sql = "INSERT INTO departments (department_name, is_delete, created_by, created_date) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO departments (department_name, is_delete, created_by, created_date, is_minor) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement st = this.connection.prepareStatement(sql)) {
             st.setString(1, dept.getDepartment_name());
             st.setBoolean(2, false);
-            st.setInt(3, dept.getCreated_by());
+            st.setInt(3, currentUser.getId());
             st.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            st.setBoolean(5, dept.isIs_minor());
             st.executeUpdate();
         }
     }
@@ -48,7 +53,17 @@ public class departmentRepo {
         return dept;
     }
 
-    public List<departmentModel> findAllForCombo() throws SQLException {
+    public List<departmentModel> findAllMajor() throws SQLException {
+        List<departmentModel> dept = new ArrayList<>();
+        String sql = "SELECT * FROM departments WHERE is_delete = false AND is_minor=false";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) { dept.add(mapResultSetToModel(rs)); }
+        }
+        return dept;
+    }
+
+    public List<departmentModel> findAllMinor() throws SQLException {
         List<departmentModel> dept = new ArrayList<>();
         String sql = "SELECT * FROM departments WHERE is_delete = false";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -59,12 +74,13 @@ public class departmentRepo {
     }
 
     public void update(departmentModel dept) throws SQLException {
-        String sql = "UPDATE departments SET department_name=?, modify_by=?, modify_date=? WHERE id=?";
+        String sql = "UPDATE departments SET department_name=?, modify_by=?, modify_date=?, is_minor=? WHERE id=?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, dept.getDepartment_name());
-            st.setInt(2, dept.getModify_by());
+            st.setInt(2, currentUser.getId());
             st.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-            st.setInt(4, dept.getId());
+            st.setBoolean(4, dept.isIs_minor());
+            st.setInt(5, dept.getId());
             st.executeUpdate();
         }
     }
@@ -96,6 +112,7 @@ public class departmentRepo {
         u.setCreated_date(rs.getTimestamp("created_date"));
         u.setModify_by(rs.getInt("modify_by"));
         u.setModify_date(rs.getTimestamp("modify_date"));
+        u.setIs_minor(rs.getBoolean("is_minor"));
         return u;
     }
 }

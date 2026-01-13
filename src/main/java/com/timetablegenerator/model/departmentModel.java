@@ -10,6 +10,7 @@ public class departmentModel {
     private Timestamp created_date;
     private int modify_by;
     private Timestamp modify_date;
+    private boolean is_minor;
 
     public int getId() {
         return id;
@@ -65,5 +66,13 @@ public class departmentModel {
 
     public void setModify_date(Timestamp modify_date) {
         this.modify_date = modify_date;
+    }
+
+    public boolean isIs_minor() {
+        return is_minor;
+    }
+
+    public void setIs_minor(boolean is_minor) {
+        this.is_minor = is_minor;
     }
 }

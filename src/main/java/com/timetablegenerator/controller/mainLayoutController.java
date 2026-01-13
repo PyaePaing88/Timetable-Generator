@@ -12,12 +12,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class mainLayoutController {
-    @FXML
-    private StackPane contentArea;
-
-    @FXML
-    private VBox sidebar;
-
+    @FXML private StackPane contentArea;
+    @FXML private VBox sidebar;
     @FXML private Label nameLabel;
 
     @FXML
