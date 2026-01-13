@@ -1,13 +1,14 @@
 package com.timetablegenerator.model;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class timeSlotModel {
     private Integer id;
     private day day_of_week;
     private Integer period;
-    private Timestamp start_time;
-    private Timestamp end_time;
+    private Time start_time;
+    private Time end_time;
     private Integer created_by;
     private Timestamp created_date;
     private Integer modify_by;
@@ -38,19 +39,19 @@ public class timeSlotModel {
         this.period = period;
     }
 
-    public Timestamp getStart_time() {
+    public Time getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(Timestamp start_time) {
+    public void setStart_time(Time start_time) {
         this.start_time = start_time;
     }
 
-    public Timestamp getEnd_time() {
+    public Time getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(Timestamp end_time) {
+    public void setEnd_time(Time end_time) {
         this.end_time = end_time;
     }
 

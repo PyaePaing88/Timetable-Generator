@@ -1,6 +1,8 @@
 package com.timetablegenerator.controller.course;
 
+import com.timetablegenerator.controller.department.addUserToDeptController;
 import com.timetablegenerator.model.courseModel;
+import com.timetablegenerator.model.departmentModel;
 import com.timetablegenerator.repository.courseRepo;
 import com.timetablegenerator.service.courseService;
 import javafx.collections.FXCollections;
@@ -17,16 +19,24 @@ import java.util.List;
 
 public class courseListController {
 
-    @FXML private TableView<courseModel> courseTable;
-    @FXML private TextField searchField;
-    @FXML private Pagination pagination;
-    @FXML private ComboBox<Integer> rowsPerPageCombo;
+    @FXML
+    private TableView<courseModel> courseTable;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<courseModel, Integer> colId;
-    @FXML private TableColumn<courseModel, String> colName;
-    @FXML private TableColumn<courseModel, String> colDept;
-    @FXML private TableColumn<courseModel, Void> colActions;
+    @FXML
+    private TableColumn<courseModel, Integer> colId;
+    @FXML
+    private TableColumn<courseModel, String> colName;
+    @FXML
+    private TableColumn<courseModel, String> colDept;
+    @FXML
+    private TableColumn<courseModel, Void> colActions;
 
     private courseService service;
 
@@ -105,10 +115,11 @@ public class courseListController {
             private final MenuButton actionMenu = new MenuButton("Options");
             private final MenuItem viewItem = new MenuItem("View More");
             private final MenuItem editItem = new MenuItem("Edit");
+            private final MenuItem linkClass = new MenuItem("Link Class");
             private final MenuItem deleteItem = new MenuItem("Delete");
 
             {
-                actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getItems().addAll(viewItem, editItem, linkClass, deleteItem);
 
                 viewItem.setOnAction(event -> {
                     courseModel course = getTableView().getItems().get(getIndex());
@@ -118,6 +129,11 @@ public class courseListController {
                 editItem.setOnAction(event -> {
                     courseModel course = getTableView().getItems().get(getIndex());
                     handleEdit(course.getId());
+                });
+
+                linkClass.setOnAction(event -> {
+                    courseModel course = getTableView().getItems().get(getIndex());
+                    handleLinkClassToCourse(course.getId());
                 });
 
                 deleteItem.setOnAction(event -> {
@@ -206,6 +222,29 @@ public class courseListController {
             handleSearch();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleLinkClassToCourse(int id) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/course/linkClassAndCourse.fxml"));
+            Parent root = loader.load();
+
+            linkClassAndCourseController controller = loader.getController();
+            controller.loadData(id);
+
+            Stage stage = new Stage();
+            stage.setTitle("Link Class and Course");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+
+            stage.showAndWait();
+            handleSearch();
+
+        } catch (IOException e) {
+            System.err.println("Error loading View: " + e.getMessage());
             e.printStackTrace();
         }
     }

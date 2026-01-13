@@ -3,10 +3,12 @@ package com.timetablegenerator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 public class mainApp extends Application {
     private static mainApp instance;
@@ -23,6 +25,14 @@ public class mainApp extends Application {
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
+
+
+        try {
+            Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/icon/app_icon.png")));
+            primaryStage.getIcons().add(icon);
+        } catch (Exception e) {
+            System.out.println("Could not load app icon: " + e.getMessage());
+        }
         stage.setTitle("Timetable Generator");
         showLogin();
         stage.show();

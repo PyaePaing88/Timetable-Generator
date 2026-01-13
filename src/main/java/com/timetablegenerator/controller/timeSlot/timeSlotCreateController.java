@@ -11,8 +11,10 @@ import javafx.stage.Stage;
 
 public class timeSlotCreateController {
 
-    @FXML private ComboBox<day> dayComboBox;
-    @FXML private Spinner<Integer>  periodSpinner,startHour, startMin, endHour, endMin;
+    @FXML
+    private ComboBox<day> dayComboBox;
+    @FXML
+    private Spinner<Integer> periodSpinner, startHour, startMin, endHour, endMin;
 
     private final timeSlotService service;
 
@@ -37,22 +39,22 @@ public class timeSlotCreateController {
         if (validateInput()) {
             try {
                 timeSlotModel newSlot = new timeSlotModel();
-
                 newSlot.setPeriod(periodSpinner.getValue());
-
-                String startStr = String.format("1970-01-01 %02d:%02d:00", startHour.getValue(), startMin.getValue());
-                String endStr = String.format("1970-01-01 %02d:%02d:00", endHour.getValue(), endMin.getValue());
-
-                newSlot.setStart_time(java.sql.Timestamp.valueOf(startStr));
-                newSlot.setEnd_time(java.sql.Timestamp.valueOf(endStr));
                 newSlot.setDay_of_week(dayComboBox.getValue());
+
+                java.time.LocalTime start = java.time.LocalTime.of(startHour.getValue(), startMin.getValue());
+                java.time.LocalTime end = java.time.LocalTime.of(endHour.getValue(), endMin.getValue());
+
+                newSlot.setStart_time(java.sql.Time.valueOf(start));
+                newSlot.setEnd_time(java.sql.Time.valueOf(end));
+
                 newSlot.setIs_delete(false);
 
                 service.saveTimeSlot(newSlot);
                 showAlert("Success", "Time Slot saved!", Alert.AlertType.INFORMATION);
                 closeWindow();
             } catch (Exception e) {
-                showAlert("Error", "Database Error: " + e.getMessage(), Alert.AlertType.ERROR);
+                showAlert("Error", "Error: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
@@ -78,7 +80,10 @@ public class timeSlotCreateController {
         return true;
     }
 
-    @FXML private void handleCancel() { closeWindow(); }
+    @FXML
+    private void handleCancel() {
+        closeWindow();
+    }
 
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);

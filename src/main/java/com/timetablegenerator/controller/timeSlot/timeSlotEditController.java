@@ -8,14 +8,18 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import java.sql.Timestamp;
-import java.util.Calendar;
+
+import java.sql.Time;
+import java.time.LocalTime;
 
 public class timeSlotEditController {
 
-    @FXML private ComboBox<day> dayComboBox;
-    @FXML private TextField periodField;
-    @FXML private Spinner<Integer> startHour, startMin, endHour, endMin;
+    @FXML
+    private ComboBox<day> dayComboBox;
+    @FXML
+    private TextField periodField;
+    @FXML
+    private Spinner<Integer> startHour, startMin, endHour, endMin;
 
     private final timeSlotService service;
     private int timeSlotId;
@@ -28,7 +32,6 @@ public class timeSlotEditController {
     public void initialize() {
         dayComboBox.setItems(FXCollections.observableArrayList(day.values()));
 
-        // Initialize Spinners with 0-23 and 0-59 ranges
         startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         startMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
@@ -43,21 +46,20 @@ public class timeSlotEditController {
                 dayComboBox.setValue(slot.getDay_of_week());
                 periodField.setText(String.valueOf(slot.getPeriod()));
 
-                // Convert Timestamps to Spinner Values
-                setSpinnerTime(slot.getStart_time(), startHour, startMin);
-                setSpinnerTime(slot.getEnd_time(), endHour, endMin);
+                if (slot.getStart_time() != null) {
+                    LocalTime startTime = slot.getStart_time().toLocalTime();
+                    startHour.getValueFactory().setValue(startTime.getHour());
+                    startMin.getValueFactory().setValue(startTime.getMinute());
+                }
+
+                if (slot.getEnd_time() != null) {
+                    LocalTime endTime = slot.getEnd_time().toLocalTime();
+                    endHour.getValueFactory().setValue(endTime.getHour());
+                    endMin.getValueFactory().setValue(endTime.getMinute());
+                }
             }
         } catch (Exception e) {
             showAlert("Error", "Could not load data: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    private void setSpinnerTime(Timestamp ts, Spinner<Integer> h, Spinner<Integer> m) {
-        if (ts != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(ts.getTime());
-            h.getValueFactory().setValue(cal.get(Calendar.HOUR_OF_DAY));
-            m.getValueFactory().setValue(cal.get(Calendar.MINUTE));
         }
     }
 
@@ -70,17 +72,18 @@ public class timeSlotEditController {
                 slot.setDay_of_week(dayComboBox.getValue());
                 slot.setPeriod(Integer.parseInt(periodField.getText().trim()));
 
-                String startStr = String.format("1970-01-01 %02d:%02d:00", startHour.getValue(), startMin.getValue());
-                String endStr = String.format("1970-01-01 %02d:%02d:00", endHour.getValue(), endMin.getValue());
+                LocalTime start = LocalTime.of(startHour.getValue(), startMin.getValue());
+                LocalTime end = LocalTime.of(endHour.getValue(), endMin.getValue());
 
-                slot.setStart_time(Timestamp.valueOf(startStr));
-                slot.setEnd_time(Timestamp.valueOf(endStr));
+                slot.setStart_time(Time.valueOf(start));
+                slot.setEnd_time(Time.valueOf(end));
                 slot.setIs_delete(false);
 
                 service.saveTimeSlot(slot);
                 showAlert("Success", "Time Slot updated successfully!", Alert.AlertType.INFORMATION);
                 closeWindow();
             } catch (Exception e) {
+                e.printStackTrace();
                 showAlert("Error", "Update failed: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
@@ -90,10 +93,17 @@ public class timeSlotEditController {
         int startTotal = (startHour.getValue() * 60) + startMin.getValue();
         int endTotal = (endHour.getValue() * 60) + endMin.getValue();
 
-        if (dayComboBox.getValue() == null || periodField.getText().isEmpty()) {
-            showAlert("Validation Error", "All fields are required.", Alert.AlertType.WARNING);
+        try {
+            if (dayComboBox.getValue() == null || periodField.getText().trim().isEmpty()) {
+                showAlert("Validation Error", "All fields are required.", Alert.AlertType.WARNING);
+                return false;
+            }
+            Integer.parseInt(periodField.getText().trim());
+        } catch (NumberFormatException e) {
+            showAlert("Validation Error", "Period must be a number.", Alert.AlertType.WARNING);
             return false;
         }
+
         if (endTotal <= startTotal) {
             showAlert("Validation Error", "End time must be after start time.", Alert.AlertType.WARNING);
             return false;
@@ -101,11 +111,15 @@ public class timeSlotEditController {
         return true;
     }
 
-    @FXML private void handleCancel() { closeWindow(); }
+    @FXML
+    private void handleCancel() {
+        closeWindow();
+    }
 
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
     }

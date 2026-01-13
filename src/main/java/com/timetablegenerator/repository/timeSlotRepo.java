@@ -22,14 +22,19 @@ public class timeSlotRepo {
 
     public void create(timeSlotModel time) throws SQLException {
         String sql = "INSERT INTO time_slots (day_of_week, period, start_time, end_time, created_by, created_date, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
             st.setString(1, time.getDay_of_week().name());
             st.setInt(2, time.getPeriod());
-            st.setTimestamp(3, time.getStart_time());
-            st.setTimestamp(4, time.getEnd_time());
+
+            st.setTime(3, time.getStart_time());
+            st.setTime(4, time.getEnd_time());
+
             st.setInt(5, currentUser.getId());
-            st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            st.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
             st.setBoolean(7, false);
+
             st.executeUpdate();
         }
     }
@@ -71,14 +76,14 @@ public class timeSlotRepo {
     }
 
     public void update(timeSlotModel time) throws SQLException {
-        String sql = "UPDATE time_slots SET day_of_week=?, period=?, start_time=?, end_time=? modify_by=?, modify_date=? WHERE id=?";
+        String sql = "UPDATE time_slots SET day_of_week=?, period=?, start_time=?, end_time=?, modify_by=?, modify_date=? WHERE id=?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, time.getDay_of_week().name());
             st.setInt(2, time.getPeriod());
-            st.setTimestamp(3, time.getStart_time());
-            st.setTimestamp(4, time.getEnd_time());
-            st.setInt(5, time.getModify_by());
-            st.setTimestamp(6,time.getModify_date());
+            st.setTime(3, time.getStart_time());
+            st.setTime(4, time.getEnd_time());
+            st.setInt(5, currentUser.getId());
+            st.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
             st.setInt(7, time.getId());
             st.executeUpdate();
         }
@@ -107,8 +112,8 @@ public class timeSlotRepo {
         u.setId(rs.getInt("id"));
         u.setDay_of_week(day.valueOf(rs.getString("day_of_week")));
         u.setPeriod(rs.getInt("period"));
-        u.setStart_time(rs.getTimestamp("start_time"));
-        u.setEnd_time(rs.getTimestamp("end_time"));
+        u.setStart_time(rs.getTime("start_time"));
+        u.setEnd_time(rs.getTime("end_time"));
         u.setCreated_by(rs.getInt("created_by"));
         u.setCreated_date(rs.getTimestamp("created_date"));
         u.setModify_by(rs.getInt("modify_by"));

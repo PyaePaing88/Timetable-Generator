@@ -6,15 +6,21 @@ import com.timetablegenerator.service.timeSlotService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
 import java.text.SimpleDateFormat;
 
 public class timeSlotDetailController {
 
-    @FXML private Label dayLabel;
-    @FXML private Label periodLabel;
-    @FXML private Label startTimeLabel;
-    @FXML private Label endTimeLabel;
-    @FXML private Label idLabel;
+    @FXML
+    private Label dayLabel;
+    @FXML
+    private Label periodLabel;
+    @FXML
+    private Label startTimeLabel;
+    @FXML
+    private Label endTimeLabel;
+    @FXML
+    private Label idLabel;
 
     private final timeSlotService service;
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -31,7 +37,6 @@ public class timeSlotDetailController {
                 dayLabel.setText(slot.getDay_of_week().toString());
                 periodLabel.setText("Period " + slot.getPeriod());
 
-                // Format the Timestamps for display
                 if (slot.getStart_time() != null) {
                     startTimeLabel.setText(timeFormat.format(slot.getStart_time()));
                 }

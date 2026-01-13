@@ -13,10 +13,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.net.URL;
+
 public class mainLayoutController {
-    @FXML private StackPane contentArea;
-    @FXML private VBox sidebar;
-    @FXML private Label nameLabel;
+    @FXML
+    private StackPane contentArea;
+    @FXML
+    private VBox sidebar;
+    @FXML
+    private Label nameLabel;
 
     @FXML
     public void initialize() {
@@ -25,17 +30,76 @@ public class mainLayoutController {
 
         loadView("/view/dashboard/dashboard.fxml", null);
 
+        autoSelectButton("Dashboard");
+    }
+
+    private void autoSelectButton(String buttonText) {
         sidebar.getChildren().stream()
                 .filter(node -> node instanceof Button)
                 .map(node -> (Button) node)
-                .filter(btn -> "Dashboard".equalsIgnoreCase(btn.getText()))
+                .filter(btn -> buttonText.equalsIgnoreCase(btn.getText().trim()))
                 .findFirst()
-                .ifPresent(btn -> {
-                    btn.getStyleClass().add("active");
-                    updateButtonIcon(btn, true); // Manually trigger active icon for Dashboard
-                });
+                .ifPresent(this::applyActiveStyle);
     }
 
+    private void loadView(String fxml, javafx.event.ActionEvent event) {
+        try {
+            URL url = getClass().getResource(fxml);
+            if (url == null) {
+                System.err.println("Could not find FXML file: " + fxml);
+                return;
+            }
+
+            Node view = FXMLLoader.load(url);
+            contentArea.getChildren().setAll(view);
+
+            // If triggered by a click, update styles based on the clicked button
+            if (event != null && event.getSource() instanceof Button) {
+                applyActiveStyle((Button) event.getSource());
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading view: " + fxml);
+            e.printStackTrace();
+        }
+    }
+
+    private void applyActiveStyle(Button targetButton) {
+        // Reset all buttons in sidebar
+        sidebar.getChildren().forEach(node -> {
+            if (node instanceof Button) {
+                Button btn = (Button) node;
+                btn.getStyleClass().remove("active");
+                updateButtonIcon(btn, false);
+            }
+        });
+
+        // Set the target button to active
+        targetButton.getStyleClass().add("active");
+        updateButtonIcon(targetButton, true);
+    }
+
+    private void updateButtonIcon(Button button, boolean isActive) {
+        if (button.getGraphic() instanceof ImageView) {
+            ImageView iv = (ImageView) button.getGraphic();
+            if (iv.getImage() != null) {
+                String currentUrl = iv.getImage().getUrl();
+                String newUrl;
+
+                // Toggle between /normal/ and /active/ folders
+                if (isActive) {
+                    newUrl = currentUrl.replace("/normal/", "/active/");
+                } else {
+                    newUrl = currentUrl.replace("/active/", "/normal/");
+                }
+
+                if (!currentUrl.equals(newUrl)) {
+                    iv.setImage(new Image(newUrl));
+                }
+            }
+        }
+    }
+
+    // Navigation Methods
     @FXML
     private void showDashboard(javafx.event.ActionEvent event) {
         loadView("/view/dashboard/dashboard.fxml", event);
@@ -69,68 +133,6 @@ public class mainLayoutController {
     @FXML
     private void showAcademicLevel(javafx.event.ActionEvent event) {
         loadView("/view/academicLevel/academicLevelList.fxml", event);
-    }
-
-    private void loadView(String fxml, javafx.event.ActionEvent event) {
-        try {
-            java.net.URL url = getClass().getResource(fxml);
-            if (url == null) {
-                System.err.println("Could not find FXML file: " + fxml);
-                return;
-            }
-
-            Node view = FXMLLoader.load(url);
-
-            contentArea.getChildren().setAll(view);
-
-            if (event != null) {
-                setActiveButton(event);
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading view: " + fxml);
-            e.printStackTrace();
-        }
-    }
-
-
-    private void setActiveButton(javafx.event.ActionEvent event) {
-        // 1. Reset all buttons to normal state
-        sidebar.getChildren().forEach(node -> {
-            if (node instanceof Button) {
-                Button btn = (Button) node;
-                btn.getStyleClass().remove("active");
-                updateButtonIcon(btn, false); // Switch to normal icon
-            }
-        });
-
-        // 2. Set the clicked button to active state
-        if (event != null) {
-            Button clicked = (Button) event.getSource();
-            clicked.getStyleClass().add("active");
-            updateButtonIcon(clicked, true); // Switch to active icon
-        }
-    }
-
-    private void updateButtonIcon(Button button, boolean isActive) {
-        if (button.getGraphic() instanceof ImageView) {
-            ImageView iv = (ImageView) button.getGraphic();
-            if (iv.getImage() != null) {
-                String currentUrl = iv.getImage().getUrl();
-
-                // Swap the folder name in the path
-                String newUrl;
-                if (isActive) {
-                    newUrl = currentUrl.replace("/normal/", "/active/");
-                } else {
-                    newUrl = currentUrl.replace("/active/", "/normal/");
-                }
-
-                // Update the image only if the path actually changed
-                if (!currentUrl.equals(newUrl)) {
-                    iv.setImage(new Image(newUrl));
-                }
-            }
-        }
     }
 
     @FXML
