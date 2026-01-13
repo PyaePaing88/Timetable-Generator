@@ -1,40 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="600.0" minWidth="1000.0"
             prefHeight="600.0" prefWidth="1000.0"
-            stylesheets="@../style/styles.css" styleClass="body"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="body" stylesheets="@../style/styles.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.timetablegenerator.controller.mainLayoutController">
 
     <top>
-        <HBox fx:id="header" spacing="15" alignment="CENTER_LEFT" styleClass="main-header">
-            <Label text="Timetable Generator" styleClass="main-logo"/>
+        <HBox fx:id="header" alignment="CENTER_LEFT" spacing="15" styleClass="main-header">
+            <Label styleClass="main-logo" text="Timetable Generator"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
-            <Label fx:id="nameLabel" text="Admin" styleClass="main-username"/>
-            <Button text="Logout" onAction="#onLogout" styleClass="btn-logout"/>
+            <Label fx:id="nameLabel" styleClass="main-username" text="Admin"/>
+            <Button onAction="#onLogout" styleClass="btn-logout" text="Logout"/>
         </HBox>
     </top>
 
     <left>
         <VBox fx:id="sidebar" spacing="5" styleClass="sidebar">
-            <Button text="Dashboard" onAction="#showDashboard" styleClass="menu-btn"/>
-            <Button text="User" onAction="#showUser" styleClass="menu-btn"/>
-            <Button text="Department" onAction="#showDepartments" styleClass="menu-btn"/>
-            <Button text="Class" onAction="#showClasses" styleClass="menu-btn"/>
-            <Button text="Course" onAction="#showCourse" styleClass="menu-btn"/>
-            <Button text="Time Slot" onAction="#showTimeSlot" styleClass="menu-btn"/>
-            <Button text="Academic Level" onAction="#showAcademicLevel" styleClass="menu-btn"/>
+            <Button onAction="#showDashboard" styleClass="menu-btn" text="   Dashboard">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/dashboard.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#showUser" styleClass="menu-btn" text="   User">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/user.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#showDepartments" styleClass="menu-btn" text="   Department">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/department.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#showClasses" styleClass="menu-btn" text="   Class">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/class.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#showCourse" styleClass="menu-btn" text="   Course">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/course.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#showTimeSlot" styleClass="menu-btn" text="   Time Slot">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/time-slot.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#showAcademicLevel" styleClass="menu-btn" text="   Academic Level">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
+                               styleClass="menu-icon">
+                        <image>
+                            <Image url="@../assets/icon/sidebar/normal/academatic-level.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
         </VBox>
     </left>
 
     <center>
         <StackPane fx:id="contentArea" styleClass="main-content"/>
     </center>
-
 </BorderPane>

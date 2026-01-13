@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -28,7 +30,10 @@ public class mainLayoutController {
                 .map(node -> (Button) node)
                 .filter(btn -> "Dashboard".equalsIgnoreCase(btn.getText()))
                 .findFirst()
-                .ifPresent(btn -> btn.getStyleClass().add("active"));
+                .ifPresent(btn -> {
+                    btn.getStyleClass().add("active");
+                    updateButtonIcon(btn, true); // Manually trigger active icon for Dashboard
+                });
     }
 
     @FXML
@@ -89,13 +94,42 @@ public class mainLayoutController {
 
 
     private void setActiveButton(javafx.event.ActionEvent event) {
-        sidebar.getChildren().forEach(node ->
-                node.getStyleClass().remove("active")
-        );
+        // 1. Reset all buttons to normal state
+        sidebar.getChildren().forEach(node -> {
+            if (node instanceof Button) {
+                Button btn = (Button) node;
+                btn.getStyleClass().remove("active");
+                updateButtonIcon(btn, false); // Switch to normal icon
+            }
+        });
 
+        // 2. Set the clicked button to active state
         if (event != null) {
             Button clicked = (Button) event.getSource();
             clicked.getStyleClass().add("active");
+            updateButtonIcon(clicked, true); // Switch to active icon
+        }
+    }
+
+    private void updateButtonIcon(Button button, boolean isActive) {
+        if (button.getGraphic() instanceof ImageView) {
+            ImageView iv = (ImageView) button.getGraphic();
+            if (iv.getImage() != null) {
+                String currentUrl = iv.getImage().getUrl();
+
+                // Swap the folder name in the path
+                String newUrl;
+                if (isActive) {
+                    newUrl = currentUrl.replace("/normal/", "/active/");
+                } else {
+                    newUrl = currentUrl.replace("/active/", "/normal/");
+                }
+
+                // Update the image only if the path actually changed
+                if (!currentUrl.equals(newUrl)) {
+                    iv.setImage(new Image(newUrl));
+                }
+            }
         }
     }
 

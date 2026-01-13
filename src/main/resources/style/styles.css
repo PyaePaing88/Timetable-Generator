@@ -30,15 +30,21 @@
     -fx-alignment: CENTER_LEFT;
     -fx-pref-width: 160;
     -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #98a2b3;
+}
+
+.menu-btn .menu-icon{
+    -fx-margin-right: 10;
 }
 
 .menu-btn:hover {
-    -fx-background-color: #eeeeee;
+    -fx-background-color: #F5F9FF;
 }
 
 .menu-btn.active {
-    -fx-background-color: #3f51b5;
-    -fx-text-fill: white;
+    -fx-background-color: #dbebff;
+    -fx-text-fill: #0054A7;
 }
 
 .main-content {
