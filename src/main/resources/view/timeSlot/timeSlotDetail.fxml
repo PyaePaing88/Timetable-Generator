@@ -2,39 +2,51 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
-<VBox spacing="20" prefWidth="400" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+<VBox spacing="15" prefWidth="450" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.timetablegenerator.controller.timeSlot.timeSlotDetailController"
-      style="-fx-background-color: white;">
-    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+      styleClass="form-container" stylesheets="@../../style/styles.css">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
 
     <VBox spacing="5">
-        <Label text="Time Slot Details" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <Label text="Time Slot Details" styleClass="content-header"/>
         <Label fx:id="idLabel" text="ID: 0" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"/>
         <Separator/>
     </VBox>
 
     <GridPane hgap="15" vgap="15">
         <columnConstraints>
-            <ColumnConstraints minWidth="100" halignment="RIGHT"/>
-            <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0"/>
         </columnConstraints>
 
-        <Label text="Day:" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <Label fx:id="dayLabel" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <children>
+            <Label text="Day of Week:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="dayLabel" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Period:" style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <Label fx:id="periodLabel" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Period Number:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="periodLabel" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <Label text="Start Time:" style="-fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <Label fx:id="startTimeLabel" text="00:00" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label text="Start Time:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="startTimeLabel" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="End Time:" style="-fx-font-weight: bold;" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <Label fx:id="endTimeLabel" text="00:00" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label text="End Time:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="endTimeLabel" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        </children>
     </GridPane>
 
-    <HBox alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
-        <Button text="Close" onAction="#handleClose" prefWidth="100"
-                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Close" onAction="#handleClose" prefWidth="90"
+                styleClass="tg-btn, tg-btn-secondary"/>
     </HBox>
 </VBox>

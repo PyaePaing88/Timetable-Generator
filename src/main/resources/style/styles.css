@@ -63,7 +63,6 @@
 
 .stat-card:hover {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 8);
-    -fx-translate-y: -2px; /* Slight lift effect */
 }
 
 .chart-container {
@@ -111,6 +110,7 @@
     -fx-border-color: #dee2e6;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
+    -fx-padding: 5px 10px;
 }
 
 .rowsPerPageCombo:hover {
@@ -253,3 +253,24 @@
     -fx-background-color: linear-gradient(to bottom, #ffd14d, #ffc107);
 }
 /*------button Style start------*/
+
+/* Form Container */
+.form-container {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* Input Styles */
+.text-input, .combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 4;
+    -fx-padding: 5 8;
+}
+
+.text-input:focused, .combo-box:focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 1.5;
+}

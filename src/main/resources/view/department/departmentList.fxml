@@ -2,12 +2,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
 <BorderPane prefHeight="-Infinity" prefWidth="-Infinity"
             stylesheets="@../../style/styles.css" styleClass="body"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.timetablegenerator.controller.department.departmentListController">
     <top>
-        <VBox prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER" spacing="10">
+        <VBox prefHeight="100.0" prefWidth="100.0" spacing="10"
+              styleClass="data_list_header" BorderPane.alignment="CENTER">
             <padding>
                 <javafx.geometry.Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
@@ -15,23 +17,26 @@
                 <Label text="Department List" styleClass="content-header"/>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <TextField fx:id="searchField" prefWidth="300" promptText="Search..."
-                               onKeyReleased="#handleSearch"/>
+                               onKeyReleased="#handleSearch" styleClass="search_field"/>
 
                     <Label text="Rows:"/>
-                    <ComboBox fx:id="rowsPerPageCombo" prefWidth="80"/>
+                    <ComboBox fx:id="rowsPerPageCombo" prefWidth="80" styleClass="rowsPerPageCombo"/>
 
-                    <Button text="Add New Department" onAction="#openCreateForm" styleClass="btn-primary"/>
+                    <Button text="Add New Department" onAction="#openCreateForm" styleClass="tg-btn, tg-btn-primary"/>
                 </HBox>
             </children>
+            <BorderPane.margin>
+                <Insets/>
+            </BorderPane.margin>
         </VBox>
     </top>
     <center>
-        <VBox spacing="10" BorderPane.alignment="CENTER">
+        <VBox spacing="10" styleClass="data_list_body" BorderPane.alignment="CENTER">
             <padding>
-                <javafx.geometry.Insets bottom="10" left="10" right="10" top="0"/>
+                <javafx.geometry.Insets bottom="10" left="10" right="10" top="10"/>
             </padding>
             <children>
-                <TableView fx:id="departmentTable" VBox.vgrow="ALWAYS">
+                <TableView fx:id="departmentTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                     <columns>
                         <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
                         <TableColumn fx:id="colName" text="Name" prefWidth="150"/>
@@ -39,8 +44,14 @@
                         <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
                     </columns>
                 </TableView>
-                <Pagination fx:id="pagination"/>
+                <Pagination fx:id="pagination" styleClass="pagination"/>
             </children>
+            <BorderPane.margin>
+                <Insets top="10.0"/>
+            </BorderPane.margin>
         </VBox>
     </center>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
 </BorderPane>

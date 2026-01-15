@@ -2,42 +2,56 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
+<?import java.net.URL?>
 
 <VBox spacing="15" prefWidth="450" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.timetablegenerator.controller.timeSlot.timeSlotCreateController">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+      fx:controller="com.timetablegenerator.controller.timeSlot.timeSlotCreateController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
 
-    <Label text="Create New Time Slot" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Create New Time Slot" styleClass="content-header"/>
     <Separator/>
 
-    <GridPane hgap="10" vgap="12">
-        <Label text="Day of Week:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="dayComboBox" prefWidth="250" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <GridPane hgap="15" vgap="15">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0"/>
+        </columnConstraints>
 
-        <Label text="Period Number:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <Spinner fx:id="periodSpinner" prefWidth="100" editable="true"
-                 GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <children>
+            <Label text="Day of Week:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="dayComboBox" prefWidth="250" promptText="Select Day"
+                      GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Start Time:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <HBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="1">
-            <Spinner fx:id="startHour" prefWidth="70" editable="true"/>
-            <Label text=":" style="-fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
-            <Spinner fx:id="startMin" prefWidth="70" editable="true"/>
-        </HBox>
+            <Label text="Period Number:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Spinner fx:id="periodSpinner" prefWidth="100" editable="true"
+                     GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <Label text="End Time:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <HBox spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1">
-            <Spinner fx:id="endHour" prefWidth="70" editable="true"/>
-            <Label text=":" style="-fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
-            <Spinner fx:id="endMin" prefWidth="70" editable="true"/>
-        </HBox>
+            <Label text="Start Time:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <Spinner fx:id="startHour" prefWidth="80" editable="true"/>
+                <Label text=":" style="-fx-font-weight: bold;"/>
+                <Spinner fx:id="startMin" prefWidth="80" editable="true"/>
+            </HBox>
+
+            <Label text="End Time:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="3" GridPane.columnIndex="1">
+                <Spinner fx:id="endHour" prefWidth="80" editable="true"/>
+                <Label text=":" style="-fx-font-weight: bold;"/>
+                <Spinner fx:id="endMin" prefWidth="80" editable="true"/>
+            </HBox>
+        </children>
     </GridPane>
 
-    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
-        <Button text="Cancel" onAction="#handleCancel" prefWidth="80"/>
-        <Button text="Save Time Slot" onAction="#handleSave" prefWidth="130"
-                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel" prefWidth="90"
+                styleClass="tg-btn, tg-btn-secondary"/>
+        <Button text="Save Time Slot" onAction="#handleSave" prefWidth="140"
+                styleClass="tg-btn, tg-btn-primary"/>
     </HBox>
 </VBox>

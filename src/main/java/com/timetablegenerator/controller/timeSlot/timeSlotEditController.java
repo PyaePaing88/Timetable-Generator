@@ -17,7 +17,7 @@ public class timeSlotEditController {
     @FXML
     private ComboBox<day> dayComboBox;
     @FXML
-    private TextField periodField;
+    private Spinner<Integer> periodSpinner;
     @FXML
     private Spinner<Integer> startHour, startMin, endHour, endMin;
 
@@ -32,6 +32,7 @@ public class timeSlotEditController {
     public void initialize() {
         dayComboBox.setItems(FXCollections.observableArrayList(day.values()));
 
+        periodSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 1));
         startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
         startMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
@@ -44,7 +45,7 @@ public class timeSlotEditController {
             timeSlotModel slot = service.getTimeSlotById(id);
             if (slot != null) {
                 dayComboBox.setValue(slot.getDay_of_week());
-                periodField.setText(String.valueOf(slot.getPeriod()));
+                periodSpinner.getValueFactory().setValue(slot.getPeriod());
 
                 if (slot.getStart_time() != null) {
                     LocalTime startTime = slot.getStart_time().toLocalTime();
@@ -70,7 +71,8 @@ public class timeSlotEditController {
                 timeSlotModel slot = new timeSlotModel();
                 slot.setId(timeSlotId);
                 slot.setDay_of_week(dayComboBox.getValue());
-                slot.setPeriod(Integer.parseInt(periodField.getText().trim()));
+
+                slot.setPeriod(periodSpinner.getValue());
 
                 LocalTime start = LocalTime.of(startHour.getValue(), startMin.getValue());
                 LocalTime end = LocalTime.of(endHour.getValue(), endMin.getValue());
@@ -90,24 +92,19 @@ public class timeSlotEditController {
     }
 
     private boolean validateInput() {
-        int startTotal = (startHour.getValue() * 60) + startMin.getValue();
-        int endTotal = (endHour.getValue() * 60) + endMin.getValue();
-
-        try {
-            if (dayComboBox.getValue() == null || periodField.getText().trim().isEmpty()) {
-                showAlert("Validation Error", "All fields are required.", Alert.AlertType.WARNING);
-                return false;
-            }
-            Integer.parseInt(periodField.getText().trim());
-        } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Period must be a number.", Alert.AlertType.WARNING);
+        if (dayComboBox.getValue() == null) {
+            showAlert("Validation Error", "Please select a Day of Week.", Alert.AlertType.WARNING);
             return false;
         }
+
+        int startTotal = (startHour.getValue() * 60) + startMin.getValue();
+        int endTotal = (endHour.getValue() * 60) + endMin.getValue();
 
         if (endTotal <= startTotal) {
             showAlert("Validation Error", "End time must be after start time.", Alert.AlertType.WARNING);
             return false;
         }
+
         return true;
     }
 

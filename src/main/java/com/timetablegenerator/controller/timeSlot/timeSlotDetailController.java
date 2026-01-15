@@ -5,6 +5,7 @@ import com.timetablegenerator.repository.timeSlotRepo;
 import com.timetablegenerator.service.timeSlotService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.text.SimpleDateFormat;
@@ -12,13 +13,14 @@ import java.text.SimpleDateFormat;
 public class timeSlotDetailController {
 
     @FXML
-    private Label dayLabel;
+    private TextField dayLabel;
     @FXML
-    private Label periodLabel;
+    private TextField periodLabel;
     @FXML
-    private Label startTimeLabel;
+    private TextField startTimeLabel;
     @FXML
-    private Label endTimeLabel;
+    private TextField endTimeLabel;
+
     @FXML
     private Label idLabel;
 
@@ -33,25 +35,27 @@ public class timeSlotDetailController {
         try {
             timeSlotModel slot = service.getTimeSlotById(id);
             if (slot != null) {
-                idLabel.setText(String.valueOf(slot.getId()));
+                idLabel.setText("ID: " + slot.getId());
+
                 dayLabel.setText(slot.getDay_of_week().toString());
-                periodLabel.setText("Period " + slot.getPeriod());
+                periodLabel.setText(String.valueOf(slot.getPeriod()));
 
                 if (slot.getStart_time() != null) {
                     startTimeLabel.setText(timeFormat.format(slot.getStart_time()));
                 }
+
                 if (slot.getEnd_time() != null) {
                     endTimeLabel.setText(timeFormat.format(slot.getEnd_time()));
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error loading details: " + e.getMessage());
+            System.err.println("Error loading details for ID " + id + ": " + e.getMessage());
         }
     }
 
     @FXML
     private void handleClose() {
-        Stage stage = (Stage) dayLabel.getScene().getWindow();
+        Stage stage = (Stage) idLabel.getScene().getWindow();
         stage.close();
     }
 }

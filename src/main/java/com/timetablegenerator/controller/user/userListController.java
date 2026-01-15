@@ -11,24 +11,36 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.List;
 
 public class userListController {
 
-    @FXML private TableView<userModel> userTable;
-    @FXML private TextField searchField;
-    @FXML private Pagination pagination;
-    @FXML private ComboBox<Integer> rowsPerPageCombo;
+    @FXML
+    private TableView<userModel> userTable;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<userModel, Integer> colId;
-    @FXML private TableColumn<userModel, String> colName;
-    @FXML private TableColumn<userModel, String> colEmail;
-    @FXML private TableColumn<userModel, String> colPhone;
-    @FXML private TableColumn<userModel, String> colRole;
-    @FXML private TableColumn<userModel, String> colActive;
-    @FXML private TableColumn<userModel, Void> colActions;
+    @FXML
+    private TableColumn<userModel, Integer> colId;
+    @FXML
+    private TableColumn<userModel, String> colName;
+    @FXML
+    private TableColumn<userModel, String> colEmail;
+    @FXML
+    private TableColumn<userModel, String> colPhone;
+    @FXML
+    private TableColumn<userModel, String> colRole;
+    @FXML
+    private TableColumn<userModel, String> colActive;
+    @FXML
+    private TableColumn<userModel, Void> colActions;
 
     private userService service;
 
@@ -105,7 +117,7 @@ public class userListController {
             e.printStackTrace();
         }
     }
-
+    
     @FXML
     private void handleSearch() {
         updatePaginationCount();

@@ -2,25 +2,42 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
 <VBox spacing="15" prefWidth="450" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.timetablegenerator.controller.classes.classCreateController">
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+      fx:controller="com.timetablegenerator.controller.classes.classCreateController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
 
-    <Label text="Create New Class" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Create New Class" styleClass="content-header"/>
     <Separator/>
 
-    <GridPane hgap="10" vgap="12">
-        <Label text="Class Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="nameField" promptText="Enter class name" GridPane.rowIndex="0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+    <GridPane hgap="15" vgap="15">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0"/>
+        </columnConstraints>
 
-        <Label text="Department Name:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="deptComboBox" prefWidth="200" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <children>
+            <Label text="Class Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="nameField" promptText="e.g. Grade 10-A"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+
+            <Label text="Department:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="deptComboBox" prefWidth="250" promptText="Select Department"
+                      GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        </children>
     </GridPane>
 
-    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
-        <Button text="Cancel" onAction="#handleCancel" prefWidth="80"/>
-        <Button text="Create Department" onAction="#handleSave" prefWidth="120"
-                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel" prefWidth="90"
+                styleClass="tg-btn, tg-btn-secondary"/>
+        <Button text="Create Class" onAction="#handleSave" prefWidth="130"
+                styleClass="tg-btn, tg-btn-primary"/>
     </HBox>
 </VBox>
