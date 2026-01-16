@@ -3,6 +3,7 @@ package com.timetablegenerator.controller;
 import com.timetablegenerator.mainApp;
 import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.util.authSession;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,16 +11,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 import java.net.URL;
 
-public class mainLayoutController {
+public class teacherLayoutController {
     @FXML
     private StackPane contentArea;
     @FXML
-    private VBox sidebar;
+    private HBox topNav;
     @FXML
     private Label nameLabel;
 
@@ -30,11 +31,11 @@ public class mainLayoutController {
 
         loadView("/view/dashboard/dashboard.fxml", null);
 
-        autoSelectButton("Dashboard");
+        autoSelectButton("Timetable");
     }
 
     private void autoSelectButton(String buttonText) {
-        sidebar.getChildren().stream()
+        topNav.getChildren().stream()
                 .filter(node -> node instanceof Button)
                 .map(node -> (Button) node)
                 .filter(btn -> buttonText.equalsIgnoreCase(btn.getText().trim()))
@@ -42,11 +43,11 @@ public class mainLayoutController {
                 .ifPresent(this::applyActiveStyle);
     }
 
-    private void loadView(String fxml, javafx.event.ActionEvent event) {
+    private void loadView(String fxml, ActionEvent event) {
         try {
             URL url = getClass().getResource(fxml);
             if (url == null) {
-                System.err.println("Could not find FXML file: " + fxml);
+                System.err.println("FXML not found: " + fxml);
                 return;
             }
 
@@ -57,13 +58,13 @@ public class mainLayoutController {
                 applyActiveStyle((Button) event.getSource());
             }
         } catch (Exception e) {
-            System.err.println("Error loading view: " + fxml);
+            System.err.println("Error loading: " + fxml);
             e.printStackTrace();
         }
     }
 
     private void applyActiveStyle(Button targetButton) {
-        sidebar.getChildren().forEach(node -> {
+        topNav.getChildren().forEach(node -> {
             if (node instanceof Button) {
                 Button btn = (Button) node;
                 btn.getStyleClass().remove("active");
@@ -89,60 +90,29 @@ public class mainLayoutController {
                 }
 
                 if (!currentUrl.equals(newUrl)) {
-                    iv.setImage(new Image(newUrl));
+                    try {
+                        iv.setImage(new Image(newUrl));
+                    } catch (Exception e) {
+                        System.err.println("Icon not found: " + newUrl);
+                    }
                 }
             }
         }
     }
 
     @FXML
-    private void showDashboard(javafx.event.ActionEvent event) {
-        loadView("/view/dashboard/dashboard.fxml", event);
+    private void showAnnouncement(ActionEvent event) {
+        loadView("/view/announcement/announcementList.fxml", event);
     }
 
     @FXML
-    private void showDepartments(javafx.event.ActionEvent event) {
-        loadView("/view/department/departmentList.fxml", event);
-    }
-
-    @FXML
-    private void showUser(javafx.event.ActionEvent event) {
-        loadView("/view/user/userList.fxml", event);
-    }
-
-    @FXML
-    private void showClasses(javafx.event.ActionEvent event) {
-        loadView("/view/class/classList.fxml", event);
-    }
-
-    @FXML
-    private void showCourse(javafx.event.ActionEvent event) {
-        loadView("/view/course/courseList.fxml", event);
-    }
-
-    @FXML
-    private void showTimeSlot(javafx.event.ActionEvent event) {
-        loadView("/view/TimeSlot/timeSlotList.fxml", event);
-    }
-
-    @FXML
-    private void showAcademicLevel(javafx.event.ActionEvent event) {
-        loadView("/view/academicLevel/academicLevelList.fxml", event);
-    }
-
-    @FXML
-    private void showAvailabilityList(javafx.event.ActionEvent event) {
-        loadView("/view/availability/availabilityList.fxml", event);
-    }
-
-    @FXML
-    private void showTimetable(javafx.event.ActionEvent event) {
+    private void showAcademicLevel(ActionEvent event) {
         loadView("/view/timetable/timetableList.fxml", event);
     }
 
     @FXML
-    private void showAnnouncement(javafx.event.ActionEvent event) {
-        loadView("/view/announcement/announcementList.fxml", event);
+    private void showAvailabilityList(ActionEvent event) {
+        loadView("/view/availability/availabilityListTeacher.fxml", event);
     }
 
     @FXML

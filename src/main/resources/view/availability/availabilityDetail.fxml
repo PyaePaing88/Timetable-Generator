@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" prefWidth="480" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.timetablegenerator.controller.availability.availabilityDetailController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Availability Details" styleClass="content-header"/>
+    <Separator/>
+
+    <GridPane hgap="15" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="130.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="250.0"/>
+        </columnConstraints>
+
+        <children>
+            <Label text="Record ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtId" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Teacher Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtTeacher" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Status:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtStatus" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Unavailable From:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtFrom" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Unavailable To:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtTo" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Remarks:" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+            <TextArea fx:id="txtRemark" editable="false" wrapText="true" prefHeight="80"
+                      styleClass="text-area-readonly"
+                      GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        </children>
+    </GridPane>
+
+    <Region VBox.vgrow="ALWAYS" prefHeight="10"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Close" onAction="#closeWindow" prefWidth="100"
+                styleClass="tg-btn, tg-btn-secondary"/>
+    </HBox>
+</VBox>

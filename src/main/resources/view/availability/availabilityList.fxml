@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="-Infinity" prefWidth="-Infinity"
+            stylesheets="@../../style/styles.css" styleClass="body"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.timetablegenerator.controller.availability.availabilityListAdminController">
+    <top>
+        <VBox prefHeight="100.0" prefWidth="100.0" spacing="10"
+              styleClass="data_list_header" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Label text="Teacher Availability" styleClass="content-header"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" prefWidth="300" promptText="Search by teacher, status or remark..."
+                               onKeyReleased="#handleSearch" styleClass="search_field"/>
+
+                    <Label text="Rows:"/>
+                    <ComboBox fx:id="rowsPerPageCombo" prefWidth="80" styleClass="rowsPerPageCombo"/>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="data_list_body" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </padding>
+            <children>
+                <TableView fx:id="availabilityTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                        <TableColumn fx:id="colTeacher" text="Teacher Name" prefWidth="150"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
+                        <TableColumn fx:id="colRemark" text="Remark" prefWidth="250"/>
+                        <TableColumn fx:id="colFrom" text="From" prefWidth="250"/>
+                        <TableColumn fx:id="colTo" text="To" prefWidth="250"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="120"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+                <Pagination fx:id="pagination" styleClass="pagination"/>
+            </children>
+            <BorderPane.margin>
+                <Insets top="10.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</BorderPane>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" styleClass="content-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.timetablegenerator.controller.announcement.announcementListController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Announcements" styleClass="content-header"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="Search announcements..." onKeyReleased="#handleSearch"
+                   prefWidth="250"/>
+        <Button text="Add New Announcement" styleClass="tg-btn, tg-btn-primary"/>
+    </HBox>
+
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" styleClass="transparent-scroll">
+        <VBox fx:id="cardContainer" spacing="15">
+        </VBox>
+    </ScrollPane>
+</VBox>

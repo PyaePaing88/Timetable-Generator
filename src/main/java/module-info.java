@@ -1,7 +1,6 @@
 module com.timetablegenerator {
-    requires javafx.controls;
-    requires javafx.fxml;
     requires java.sql;
+    requires jfxtras.controls;
 
     opens com.timetablegenerator.model to javafx.base, javafx.fxml;
     opens com.timetablegenerator.controller to javafx.fxml;
@@ -15,4 +14,6 @@ module com.timetablegenerator {
     opens com.timetablegenerator.controller.academicLevel to javafx.fxml;
     opens com.timetablegenerator.controller.auth to javafx.fxml;
     opens com.timetablegenerator.controller.timeSlot to javafx.fxml;
+    opens com.timetablegenerator.controller.availability to javafx.fxml;
+    opens com.timetablegenerator.controller.announcement to javafx.fxml;
 }

@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane prefHeight="-Infinity" prefWidth="-Infinity"
             stylesheets="@../../style/styles.css" styleClass="body"
             xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.timetablegenerator.controller.timetableController">
-    <top>
-        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="Timetable List" styleClass="content-header"/>
-                <HBox prefHeight="100.0" prefWidth="800.0" styleClass="filter-box">
-                    <children>
-                        <TextField prefWidth="150.0" styleClass="input-field"/>
-                        <DatePicker styleClass="input-field"/>
-                        <Button mnemonicParsing="false" text="Search" styleClass="btn-filter"/>
-                        <Button mnemonicParsing="false" text="Add new" styleClass="btn-add-new"/>
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
-    </top>
-    <center>
-        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" styleClass="data-list">
-            <columns>
-                <TableColumn prefWidth="75.0" text="C1"/>
-                <TableColumn prefWidth="75.0" text="C2"/>
-            </columns>
-        </TableView>
-    </center>
-</BorderPane>
+            fx:controller="com.timetablegenerator.controller.timetableController"/>
+

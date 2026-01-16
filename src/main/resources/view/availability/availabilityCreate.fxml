@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<?import jfxtras.scene.control.LocalDateTimeTextField?>
+<VBox spacing="15" prefWidth="480" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.timetablegenerator.controller.availability.availabilityCreateController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Record Teacher Unavailability" styleClass="content-header"/>
+    <Separator/>
+
+    <GridPane hgap="15" vgap="15">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="130.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="250.0"/>
+        </columnConstraints>
+
+        <children>
+            <Label text="Status:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="statusField" promptText="e.g. Medical Leave, Conference, Busy"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="From (Date &amp; Time):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <LocalDateTimeTextField fx:id="fromPicker" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                    maxWidth="Infinity"/>
+
+            <Label text="To (Date &amp; Time):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <LocalDateTimeTextField fx:id="toPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                    maxWidth="Infinity"/>
+
+            <Label text="Remark:" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+            <TextArea fx:id="remarkArea" prefHeight="100" wrapText="true" promptText="Additional details..."
+                      GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        </children>
+    </GridPane>
+
+    <Region VBox.vgrow="ALWAYS" prefHeight="20"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel" prefWidth="100"
+                styleClass="tg-btn, tg-btn-secondary"/>
+        <Button text="Save Availability" onAction="#handleSave" prefWidth="150"
+                styleClass="tg-btn, tg-btn-primary"/>
+    </HBox>
+</VBox>
