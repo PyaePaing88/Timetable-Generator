@@ -7,16 +7,18 @@
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.timetablegenerator.controller.department.addUserToDeptController">
 
-    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-    <Label text="Assign Users to Department" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    <Label text="Add Teachers to Department" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
         <VBox spacing="5" HBox.hgrow="ALWAYS">
-            <Label text="Available Users (No Department)"/>
+            <Label text="Available Teachers (No Department)"/>
             <TableView fx:id="allUsersTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colAllUserName" text="User Name" prefWidth="250"/>
+                    <TableColumn fx:id="colAllUserName" text="Teacher Name" prefWidth="250"/>
                 </columns>
             </TableView>
         </VBox>
@@ -27,10 +29,10 @@
         </VBox>
 
         <VBox spacing="5" HBox.hgrow="ALWAYS">
-            <Label text="Department Users"/>
+            <Label text="Department Teachers"/>
             <TableView fx:id="deptUsersTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colDeptUserName" text="User Name" prefWidth="250"/>
+                    <TableColumn fx:id="colDeptUserName" text="Teacher Name" prefWidth="250"/>
                 </columns>
             </TableView>
         </VBox>
@@ -38,6 +40,7 @@
 
     <HBox alignment="CENTER_RIGHT" spacing="10">
         <Button text="Cancel" onAction="#handleCancel" prefWidth="80" styleClass="btn-secondary"/>
-        <Button text="Save Changes" onAction="#handleSave" prefWidth="120" style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+        <Button text="Save Changes" onAction="#handleSave" prefWidth="120"
+                style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
     </HBox>
 </VBox>

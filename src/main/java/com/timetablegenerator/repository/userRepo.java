@@ -4,16 +4,15 @@ import com.timetablegenerator.model.role;
 import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class userRepo {
 
-    private final Connection connection;
 
     public userRepo() {
-        this.connection = dbConnection.getConnection();
     }
 
     private final userModel currentUser = authSession.getUser();
@@ -21,7 +20,8 @@ public class userRepo {
 
     public void create(userModel user) throws SQLException {
         String sql = "INSERT INTO users (name, phone, email, password, department_id, role, is_active, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, user.getName());
             st.setString(2, user.getPhone());
             st.setString(3, user.getEmail());
@@ -38,7 +38,8 @@ public class userRepo {
 
     public int getTotalCount(String search) throws Exception {
         String sql = "SELECT COUNT(*) FROM users WHERE (name LIKE ? OR email LIKE ?) AND is_delete = 0";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setString(2, "%" + search + "%");
             ResultSet rs = st.executeQuery();
@@ -50,13 +51,16 @@ public class userRepo {
     public List<userModel> findAll(int limit, int offset, String search) throws SQLException {
         List<userModel> users = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE is_delete = false AND (name LIKE ? OR email LIKE ?) LIMIT ? OFFSET ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setString(2, "%" + search + "%");
             st.setInt(3, limit);
             st.setInt(4, offset);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { users.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                users.add(mapResultSetToModel(rs));
+            }
         }
         return users;
     }
@@ -64,9 +68,12 @@ public class userRepo {
     public List<userModel> findAllForDept() throws SQLException {
         List<userModel> users = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE is_delete = false AND is_active = true AND role='teacher' AND department_id=0";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { users.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                users.add(mapResultSetToModel(rs));
+            }
         }
         return users;
     }
@@ -74,17 +81,21 @@ public class userRepo {
     public List<userModel> findAllByDeptId(int id) throws SQLException {
         List<userModel> users = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE department_id = ? AND is_delete = false AND is_active=true AND role='teacher'";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { users.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                users.add(mapResultSetToModel(rs));
+            }
         }
         return users;
     }
 
     public void update(userModel user) throws SQLException {
         String sql = "UPDATE users SET name=?, phone=?, email=?, department_id=?, role=?, is_active=?, modify_by=?, modify_date=? WHERE id=?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, user.getName());
             st.setString(2, user.getPhone());
             st.setString(3, user.getEmail());
@@ -100,7 +111,8 @@ public class userRepo {
 
     public void softDelete(int id) throws SQLException {
         String sql = "UPDATE users SET is_delete = true WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         }
@@ -108,7 +120,8 @@ public class userRepo {
 
     public userModel findById(int id) throws SQLException {
         String sql = "SELECT * FROM users WHERE id = ? AND is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) return mapResultSetToModel(rs);

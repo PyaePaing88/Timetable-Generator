@@ -10,16 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class announcementRepo {
-    private final Connection connection;
     private final userModel currentUser = authSession.getUser();
 
     public announcementRepo() {
-        this.connection = dbConnection.getConnection();
     }
 
     public void create(announcementModel announcement) throws SQLException {
         String sql = "INSERT INTO announcements (title, message, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, announcement.getTitle());
             st.setString(2, announcement.getMessage());
             st.setBoolean(3, false);
@@ -31,7 +30,8 @@ public class announcementRepo {
 
     public int getTotalCount(String search) throws Exception {
         String sql = "SELECT COUNT(*) FROM announcements WHERE (title LIKE ? OR message LIKE ?) AND is_delete = 0";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String pattern = "%" + search + "%";
             st.setString(1, pattern);
             st.setString(2, pattern);
@@ -48,7 +48,8 @@ public class announcementRepo {
                 "AND (a.title LIKE ? OR a.message LIKE ?) " +
                 "ORDER BY a.created_date DESC LIMIT ? OFFSET ?";
 
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";
             st.setString(1, searchPattern);
             st.setString(2, searchPattern);
@@ -65,7 +66,8 @@ public class announcementRepo {
 
     public void update(announcementModel announcement) throws SQLException {
         String sql = "UPDATE announcements SET title=?, message=?, modify_by=?, modify_date=? WHERE id=?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, announcement.getTitle());
             st.setString(2, announcement.getMessage());
             st.setInt(3, currentUser.getId());
@@ -77,7 +79,8 @@ public class announcementRepo {
 
     public void softDelete(int id) throws SQLException {
         String sql = "UPDATE announcements SET is_delete = true WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         }
@@ -85,7 +88,8 @@ public class announcementRepo {
 
     public announcementModel findById(int id) throws SQLException {
         String sql = "SELECT * FROM announcements WHERE id = ? AND is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {

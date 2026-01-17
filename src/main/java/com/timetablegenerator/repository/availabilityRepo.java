@@ -10,17 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class availabilityRepo {
-    private final Connection connection;
 
     public availabilityRepo() {
-        this.connection = dbConnection.getConnection();
     }
 
     private final userModel currentUser = authSession.getUser();
 
     public void create(availabilityModel availability) throws SQLException {
         String sql = "INSERT INTO availabilities (status, remark, `from`, `to`, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, availability.getStatus());
             st.setString(2, availability.getRemark());
             st.setTimestamp(3, availability.getFrom());
@@ -34,7 +33,8 @@ public class availabilityRepo {
 
     public int getTotalCount(String search) throws Exception {
         String sql = "SELECT COUNT(*) FROM availabilities WHERE (status LIKE ? OR remark LIKE ?) AND is_delete = 0";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setString(2, "%" + search + "%");
             ResultSet rs = st.executeQuery();
@@ -52,7 +52,8 @@ public class availabilityRepo {
                 "AND (a.status LIKE ? OR a.Remark LIKE ? OR u.name LIKE ?) " +
                 "LIMIT ? OFFSET ?";
 
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";
             st.setString(1, searchPattern);
             st.setString(2, searchPattern);
@@ -73,7 +74,8 @@ public class availabilityRepo {
                 "INNER JOIN users u ON a.created_by = u.id " +
                 "WHERE (a.status LIKE ? OR a.Remark LIKE ? OR u.name LIKE ?) " +
                 "AND a.is_delete = 0 AND a.created_by = ?";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String pattern = "%" + search + "%";
             st.setString(1, pattern);
             st.setString(2, pattern);
@@ -95,7 +97,8 @@ public class availabilityRepo {
                 "AND a.created_by = ? " +
                 "LIMIT ? OFFSET ?";
 
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";
             st.setString(1, searchPattern);
             st.setString(2, searchPattern);
@@ -114,7 +117,8 @@ public class availabilityRepo {
 
     public void update(availabilityModel availability) throws SQLException {
         String sql = "UPDATE availabilities SET status=?, remark=?, `from`=?, `to`=?, modify_by=?, modify_date=? WHERE id=?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, availability.getStatus());
             st.setString(2, availability.getRemark());
             st.setTimestamp(3, availability.getFrom());
@@ -128,7 +132,8 @@ public class availabilityRepo {
 
     public void softDelete(int id) throws SQLException {
         String sql = "UPDATE availabilities SET is_delete = true WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         }
@@ -140,7 +145,8 @@ public class availabilityRepo {
                 "INNER JOIN users u ON a.created_by = u.id " +
                 "WHERE a.id = ? AND a.is_delete = false";
 
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 

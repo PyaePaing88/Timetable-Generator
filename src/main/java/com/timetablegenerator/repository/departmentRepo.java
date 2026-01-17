@@ -10,17 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class departmentRepo {
-    private final Connection connection;
 
     public departmentRepo() {
-        this.connection = dbConnection.getConnection();
     }
 
     private final userModel currentUser = authSession.getUser();
 
     public void create(departmentModel dept) throws SQLException {
         String sql = "INSERT INTO departments (department_name, is_delete, created_by, created_date, is_minor) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, dept.getDepartment_name());
             st.setBoolean(2, false);
             st.setInt(3, currentUser.getId());
@@ -32,7 +31,8 @@ public class departmentRepo {
 
     public int getTotalCount(String search) throws Exception {
         String sql = "SELECT COUNT(*) FROM departments WHERE (department_name LIKE ?) AND is_delete = 0";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             ResultSet rs = st.executeQuery();
             if (rs.next()) return rs.getInt(1);
@@ -43,12 +43,15 @@ public class departmentRepo {
     public List<departmentModel> findAll(int limit, int offset, String search) throws SQLException {
         List<departmentModel> dept = new ArrayList<>();
         String sql = "SELECT * FROM departments WHERE is_delete = false AND (department_name LIKE ?) LIMIT ? OFFSET ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setInt(2, limit);
             st.setInt(3, offset);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { dept.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                dept.add(mapResultSetToModel(rs));
+            }
         }
         return dept;
     }
@@ -56,9 +59,12 @@ public class departmentRepo {
     public List<departmentModel> findAllMajor() throws SQLException {
         List<departmentModel> dept = new ArrayList<>();
         String sql = "SELECT * FROM departments WHERE is_delete = false AND is_minor=false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { dept.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                dept.add(mapResultSetToModel(rs));
+            }
         }
         return dept;
     }
@@ -66,16 +72,20 @@ public class departmentRepo {
     public List<departmentModel> findAllMinor() throws SQLException {
         List<departmentModel> dept = new ArrayList<>();
         String sql = "SELECT * FROM departments WHERE is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { dept.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                dept.add(mapResultSetToModel(rs));
+            }
         }
         return dept;
     }
 
     public void update(departmentModel dept) throws SQLException {
         String sql = "UPDATE departments SET department_name=?, modify_by=?, modify_date=?, is_minor=? WHERE id=?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, dept.getDepartment_name());
             st.setInt(2, currentUser.getId());
             st.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -87,7 +97,8 @@ public class departmentRepo {
 
     public void softDelete(int id) throws SQLException {
         String sql = "UPDATE departments SET is_delete = true WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         }
@@ -95,7 +106,8 @@ public class departmentRepo {
 
     public departmentModel findById(int id) throws SQLException {
         String sql = "SELECT * FROM departments WHERE id = ? AND is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) return mapResultSetToModel(rs);

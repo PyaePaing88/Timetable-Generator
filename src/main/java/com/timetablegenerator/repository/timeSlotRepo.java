@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class timeSlotRepo {
-    private final Connection connection;
 
     public timeSlotRepo() {
-        this.connection = dbConnection.getConnection();
     }
 
     private final userModel currentUser = authSession.getUser();
@@ -23,8 +21,8 @@ public class timeSlotRepo {
     public void create(timeSlotModel time) throws SQLException {
         String sql = "INSERT INTO time_slots (day_of_week, period, start_time, end_time, created_by, created_date, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, time.getDay_of_week().name());
             st.setInt(2, time.getPeriod());
 
@@ -41,7 +39,8 @@ public class timeSlotRepo {
 
     public int getTotalCount(String search) throws Exception {
         String sql = "SELECT COUNT(*) FROM time_slots WHERE (day_of_week LIKE ? OR period LIKE ? OR start_time LIKE ? OR end_time LIKE ?) AND is_delete = 0";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";
             st.setString(1, searchPattern);
             st.setString(2, searchPattern);
@@ -57,7 +56,8 @@ public class timeSlotRepo {
     public List<timeSlotModel> findAll(int limit, int offset, String search) throws SQLException {
         List<timeSlotModel> time = new ArrayList<>();
         String sql = "SELECT * FROM time_slots WHERE is_delete = false AND (day_of_week LIKE ? OR period LIKE ? OR start_time LIKE ? OR end_time LIKE ?) LIMIT ? OFFSET ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";
 
             st.setString(1, searchPattern);
@@ -77,7 +77,8 @@ public class timeSlotRepo {
 
     public void update(timeSlotModel time) throws SQLException {
         String sql = "UPDATE time_slots SET day_of_week=?, period=?, start_time=?, end_time=?, modify_by=?, modify_date=? WHERE id=?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, time.getDay_of_week().name());
             st.setInt(2, time.getPeriod());
             st.setTime(3, time.getStart_time());
@@ -91,7 +92,8 @@ public class timeSlotRepo {
 
     public void softDelete(int id) throws SQLException {
         String sql = "UPDATE time_slots SET is_delete = true WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         }
@@ -99,7 +101,8 @@ public class timeSlotRepo {
 
     public timeSlotModel findById(int id) throws SQLException {
         String sql = "SELECT * FROM time_slots WHERE id = ? AND is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) return mapResultSetToModel(rs);

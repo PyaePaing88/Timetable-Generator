@@ -4,21 +4,22 @@ import com.timetablegenerator.model.academicLevelModel;
 import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class academicLevelRepo {
-    private final Connection connection;
+
     public academicLevelRepo() {
-        this.connection = dbConnection.getConnection();
     }
 
     private final userModel currentUser = authSession.getUser();
 
     public void create(academicLevelModel al) throws SQLException {
         String sql = "INSERT INTO academic_levels (year, is_delete, created_by, created_date) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, al.getYear());
             st.setBoolean(2, false);
             st.setInt(3, currentUser.getId());
@@ -29,7 +30,8 @@ public class academicLevelRepo {
 
     public int getTotalCount(String search) throws Exception {
         String sql = "SELECT COUNT(*) FROM academic_levels WHERE (year LIKE ?) AND is_delete = 0";
-        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             ResultSet rs = st.executeQuery();
             if (rs.next()) return rs.getInt(1);
@@ -40,12 +42,15 @@ public class academicLevelRepo {
     public List<academicLevelModel> findAll(int limit, int offset, String search) throws SQLException {
         List<academicLevelModel> al = new ArrayList<>();
         String sql = "SELECT * FROM academic_levels WHERE is_delete = false AND (year LIKE ?) LIMIT ? OFFSET ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, "%" + search + "%");
             st.setInt(2, limit);
             st.setInt(3, offset);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { al.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                al.add(mapResultSetToModel(rs));
+            }
         }
         return al;
     }
@@ -53,16 +58,20 @@ public class academicLevelRepo {
     public List<academicLevelModel> findAllForCombo() throws SQLException {
         List<academicLevelModel> al = new ArrayList<>();
         String sql = "SELECT * FROM academic_levels WHERE is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
-            while (rs.next()) { al.add(mapResultSetToModel(rs)); }
+            while (rs.next()) {
+                al.add(mapResultSetToModel(rs));
+            }
         }
         return al;
     }
 
     public void update(academicLevelModel al) throws SQLException {
         String sql = "UPDATE academic_levels SET year=?, modify_by=?, modify_date=? WHERE id=?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, al.getYear());
             st.setInt(2, currentUser.getId());
             st.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -73,7 +82,8 @@ public class academicLevelRepo {
 
     public void softDelete(int id) throws SQLException {
         String sql = "UPDATE academic_levels SET is_delete = true WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         }
@@ -81,7 +91,8 @@ public class academicLevelRepo {
 
     public academicLevelModel findById(int id) throws SQLException {
         String sql = "SELECT * FROM academic_levels WHERE id = ? AND is_delete = false";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) return mapResultSetToModel(rs);
