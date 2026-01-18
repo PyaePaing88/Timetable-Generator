@@ -1,14 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="500.0" minWidth="800.0"
-            prefHeight="500.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.timetablegenerator.controller.timetableController"
-            stylesheets="@../../style/styles.css"/>
+<VBox prefWidth="480.0" spacing="0.0" styleClass="modal-container"
+      stylesheets="@../../style/styles.css"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.timetablegenerator.controller.timetable.timetableCreateController">
+
+    <VBox spacing="5.0" styleClass="modal-header">
+        <padding>
+            <Insets bottom="20.0" left="25.0" right="25.0" top="20.0"/>
+        </padding>
+        <children>
+            <Label text="Generate Weekly Schedule" styleClass="modal-title"
+                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Label text="Run the algorithm to create an optimized timetable."
+                   style="-fx-text-fill: #7f8c8d; -fx-font-size: 13;"/>
+        </children>
+    </VBox>
+
+    <Separator/>
+
+    <VBox spacing="25.0" styleClass="modal-body">
+        <padding>
+            <Insets bottom="30.0" left="25.0" right="25.0" top="30.0"/>
+        </padding>
+        <children>
+            <VBox spacing="8.0">
+                <children>
+                    <Label text="Target Department" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                    <ComboBox fx:id="departmentComboBox" maxWidth="Infinity"
+                              prefHeight="40.0" promptText="Select department to schedule..."/>
+                </children>
+            </VBox>
+            
+            <HBox spacing="10" style="-fx-background-color: #ebf5fb; -fx-padding: 10; -fx-background-radius: 5;">
+                <children>
+                    <Label text="ℹ" style="-fx-text-fill: #3498db; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <Label text="Constraint check: Max 4 slots per teacher, forced shift variety, and proximity grouping will be applied."
+                           style="-fx-text-fill: #2980b9; -fx-font-size: 11;" wrapText="true" HBox.hgrow="ALWAYS"/>
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+
+    <Separator/>
+
+    <HBox alignment="CENTER_RIGHT" spacing="15.0" styleClass="modal-footer">
+        <padding>
+            <Insets bottom="20.0" left="25.0" right="25.0" top="20.0"/>
+        </padding>
+        <children>
+            <Button onAction="#handleCancel" prefHeight="35.0" prefWidth="100.0"
+                    style="-fx-background-color: transparent; -fx-border-color: #bdc3c7; -fx-border-radius: 5;"
+                    text="Cancel"/>
+
+            <StackPane alignment="CENTER">
+                <children>
+                    <Button fx:id="generateBtn" onAction="#handleGenerate"
+                            prefHeight="40.0" prefWidth="160.0"
+                            styleClass="btn-primary" text="Run Algorithm"/>
+
+                    <ProgressIndicator fx:id="loadingIndicator" maxHeight="28.0" maxWidth="28.0"
+                                       visible="false"/>
+                </children>
+            </StackPane>
+        </children>
+    </HBox>
+</VBox>

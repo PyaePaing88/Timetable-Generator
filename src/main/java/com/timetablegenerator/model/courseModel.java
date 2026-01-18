@@ -3,21 +3,24 @@ package com.timetablegenerator.model;
 import java.sql.Timestamp;
 
 public class courseModel {
-    private int id;
+    private Integer id;
     private String course_name;
-    private int department_id;
+    private String subject_code;
+    private Integer department_id;
     private String department_name;
+    private Integer academicLevel_id;
+    private String academicLevel;
     private boolean is_delete;
-    private int created_by;
+    private Integer created_by;
     private Timestamp created_date;
     private int modify_by;
     private Timestamp modify_date;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -29,11 +32,19 @@ public class courseModel {
         this.course_name = course_name;
     }
 
-    public int getDepartment_id() {
+    public String getSubject_code() {
+        return subject_code;
+    }
+
+    public void setSubject_code(String subject_code) {
+        this.subject_code = subject_code;
+    }
+
+    public Integer getDepartment_id() {
         return department_id;
     }
 
-    public void setDepartment_id(int department_id) {
+    public void setDepartment_id(Integer department_id) {
         this.department_id = department_id;
     }
 
@@ -45,6 +56,22 @@ public class courseModel {
         this.department_name = department_name;
     }
 
+    public Integer getAcademicLevel_id() {
+        return academicLevel_id;
+    }
+
+    public void setAcademicLevel_id(Integer academicLevel_id) {
+        this.academicLevel_id = academicLevel_id;
+    }
+
+    public String getAcademicLevel() {
+        return academicLevel;
+    }
+
+    public void setAcademicLevel(String academicLevel) {
+        this.academicLevel = academicLevel;
+    }
+
     public boolean isIs_delete() {
         return is_delete;
     }
@@ -53,11 +80,11 @@ public class courseModel {
         this.is_delete = is_delete;
     }
 
-    public int getCreated_by() {
+    public Integer getCreated_by() {
         return created_by;
     }
 
-    public void setCreated_by(int created_by) {
+    public void setCreated_by(Integer created_by) {
         this.created_by = created_by;
     }
 

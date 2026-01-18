@@ -14,6 +14,7 @@ public class timeSlotModel {
     private Integer modify_by;
     private Timestamp modify_date;
     private boolean is_delete;
+    private boolean is_morning_shift;
 
     public Integer getId() {
         return id;
@@ -94,4 +95,13 @@ public class timeSlotModel {
     public void setIs_delete(boolean is_delete) {
         this.is_delete = is_delete;
     }
+
+    public boolean isIs_morning_shift() {
+        return is_morning_shift;
+    }
+
+    public void setIs_morning_shift(boolean is_morning_shift) {
+        this.is_morning_shift = is_morning_shift;
+    }
+
 }

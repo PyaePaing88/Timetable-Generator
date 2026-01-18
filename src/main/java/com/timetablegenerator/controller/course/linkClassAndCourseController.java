@@ -30,11 +30,9 @@ public class linkClassAndCourseController {
 
     @FXML
     public void initialize() {
-        // Setup columns
         colAllClassName.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getClass_name()));
         colCourseClassName.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getClass_name()));
 
-        // Bind lists to tables
         allClassTable.setItems(availableClasses);
         courseClassTable.setItems(assignedClasses);
     }

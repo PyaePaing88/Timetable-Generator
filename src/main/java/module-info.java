@@ -16,4 +16,5 @@ module com.timetablegenerator {
     opens com.timetablegenerator.controller.timeSlot to javafx.fxml;
     opens com.timetablegenerator.controller.availability to javafx.fxml;
     opens com.timetablegenerator.controller.announcement to javafx.fxml;
+    opens com.timetablegenerator.controller.timetable to javafx.fxml;
 }

@@ -43,6 +43,12 @@
                 <Label text=":" style="-fx-font-weight: bold;"/>
                 <Spinner fx:id="endMin" prefWidth="80" editable="true"/>
             </HBox>
+
+            <Label text="Shift:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <HBox spacing="15" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                <RadioButton fx:id="morningRadio" text="Morning Shift"/>
+                <RadioButton fx:id="eveningRadio" text="Evening Shift"/>
+            </HBox>
         </children>
     </GridPane>
 

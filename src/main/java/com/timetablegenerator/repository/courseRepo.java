@@ -17,23 +17,27 @@ public class courseRepo {
     private final userModel currentUser = authSession.getUser();
 
     public void create(courseModel course) throws SQLException {
-        String sql = "INSERT INTO courses (course_name,department_id, is_delete, created_by, created_date) VALUES (?,?, ?, ?, ?)";
+        String sql = "INSERT INTO courses (course_name, subject_code, department_id, academicLevel_id, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, course.getCourse_name());
-            st.setInt(2, course.getDepartment_id());
-            st.setBoolean(3, false);
-            st.setInt(4, currentUser.getId());
-            st.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            st.setString(2, course.getSubject_code());
+            st.setInt(3, course.getDepartment_id());
+            st.setInt(4, course.getAcademicLevel_id()); // Added
+            st.setBoolean(5, false);
+            st.setInt(6, currentUser.getId());
+            st.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
             st.executeUpdate();
         }
     }
 
     public int getTotalCount(String search) throws Exception {
-        String sql = "SELECT COUNT(*) FROM courses WHERE (course_name LIKE ?) AND is_delete = 0";
+        String sql = "SELECT COUNT(*) FROM courses WHERE is_delete = false AND (course_name LIKE ? OR subject_code LIKE ?)";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setString(1, "%" + search + "%");
+            String pattern = "%" + search + "%";
+            st.setString(1, pattern);
+            st.setString(2, pattern);
             ResultSet rs = st.executeQuery();
             if (rs.next()) return rs.getInt(1);
         }
@@ -41,47 +45,79 @@ public class courseRepo {
     }
 
     public List<courseModel> findAll(int limit, int offset, String search) throws SQLException {
-        List<courseModel> course = new ArrayList<>();
-        String sql = "SELECT c.*, d.department_name " +
+        List<courseModel> courses = new ArrayList<>();
+        String sql = "SELECT c.*, d.department_name, al.year AS academic_level_name " +
                 "FROM courses c " +
                 "INNER JOIN departments d ON c.department_id = d.id " +
-                "WHERE c.is_delete = false AND (c.course_name LIKE ?) " +
+                "INNER JOIN academic_levels al ON c.academicLevel_id = al.id " +
+                "WHERE c.is_delete = false AND (c.course_name LIKE ? OR c.subject_code LIKE ?) " +
+                "ORDER BY c.id DESC " +
                 "LIMIT ? OFFSET ?";
+
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setString(1, "%" + search + "%");
-            st.setInt(2, limit);
-            st.setInt(3, offset);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                course.add(mapResultSetToModel(rs));
+
+            String searchPattern = "%" + search + "%";
+            st.setString(1, searchPattern);
+            st.setString(2, searchPattern);
+            st.setInt(3, limit);
+            st.setInt(4, offset);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    courses.add(mapResultSetToModel(rs));
+                }
             }
         }
-        return course;
+        return courses;
     }
 
     public List<courseModel> findAllForCombo() throws SQLException {
-        List<courseModel> course = new ArrayList<>();
-        String sql = "SELECT * FROM courses WHERE is_delete = false";
+        List<courseModel> courses = new ArrayList<>();
+        String sql = "SELECT c.*, d.department_name, al.name AS academic_level_name " +
+                "FROM courses c " +
+                "INNER JOIN departments d ON c.department_id = d.id " +
+                "INNER JOIN academic_levels al ON c.academicLevel_id = al.id " +
+                "WHERE c.is_delete = false";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                course.add(mapResultSetToModel(rs));
+                courses.add(mapResultSetToModel(rs));
             }
         }
-        return course;
+        return courses;
+    }
+
+    public List<Integer> getCourseIdByDepartment(Integer deptId) throws SQLException {
+        List<Integer> courseIds = new ArrayList<>();
+        String sql = "SELECT id FROM courses WHERE is_delete = false AND department_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setInt(1, deptId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    courseIds.add(rs.getInt("id"));
+                }
+            }
+        }
+        return courseIds;
     }
 
     public void update(courseModel course) throws SQLException {
-        String sql = "UPDATE courses SET course_name=?, department_id=?, modify_by=?, modify_date=? WHERE id=?";
+        String sql = "UPDATE courses SET course_name=?, subject_code=?, department_id=?, academicLevel_id=?, modify_by=?, modify_date=? WHERE id=?";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, course.getCourse_name());
-            st.setInt(2, course.getDepartment_id());
-            st.setInt(3, currentUser.getId());
-            st.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
-            st.setInt(5, course.getId());
+            st.setString(2, course.getSubject_code());
+            st.setInt(3, course.getDepartment_id());
+            st.setInt(4, course.getAcademicLevel_id()); // Added
+            st.setInt(5, currentUser.getId());
+            st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+            st.setInt(7, course.getId());
             st.executeUpdate();
         }
     }
@@ -96,8 +132,10 @@ public class courseRepo {
     }
 
     public courseModel findById(int id) throws SQLException {
-        String sql = "SELECT c.*, d.department_name FROM courses c " +
+        String sql = "SELECT c.*, d.department_name, al.year AS academic_level_name " +
+                "FROM courses c " +
                 "INNER JOIN departments d ON c.department_id = d.id " +
+                "INNER JOIN academic_levels al ON c.academicLevel_id = al.id " +
                 "WHERE c.id = ? AND c.is_delete = false";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
@@ -112,12 +150,22 @@ public class courseRepo {
         courseModel c = new courseModel();
         c.setId(rs.getInt("id"));
         c.setCourse_name(rs.getString("course_name"));
+        c.setSubject_code(rs.getString("subject_code"));
         c.setDepartment_id(rs.getInt("department_id"));
+
         try {
             c.setDepartment_name(rs.getString("department_name"));
         } catch (SQLException e) {
             c.setDepartment_name("N/A");
         }
+
+        c.setAcademicLevel_id(rs.getInt("academicLevel_id"));
+        try {
+            c.setAcademicLevel(rs.getString("academic_level_name"));
+        } catch (SQLException e) {
+            c.setAcademicLevel("N/A");
+        }
+
         c.setIs_delete(rs.getBoolean("is_delete"));
         c.setCreated_by(rs.getInt("created_by"));
         c.setCreated_date(rs.getTimestamp("created_date"));

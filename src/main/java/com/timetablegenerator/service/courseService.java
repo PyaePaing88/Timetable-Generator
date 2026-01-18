@@ -32,7 +32,7 @@ public class courseService {
     }
 
     public void saveCourses(courseModel course) throws Exception {
-        if (course.getId() > 0) {
+        if (course.getId() != null && course.getId() > 0) {
             repo.update(course);
         } else {
             repo.create(course);

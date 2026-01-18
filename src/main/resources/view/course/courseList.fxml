@@ -40,7 +40,9 @@
                     <columns>
                         <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
                         <TableColumn fx:id="colName" text="Course Name" prefWidth="150"/>
+                        <TableColumn fx:id="colSubject_code" text="Subject Code" prefWidth="150"/>
                         <TableColumn fx:id="colDept" text="Department Name" prefWidth="150"/>
+                        <TableColumn fx:id="colLevel" text="Year" prefWidth="150"/>
                         <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
                     </columns>
                 </TableView>

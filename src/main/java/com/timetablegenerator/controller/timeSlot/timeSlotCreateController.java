@@ -16,6 +16,12 @@ public class timeSlotCreateController {
     @FXML
     private Spinner<Integer> periodSpinner, startHour, startMin, endHour, endMin;
 
+    @FXML
+    private RadioButton morningRadio;
+    @FXML
+    private RadioButton eveningRadio;
+    private ToggleGroup shiftGroup;
+
     private final timeSlotService service;
 
     public timeSlotCreateController() {
@@ -28,10 +34,15 @@ public class timeSlotCreateController {
 
         periodSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
 
-        startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 9));
-        endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 10));
+        startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 9));
+        endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 10));
         startMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         endMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+
+        shiftGroup = new ToggleGroup();
+        morningRadio.setToggleGroup(shiftGroup);
+        eveningRadio.setToggleGroup(shiftGroup);
+        morningRadio.setSelected(true);
     }
 
     @FXML
@@ -41,6 +52,9 @@ public class timeSlotCreateController {
                 timeSlotModel newSlot = new timeSlotModel();
                 newSlot.setPeriod(periodSpinner.getValue());
                 newSlot.setDay_of_week(dayComboBox.getValue());
+
+                // Set shift boolean: Morning = true, Evening = false
+                newSlot.setIs_morning_shift(morningRadio.isSelected());
 
                 java.time.LocalTime start = java.time.LocalTime.of(startHour.getValue(), startMin.getValue());
                 java.time.LocalTime end = java.time.LocalTime.of(endHour.getValue(), endMin.getValue());
@@ -64,6 +78,11 @@ public class timeSlotCreateController {
 
         if (dayComboBox.getValue() == null) {
             errorMsg.append("Day of week is required.\n");
+        }
+
+        // Ensure a shift is selected
+        if (shiftGroup.getSelectedToggle() == null) {
+            errorMsg.append("Please select a shift.\n");
         }
 
         int startTotal = (startHour.getValue() * 60) + startMin.getValue();
@@ -94,7 +113,6 @@ public class timeSlotCreateController {
     }
 
     private void closeWindow() {
-        // Using dayComboBox to get the scene since nameField was removed
         Stage stage = (Stage) dayComboBox.getScene().getWindow();
         stage.close();
     }

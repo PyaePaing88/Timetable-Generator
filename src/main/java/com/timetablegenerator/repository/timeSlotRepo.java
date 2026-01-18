@@ -17,21 +17,19 @@ public class timeSlotRepo {
 
     private final userModel currentUser = authSession.getUser();
 
-
     public void create(timeSlotModel time) throws SQLException {
-        String sql = "INSERT INTO time_slots (day_of_week, period, start_time, end_time, created_by, created_date, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO time_slots (day_of_week, period, start_time, end_time, created_by, created_date, is_delete, is_morning_shift) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, time.getDay_of_week().name());
             st.setInt(2, time.getPeriod());
-
             st.setTime(3, time.getStart_time());
             st.setTime(4, time.getEnd_time());
-
             st.setInt(5, currentUser.getId());
             st.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
-            st.setBoolean(7, false);
+            st.setBoolean(7, false); // is_delete
+            st.setBoolean(8, time.isIs_morning_shift());
 
             st.executeUpdate();
         }
@@ -55,7 +53,7 @@ public class timeSlotRepo {
 
     public List<timeSlotModel> findAll(int limit, int offset, String search) throws SQLException {
         List<timeSlotModel> time = new ArrayList<>();
-        String sql = "SELECT * FROM time_slots WHERE is_delete = false AND (day_of_week LIKE ? OR period LIKE ? OR start_time LIKE ? OR end_time LIKE ?) LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM time_slots WHERE is_delete = false AND (day_of_week LIKE ? OR period LIKE ? OR start_time LIKE ? OR end_time LIKE ?) ORDER BY id DESC LIMIT ? OFFSET ?";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             String searchPattern = "%" + search + "%";
@@ -75,8 +73,24 @@ public class timeSlotRepo {
         return time;
     }
 
+    public List<timeSlotModel> findAllForTimetable() throws SQLException {
+        List<timeSlotModel> timeSlots = new ArrayList<>();
+        String sql = "SELECT * FROM time_slots WHERE is_delete = false ORDER BY day_of_week, start_time";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    timeSlots.add(mapResultSetToModel(rs));
+                }
+            }
+        }
+        return timeSlots;
+    }
+
     public void update(timeSlotModel time) throws SQLException {
-        String sql = "UPDATE time_slots SET day_of_week=?, period=?, start_time=?, end_time=?, modify_by=?, modify_date=? WHERE id=?";
+        String sql = "UPDATE time_slots SET day_of_week=?, period=?, start_time=?, end_time=?, modify_by=?, modify_date=?, is_morning_shift=? WHERE id=?";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, time.getDay_of_week().name());
@@ -85,7 +99,9 @@ public class timeSlotRepo {
             st.setTime(4, time.getEnd_time());
             st.setInt(5, currentUser.getId());
             st.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
-            st.setInt(7, time.getId());
+            st.setBoolean(7, time.isIs_morning_shift());
+            st.setInt(8, time.getId());
+
             st.executeUpdate();
         }
     }
@@ -122,6 +138,7 @@ public class timeSlotRepo {
         u.setModify_by(rs.getInt("modify_by"));
         u.setModify_date(rs.getTimestamp("modify_date"));
         u.setIs_delete(rs.getBoolean("is_delete"));
+        u.setIs_morning_shift(rs.getBoolean("is_morning_shift"));
         return u;
     }
 }

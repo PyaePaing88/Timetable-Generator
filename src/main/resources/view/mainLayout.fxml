@@ -111,7 +111,7 @@
                     </ImageView>
                 </graphic>
             </Button>
-            <Button onAction="#showAcademicLevel" styleClass="menu-btn" text="   Timetable">
+            <Button onAction="#showTimetable" styleClass="menu-btn" text="   Timetable">
                 <graphic>
                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
                                styleClass="menu-icon">

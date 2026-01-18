@@ -413,3 +413,17 @@
 .card-options-button .arrow {
     -fx-background-color: #718096; /* Color of the small arrow */
 }
+
+
+.timetable-card {
+    -fx-background-color: white;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 20;
+    -fx-pref-width: 250;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+.timetable-card:hover {
+    -fx-border-color: #0078D7;
+}

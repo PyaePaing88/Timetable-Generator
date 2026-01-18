@@ -77,6 +77,24 @@ public class classRepo {
         return clas;
     }
 
+    public List<Integer> getClassesIdByDepartment(Integer deptId) throws SQLException {
+        List<Integer> classIds = new ArrayList<>();
+        String sql = "SELECT id FROM classes WHERE is_delete = false AND department_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setInt(1, deptId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    classIds.add(rs.getInt("id"));
+                }
+            }
+        }
+        return classIds;
+    }
+
     public void update(classModel clas) throws SQLException {
         String sql = "UPDATE classes SET class_name=?, department_id=?, modify_by=?, modify_date=? WHERE id=?";
         try (Connection conn = dbConnection.getConnection();

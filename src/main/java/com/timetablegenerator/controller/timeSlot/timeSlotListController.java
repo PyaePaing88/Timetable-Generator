@@ -17,18 +17,30 @@ import java.util.List;
 
 public class timeSlotListController {
 
-    @FXML private TableView<timeSlotModel> userTable;
-    @FXML private TextField searchField;
-    @FXML private Pagination pagination;
-    @FXML private ComboBox<Integer> rowsPerPageCombo;
+    @FXML
+    private TableView<timeSlotModel> userTable;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<timeSlotModel, Integer> colId;
-    @FXML private TableColumn<timeSlotModel, String> colDay;
-    @FXML private TableColumn<timeSlotModel, String> colPeriod;
-    @FXML private TableColumn<timeSlotModel, String> colStartTime;
-    @FXML private TableColumn<timeSlotModel, String> colEndTime;
-    @FXML private TableColumn<timeSlotModel, Void> colActions;
+    @FXML
+    private TableColumn<timeSlotModel, Integer> colId;
+    @FXML
+    private TableColumn<timeSlotModel, String> colDay;
+    @FXML
+    private TableColumn<timeSlotModel, String> colPeriod;
+    @FXML
+    private TableColumn<timeSlotModel, String> colStartTime;
+    @FXML
+    private TableColumn<timeSlotModel, String> colEndTime;
+    @FXML
+    private TableColumn<timeSlotModel, String> colShift;
+    @FXML
+    private TableColumn<timeSlotModel, Void> colActions;
 
     private timeSlotService service;
 
@@ -45,13 +57,18 @@ public class timeSlotListController {
                         cellData.getValue().getDay_of_week() != null ? cellData.getValue().getDay_of_week().name() : ""));
 
         colPeriod.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getPeriod())));
+                new javafx.beans.property.SimpleStringProperty("Period " + cellData.getValue().getPeriod()));
 
         colStartTime.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getStart_time())));
 
         colEndTime.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getEnd_time())));
+
+        colShift.setCellValueFactory(cellData -> {
+            boolean isMorning = cellData.getValue().isIs_morning_shift();
+            return new javafx.beans.property.SimpleStringProperty(isMorning ? "Morning" : "Evening");
+        });
 
         setupActionColumn();
 

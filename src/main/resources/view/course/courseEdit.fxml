@@ -26,9 +26,17 @@
             <TextField fx:id="nameField" promptText="Enter course name"
                        GridPane.rowIndex="0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
 
-            <Label text="Department:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label text="subject Code:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="subjectCodeField" promptText="Enter subject code"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+
+            <Label text="Department:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <ComboBox fx:id="deptComboBox" prefWidth="250"
-                      GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                      GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Academic Level:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="academicLevelComboBox" prefWidth="250"
+                      GridPane.rowIndex="3" GridPane.columnIndex="1"/>
         </children>
     </GridPane>
 

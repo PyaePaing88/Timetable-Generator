@@ -129,6 +129,24 @@ public class userRepo {
         return null;
     }
 
+    public List<Integer> getTeachersByCourse(Integer courseId) throws SQLException {
+        List<Integer> teachersIds = new ArrayList<>();
+        String sql = "SELECT id FROM users WHERE is_delete = false AND role='teacher' AND department_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setInt(1, courseId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    teachersIds.add(rs.getInt("id"));
+                }
+            }
+        }
+        return teachersIds;
+    }
+
     private userModel mapResultSetToModel(ResultSet rs) throws SQLException {
         userModel u = new userModel();
         u.setId(rs.getInt("id"));

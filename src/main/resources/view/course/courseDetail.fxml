@@ -30,9 +30,17 @@
             <TextField fx:id="txtName" editable="false" styleClass="text-field-readonly"
                        GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-            <Label text="Department:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <TextField fx:id="txtDepartment" editable="false" styleClass="text-field-readonly"
+            <Label text="Subject Code:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtSubjectCode" editable="false" styleClass="text-field-readonly"
                        GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Department:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtDepartment" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Department:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtAcademicLevel" editable="false" styleClass="text-field-readonly"
+                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
         </children>
     </GridPane>
 

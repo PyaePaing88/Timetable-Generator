@@ -21,6 +21,13 @@ public class timeSlotEditController {
     @FXML
     private Spinner<Integer> startHour, startMin, endHour, endMin;
 
+    // --- New Shift Radio Components ---
+    @FXML
+    private RadioButton morningRadio;
+    @FXML
+    private RadioButton eveningRadio;
+    private ToggleGroup shiftGroup;
+
     private final timeSlotService service;
     private int timeSlotId;
 
@@ -32,11 +39,16 @@ public class timeSlotEditController {
     public void initialize() {
         dayComboBox.setItems(FXCollections.observableArrayList(day.values()));
 
-        periodSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 1));
-        startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
-        endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+        periodSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
+        startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 0));
+        endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 0));
         startMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         endMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+
+        // Initialize ToggleGroup for Shift
+        shiftGroup = new ToggleGroup();
+        morningRadio.setToggleGroup(shiftGroup);
+        eveningRadio.setToggleGroup(shiftGroup);
     }
 
     public void loadTimeSlotData(int id) {
@@ -46,6 +58,13 @@ public class timeSlotEditController {
             if (slot != null) {
                 dayComboBox.setValue(slot.getDay_of_week());
                 periodSpinner.getValueFactory().setValue(slot.getPeriod());
+
+                // Set RadioButton selection based on shift data
+                if (slot.isIs_morning_shift()) {
+                    morningRadio.setSelected(true);
+                } else {
+                    eveningRadio.setSelected(true);
+                }
 
                 if (slot.getStart_time() != null) {
                     LocalTime startTime = slot.getStart_time().toLocalTime();
@@ -71,8 +90,10 @@ public class timeSlotEditController {
                 timeSlotModel slot = new timeSlotModel();
                 slot.setId(timeSlotId);
                 slot.setDay_of_week(dayComboBox.getValue());
-
                 slot.setPeriod(periodSpinner.getValue());
+
+                // Get shift selection: Morning = true, Evening = false
+                slot.setIs_morning_shift(morningRadio.isSelected());
 
                 LocalTime start = LocalTime.of(startHour.getValue(), startMin.getValue());
                 LocalTime end = LocalTime.of(endHour.getValue(), endMin.getValue());
@@ -81,6 +102,7 @@ public class timeSlotEditController {
                 slot.setEnd_time(Time.valueOf(end));
                 slot.setIs_delete(false);
 
+                // Ensure your service method handles update logic correctly
                 service.saveTimeSlot(slot);
                 showAlert("Success", "Time Slot updated successfully!", Alert.AlertType.INFORMATION);
                 closeWindow();
@@ -94,6 +116,11 @@ public class timeSlotEditController {
     private boolean validateInput() {
         if (dayComboBox.getValue() == null) {
             showAlert("Validation Error", "Please select a Day of Week.", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (shiftGroup.getSelectedToggle() == null) {
+            showAlert("Validation Error", "Please select a shift.", Alert.AlertType.WARNING);
             return false;
         }
 
