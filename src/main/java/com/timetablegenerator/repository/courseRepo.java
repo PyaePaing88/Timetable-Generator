@@ -89,14 +89,19 @@ public class courseRepo {
         return courses;
     }
 
-    public List<Integer> getCourseIdByDepartment(Integer deptId) throws SQLException {
+    public List<Integer> getCourseIdByClass(Integer classId) throws SQLException {
         List<Integer> courseIds = new ArrayList<>();
-        String sql = "SELECT id FROM courses WHERE is_delete = false AND department_id = ?";
+        String sql = "SELECT c.id " +
+                "FROM courses c " +
+                "JOIN class_course cc ON c.id = cc.course_id " +
+                "WHERE cc.class_id = ? " +
+                "AND c.is_delete = 0 " +
+                "AND cc.is_delete = 0";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
 
-            st.setInt(1, deptId);
+            st.setInt(1, classId);
 
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {

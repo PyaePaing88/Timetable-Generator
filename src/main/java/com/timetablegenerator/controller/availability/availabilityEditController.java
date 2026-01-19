@@ -1,16 +1,19 @@
 package com.timetablegenerator.controller.availability;
 
 import com.timetablegenerator.model.availabilityModel;
+import com.timetablegenerator.model.timeSlotModel; // Assuming this is your model name
 import com.timetablegenerator.repository.availabilityRepo;
+import com.timetablegenerator.repository.timeSlotRepo; // Assuming this exists
 import com.timetablegenerator.service.availabilityService;
 import com.timetablegenerator.util.authSession;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import jfxtras.scene.control.LocalDateTimeTextField;
+import javafx.util.StringConverter;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class availabilityEditController {
 
@@ -19,19 +22,56 @@ public class availabilityEditController {
     @FXML
     private TextArea remarkArea;
     @FXML
-    private LocalDateTimeTextField fromPicker;
+    private ComboBox<String> dayComboBox;
     @FXML
-    private LocalDateTimeTextField toPicker;
+    private ComboBox<timeSlotModel> periodComboBox;
 
-    private final availabilityService service;
+    private final availabilityService service = new availabilityService(new availabilityRepo());
+    private final timeSlotRepo tsRepo = new timeSlotRepo();
+
     private availabilityModel currentAvailability;
-
-    public availabilityEditController() {
-        this.service = new availabilityService(new availabilityRepo());
-    }
+    private List<timeSlotModel> allTimeSlots = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        setupComboBoxes();
+        loadAllTimeSlots();
+    }
+
+    private void setupComboBoxes() {
+        // Filter periods when day is selected
+        dayComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                filterPeriodsByDay(newVal);
+                periodComboBox.setDisable(false);
+            }
+        });
+
+        // Display "Period X (Start - End)" in the ComboBox
+        periodComboBox.setConverter(new StringConverter<timeSlotModel>() {
+            @Override
+            public String toString(timeSlotModel slot) {
+                return slot == null ? "" : "Period " + slot.getPeriod();
+            }
+
+            @Override
+            public timeSlotModel fromString(String string) {
+                return null;
+            }
+        });
+    }
+
+    private void loadAllTimeSlots() {
+        try {
+            allTimeSlots = tsRepo.findAllForCombo();
+            List<String> uniqueDays = allTimeSlots.stream()
+                    .map(slot -> slot.getDay_of_week().name())
+                    .distinct()
+                    .toList();
+            dayComboBox.getItems().setAll(uniqueDays);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadAvailabilityData(int id) {
@@ -41,17 +81,31 @@ public class availabilityEditController {
                 statusField.setText(currentAvailability.getStatus());
                 remarkArea.setText(currentAvailability.getRemark());
 
-                // Convert Timestamp to LocalDateTime for JFXtras
-                if (currentAvailability.getFrom() != null) {
-                    fromPicker.setLocalDateTime(currentAvailability.getFrom().toLocalDateTime());
-                }
-                if (currentAvailability.getTo() != null) {
-                    toPicker.setLocalDateTime(currentAvailability.getTo().toLocalDateTime());
+                // 1. Find the specific time slot object from our list
+                timeSlotModel selectedSlot = allTimeSlots.stream()
+                        .filter(ts -> ts.getId() == currentAvailability.getTime_slot_id())
+                        .findFirst()
+                        .orElse(null);
+
+                if (selectedSlot != null) {
+                    // 2. Set the Day first (this triggers the listener to fill periodComboBox)
+                    dayComboBox.getSelectionModel().select(selectedSlot.getDay_of_week().name());
+
+                    // 3. Set the Period
+                    periodComboBox.getSelectionModel().select(selectedSlot);
                 }
             }
         } catch (Exception e) {
-            showAlert("Error", "Could not load availability data: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Error", "Could not load data: " + e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private void filterPeriodsByDay(String dayName) {
+        List<timeSlotModel> filtered = allTimeSlots.stream()
+                .filter(ts -> ts.getDay_of_week().name().equalsIgnoreCase(dayName))
+                .sorted(Comparator.comparingInt(timeSlotModel::getPeriod))
+                .toList();
+        periodComboBox.getItems().setAll(filtered);
     }
 
     @FXML
@@ -62,50 +116,26 @@ public class availabilityEditController {
             currentAvailability.setStatus(statusField.getText().trim());
             currentAvailability.setRemark(remarkArea.getText().trim());
 
-            // Get LocalDateTime from pickers and convert to Timestamp
-            currentAvailability.setFrom(Timestamp.valueOf(fromPicker.getLocalDateTime()));
-            currentAvailability.setTo(Timestamp.valueOf(toPicker.getLocalDateTime()));
+            // Link the selected time slot ID
+            timeSlotModel selectedSlot = periodComboBox.getValue();
+            currentAvailability.setTime_slot_id(selectedSlot.getId());
 
             if (authSession.getUser() != null) {
                 currentAvailability.setModify_by(authSession.getUser().getId());
             }
-            currentAvailability.setModify_date(new Timestamp(System.currentTimeMillis()));
 
             service.saveAvailability(currentAvailability);
-
-            showAlert("Success", "Availability updated successfully!", Alert.AlertType.INFORMATION);
+            showAlert("Success", "Updated successfully!", Alert.AlertType.INFORMATION);
             closeWindow();
         } catch (Exception e) {
             showAlert("Database Error", "Update failed: " + e.getMessage(), Alert.AlertType.ERROR);
-            e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void handleCancel() {
-        closeWindow();
     }
 
     private boolean validateInput() {
-        StringBuilder errorMsg = new StringBuilder();
-
-        if (statusField.getText().isBlank()) {
-            errorMsg.append("- Status is required.\n");
-        }
-
-        LocalDateTime from = fromPicker.getLocalDateTime();
-        LocalDateTime to = toPicker.getLocalDateTime();
-
-        if (from == null || to == null) {
-            errorMsg.append("- Both Start and End date/time are required.\n");
-        } else if (to.isBefore(from)) {
-            errorMsg.append("- End time cannot be earlier than start time.\n");
-        }
-
-        if (errorMsg.length() > 0) {
-            showAlert("Validation Error", errorMsg.toString(), Alert.AlertType.WARNING);
-            return false;
-        }
+        if (statusField.getText().isBlank()) return false;
+        if (dayComboBox.getValue() == null) return false;
+        if (periodComboBox.getValue() == null) return false;
         return true;
     }
 

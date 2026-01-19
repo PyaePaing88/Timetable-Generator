@@ -33,13 +33,11 @@
             <TextField fx:id="txtStatus" editable="false" styleClass="text-field-readonly"
                        GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="Unavailable From:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <TextField fx:id="txtFrom" editable="false" styleClass="text-field-readonly"
-                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label text="Day of Week:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtDay" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-            <Label text="Unavailable To:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-            <TextField fx:id="txtTo" editable="false" styleClass="text-field-readonly"
-                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Label text="Period:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtPeriod" editable="false" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
             <Label text="Remarks:" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
             <TextArea fx:id="txtRemark" editable="false" wrapText="true" prefHeight="80"

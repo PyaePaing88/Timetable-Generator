@@ -13,6 +13,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Separator?>
+<?import javax.sound.sampled.Line?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.Group?>
 <BorderPane prefHeight="-Infinity" prefWidth="-Infinity" stylesheets="@../../style/styles.css"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.timetablegenerator.controller.dashboardController">
@@ -176,30 +183,27 @@
 
                 <HBox spacing="25.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <VBox prefWidth="400.0" styleClass="chart-container" HBox.hgrow="SOMETIMES">
+                        <VBox prefWidth="-Infinity" spacing="10" styleClass="chart-container" HBox.hgrow="SOMETIMES">
                             <children>
-                                <Label text="Distribution by Department" textFill="#2c3e50">
-                                    <font>
-                                        <Font name="System Bold" size="16.0"/>
-                                    </font>
-                                </Label>
-                                <Region VBox.vgrow="ALWAYS"/>
-                                <Label text="Chart will load here..." textFill="#bdc3c7"/>
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label fx:id="monthYearLabel" text="January 2026" textFill="#2c3e50">
+                                        <font>
+                                            <Font name="System Bold" size="18.0"/>
+                                        </font>
+                                    </Label>
+                                </HBox>
+
+                                <Separator/>
+
+                                <GridPane fx:id="calendarGrid" alignment="CENTER" hgap="5" vgap="5">
+                                </GridPane>
+
                                 <Region VBox.vgrow="ALWAYS"/>
                             </children>
                         </VBox>
 
-                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
-                            <children>
-                                <Label text="System Weekly Activity" textFill="#2c3e50">
-                                    <font>
-                                        <Font name="System Bold" size="16.0"/>
-                                    </font>
-                                </Label>
-                                <Region VBox.vgrow="ALWAYS"/>
-                                <Label text="Main Analytics will load here..." textFill="#bdc3c7"/>
-                                <Region VBox.vgrow="ALWAYS"/>
-                            </children>
+                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
+
                         </VBox>
                     </children>
                 </HBox>

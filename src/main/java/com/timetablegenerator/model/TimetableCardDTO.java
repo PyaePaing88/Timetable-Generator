@@ -4,7 +4,7 @@ public class TimetableCardDTO {
     private Integer timetableId;
     private String departmentName;
     private String className;
-    private String scheduleDate;
+    private Integer scheduleDate;
 
     public Integer getTimetableId() {
         return timetableId;
@@ -30,11 +30,11 @@ public class TimetableCardDTO {
         this.className = className;
     }
 
-    public String getScheduleDate() {
+    public Integer getScheduleDate() {
         return scheduleDate;
     }
 
-    public void setScheduleDate(String scheduleDate) {
+    public void setScheduleDate(Integer scheduleDate) {
         this.scheduleDate = scheduleDate;
     }
 }

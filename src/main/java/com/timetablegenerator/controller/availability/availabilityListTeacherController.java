@@ -35,9 +35,9 @@ public class availabilityListTeacherController {
     @FXML
     private TableColumn<availabilityModel, String> colRemark;
     @FXML
-    private TableColumn<availabilityModel, String> colFrom;
+    private TableColumn<availabilityModel, String> colDay;
     @FXML
-    private TableColumn<availabilityModel, String> colTo;
+    private TableColumn<availabilityModel, String> colPeriod;
     @FXML
     private TableColumn<availabilityModel, Void> colActions;
 
@@ -60,11 +60,11 @@ public class availabilityListTeacherController {
         colRemark.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getRemark()));
 
-        colFrom.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getFrom().toString()));
+        colDay.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDay_of_week().toString()));
 
-        colTo.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTo().toString()));
+        colPeriod.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPeriod().toString()));
 
         setupActionColumn();
 

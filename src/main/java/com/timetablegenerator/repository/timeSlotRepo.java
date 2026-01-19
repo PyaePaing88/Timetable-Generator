@@ -73,6 +73,19 @@ public class timeSlotRepo {
         return time;
     }
 
+    public List<timeSlotModel> findAllForCombo() throws SQLException {
+        List<timeSlotModel> time = new ArrayList<>();
+        String sql = "SELECT * FROM time_slots WHERE is_delete = false ";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                time.add(mapResultSetToModel(rs));
+            }
+        }
+        return time;
+    }
+
     public List<timeSlotModel> findAllForTimetable() throws SQLException {
         List<timeSlotModel> timeSlots = new ArrayList<>();
         String sql = "SELECT * FROM time_slots WHERE is_delete = false ORDER BY day_of_week, start_time";

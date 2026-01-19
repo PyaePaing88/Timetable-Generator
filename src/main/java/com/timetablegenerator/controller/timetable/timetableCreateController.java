@@ -36,6 +36,7 @@ public class timetableCreateController {
     private void setupDepartmentComboBox() {
         try {
             departmentComboBox.setItems(FXCollections.observableArrayList(deptService.getMajorDepartments()));
+
             departmentComboBox.setConverter(new StringConverter<departmentModel>() {
                 @Override
                 public String toString(departmentModel dept) {
@@ -63,7 +64,6 @@ public class timetableCreateController {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                // Using the refactored service method we created earlier
                 service.generateWeeklyTimetable(selectedDept.getId());
                 return null;
             }
@@ -71,25 +71,26 @@ public class timetableCreateController {
 
         task.setOnSucceeded(e -> {
             toggleUI(false);
-            showAlert("Success", "Timetable generated successfully!", Alert.AlertType.INFORMATION);
+            showAlert("Success", "Timetable generated successfully for all classes in "
+                    + selectedDept.getDepartment_name() + "!", Alert.AlertType.INFORMATION);
             closeWindow();
         });
 
         task.setOnFailed(e -> {
             toggleUI(false);
             Throwable ex = task.getException();
-            showAlert("Generation Failed", "Conflict detected or Database Error: " + ex.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Generation Failed", "Could not satisfy constraints or DB error: " + ex.getMessage(), Alert.AlertType.ERROR);
             ex.printStackTrace();
         });
 
         Thread thread = new Thread(task);
-        thread.setDaemon(true); // Ensure thread closes if app is closed
+        thread.setDaemon(true);
         thread.start();
     }
 
     private boolean validateInput() {
         if (departmentComboBox.getValue() == null) {
-            showAlert("Validation Error", "Please select a department.", Alert.AlertType.WARNING);
+            showAlert("Validation Error", "Please select a department before generating.", Alert.AlertType.WARNING);
             return false;
         }
         return true;
@@ -99,6 +100,7 @@ public class timetableCreateController {
         generateBtn.setDisable(isProcessing);
         departmentComboBox.setDisable(isProcessing);
         loadingIndicator.setVisible(isProcessing);
+        generateBtn.setText(isProcessing ? "Generating..." : "Generate Timetable");
     }
 
     @FXML
@@ -112,7 +114,6 @@ public class timetableCreateController {
         alert.setHeaderText(null);
         alert.setContentText(content);
 
-        // Dynamic CSS injection for custom alert styling
         try {
             DialogPane dp = alert.getDialogPane();
             String css = getClass().getResource("/com/timetablegenerator/style/styles.css").toExternalForm();

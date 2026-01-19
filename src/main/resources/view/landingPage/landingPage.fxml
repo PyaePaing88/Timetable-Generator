@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 
-
-<BorderPane prefHeight="-Infinity" prefWidth="-Infinity"
-            stylesheets="@../../style/styles.css" styleClass="body"
+<BorderPane minHeight="600.0" minWidth="1000.0"
+            prefHeight="600.0" prefWidth="1000.0"
+            styleClass="body" stylesheets="@../../style/styles.css"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.timetablegenerator.controller.landingPageController">
-    <center>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
-    </center>
+
     <top>
-        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="Label"/>
-                <Button mnemonicParsing="false" text="Login" onAction="#goLogin"/>
-            </children>
+        <HBox fx:id="header" alignment="CENTER_LEFT" spacing="15" styleClass="main-header">
+            <padding>
+                <Insets left="20" right="20"/>
+            </padding>
+
+            <Label styleClass="main-logo" text="Timetable Generator"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox fx:id="topNav" alignment="CENTER" spacing="10" styleClass="top-nav"/>
+
+            <HBox alignment="CENTER" spacing="15">
+                <Button onAction="#onLogin" text="Login">
+                    <styleClass>
+                        <String fx:value="tg-btn"/>
+                        <String fx:value="tg-btn-primary"/>
+                    </styleClass>
+                </Button>
+            </HBox>
         </HBox>
     </top>
+
+    <center>
+        <StackPane fx:id="contentArea" styleClass="main-content">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </padding>
+        </StackPane>
+    </center>
 </BorderPane>

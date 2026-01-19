@@ -20,7 +20,7 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <HBox fx:id="topNav" alignment="CENTER" spacing="10" styleClass="top-nav">
-                <Button onAction="#showAcademicLevel" styleClass="top-menu" text="  Timetable">
+                <Button onAction="#showTimetable" styleClass="top-menu" text="  Timetable">
                     <graphic>
                         <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../../assets/icon/sidebar/normal/timetable.png"/>

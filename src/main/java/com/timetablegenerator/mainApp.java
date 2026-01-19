@@ -34,7 +34,7 @@ public class mainApp extends Application {
             System.out.println("Could not load app icon: " + e.getMessage());
         }
         stage.setTitle("Timetable Generator");
-        showLogin();
+        showLandingPage();
         stage.show();
     }
 

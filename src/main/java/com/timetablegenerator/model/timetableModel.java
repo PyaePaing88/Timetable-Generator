@@ -1,11 +1,12 @@
 package com.timetablegenerator.model;
 
 import java.sql.Timestamp;
+import java.time.Year;
 
 public class timetableModel {
     private Integer id;
     private Integer department_id;
-    private Timestamp schedule_date;
+    private Integer schedule_date;
     private Integer class_id;
 
     public Integer getId() {
@@ -24,11 +25,11 @@ public class timetableModel {
         this.department_id = department_id;
     }
 
-    public Timestamp getSchedule_date() {
+    public Integer getSchedule_date() {
         return schedule_date;
     }
 
-    public void setSchedule_date(Timestamp schedule_date) {
+    public void setSchedule_date(Integer schedule_date) {
         this.schedule_date = schedule_date;
     }
 

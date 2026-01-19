@@ -8,164 +8,127 @@ import java.util.*;
 
 public class timetableRepo {
 
+    public void saveFullSchedule(List<timetableModel> headers, List<timetableAssignmentModel> assignments) throws SQLException {
+        try (Connection conn = dbConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                String headerSql = "INSERT INTO timetable (department_id, class_id, schedule_date) VALUES (?, ?, ?)";
+                String assignSql = "INSERT INTO timetable_assignments (timetable_id, user_id, course_id, timeSlot_id) VALUES (?, ?, ?, ?)";
 
-    public List<TimetableCardDTO> findAllWithNames() throws SQLException {
+                for (timetableModel header : headers) {
+                    try (PreparedStatement hSt = conn.prepareStatement(headerSql, Statement.RETURN_GENERATED_KEYS)) {
+                        hSt.setInt(1, header.getDepartment_id());
+                        hSt.setInt(2, header.getClass_id());
+                        hSt.setInt(3, header.getSchedule_date());
+                        hSt.executeUpdate();
+
+                        try (ResultSet rs = hSt.getGeneratedKeys()) {
+                            if (rs.next()) {
+                                int hId = rs.getInt(1);
+                                try (PreparedStatement aSt = conn.prepareStatement(assignSql)) {
+                                    for (timetableAssignmentModel a : assignments) {
+                                        if (a.getTempClassId().equals(header.getClass_id())) {
+                                            aSt.setInt(1, hId);
+                                            aSt.setInt(2, a.getUser_id());
+                                            aSt.setInt(3, a.getCourse_id());
+                                            aSt.setInt(4, a.getTimeSlot_id());
+                                            aSt.addBatch();
+                                        }
+                                    }
+                                    aSt.executeBatch();
+                                }
+                            }
+                        }
+                    }
+                }
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        }
+    }
+
+    public int getTotalTimetableCount(String search) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM timetable t " +
+                "JOIN departments d ON t.department_id = d.id " +
+                "JOIN classes c ON t.class_id = c.id " +
+                "WHERE d.department_name LIKE ? OR c.class_name LIKE ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            String query = "%" + search + "%";
+            st.setString(1, query);
+            st.setString(2, query);
+
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public List<TimetableCardDTO> getTimetablesPaginated(int page, int size, String search) throws SQLException {
         List<TimetableCardDTO> list = new ArrayList<>();
+        int offset = (page - 1) * size;
+
         String sql = "SELECT t.id, d.department_name, c.class_name, t.schedule_date " +
                 "FROM timetable t " +
                 "JOIN departments d ON t.department_id = d.id " +
                 "JOIN classes c ON t.class_id = c.id " +
-                "ORDER BY t.schedule_date DESC";
+                "WHERE d.department_name LIKE ? OR c.class_name LIKE ? " +
+                "ORDER BY t.id DESC LIMIT ? OFFSET ?";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
-            while (rs.next()) {
-                TimetableCardDTO dto = new TimetableCardDTO();
-                dto.setTimetableId(rs.getInt("id"));
-                dto.setDepartmentName(rs.getString("department_name"));
-                dto.setClassName(rs.getString("class_name"));
-                dto.setScheduleDate(rs.getTimestamp("schedule_date").toString());
-                list.add(dto);
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            String query = "%" + search + "%";
+            st.setString(1, query);
+            st.setString(2, query);
+            st.setInt(3, size);
+            st.setInt(4, offset);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    TimetableCardDTO dto = new TimetableCardDTO();
+                    dto.setTimetableId(rs.getInt("id"));
+                    dto.setDepartmentName(rs.getString("department_name"));
+                    dto.setClassName(rs.getString("class_name"));
+                    dto.setScheduleDate(rs.getInt("schedule_date"));
+                    list.add(dto);
+                }
             }
         }
         return list;
     }
 
-    public void saveFullSchedule(List<timetableModel> headers, List<timetableAssignmentModel> assignments) throws SQLException {
-        Connection conn = null;
-        try {
-            conn = dbConnection.getConnection();
-            conn.setAutoCommit(false);
+    public List<TimetableDetailDTO> findAssignmentsByTimetableId(Integer timetableId) throws SQLException {
+        List<TimetableDetailDTO> list = new ArrayList<>();
+        String sql = "SELECT ts.day_of_week, ts.period, ts.start_time, ts.end_time, " +
+                "u.name as teacher_name, co.course_name, co.subject_code " +
+                "FROM timetable_assignments ta " +
+                "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
+                "JOIN users u ON ta.user_id = u.id " +
+                "JOIN courses co ON ta.course_id = co.id " +
+                "WHERE ta.timetable_id = ? " +
+                "ORDER BY ts.day_of_week, ts.period";
 
-            for (timetableModel header : headers) {
-                int headerId = saveHeaderInternal(conn, header);
-
-                for (timetableAssignmentModel assign : assignments) {
-                    if (assign.getTempClassId().equals(header.getClass_id())) {
-                        assign.setTimetable_id(headerId);
-                        saveAssignmentInternal(conn, assign);
-                    }
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, timetableId);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    TimetableDetailDTO dto = new TimetableDetailDTO();
+                    dto.setDay(rs.getString("day_of_week"));
+                    dto.setPeriod(rs.getInt("period"));
+                    dto.setTime(rs.getString("start_time") + " - " + rs.getString("end_time"));
+                    dto.setTeacherName(rs.getString("teacher_name"));
+                    dto.setCourseName(rs.getString("course_name"));
+                    dto.setSubjectCode(rs.getString("subject_code"));
+                    list.add(dto);
                 }
             }
-
-            conn.commit();
-        } catch (SQLException e) {
-            if (conn != null) conn.rollback();
-            throw e;
-        } finally {
-            if (conn != null) {
-                conn.setAutoCommit(true);
-                conn.close();
-            }
         }
-    }
-
-    private int saveHeaderInternal(Connection conn, timetableModel model) throws SQLException {
-        String sql = "INSERT INTO timetable (department_id, class_id, schedule_date) VALUES (?, ?, ?)";
-        try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setInt(1, model.getDepartment_id());
-            st.setInt(2, model.getClass_id());
-            st.setTimestamp(3, model.getSchedule_date());
-            st.executeUpdate();
-            try (ResultSet rs = st.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
-                throw new SQLException("Failed to retrieve generated ID for timetable.");
-            }
-        }
-    }
-
-    private void saveAssignmentInternal(Connection conn, timetableAssignmentModel model) throws SQLException {
-        String sql = "INSERT INTO timetable_assignments (timetable_id, user_id, course_id, timeSlot_id) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, model.getTimetable_id());
-            st.setInt(2, model.getUser_id());
-            st.setInt(3, model.getCourse_id());
-            st.setInt(4, model.getTimeSlot_id());
-            st.executeUpdate();
-        }
-    }
-
-    public boolean hasConflict(Integer userId, Integer classId, Integer slotId, Timestamp date) throws SQLException {
-        String sql = "SELECT 1 FROM timetable_assignments ta JOIN timetable t ON ta.timetable_id = t.id " +
-                "WHERE (ta.user_id = ? OR t.class_id = ?) AND ta.timeSlot_id = ? AND t.schedule_date = ? LIMIT 1";
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, userId);
-            st.setInt(2, classId);
-            st.setInt(3, slotId);
-            st.setTimestamp(4, date);
-            try (ResultSet rs = st.executeQuery()) {
-                return rs.next();
-            }
-        }
-    }
-
-    public boolean hasShiftConflict(Integer tId, Integer cId, Timestamp date, boolean morning) throws SQLException {
-        String shiftCondition = morning ? "ts.start_time < '12:00:00'" : "ts.start_time >= '12:00:00'";
-        String sql = "SELECT EXISTS(SELECT 1 FROM timetable_assignments ta JOIN timetable t ON ta.timetable_id = t.id " +
-                "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
-                "WHERE ta.user_id = ? AND t.class_id = ? AND t.schedule_date = ? AND " + shiftCondition + ")";
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, tId);
-            st.setInt(2, cId);
-            st.setTimestamp(3, date);
-            try (ResultSet rs = st.executeQuery()) {
-                return rs.next() && rs.getBoolean(1);
-            }
-        }
-    }
-
-    public int countDistinctShiftsThisWeek(Integer tId, Timestamp start) throws SQLException {
-        String sql = "SELECT COUNT(DISTINCT CASE WHEN ts.start_time < '12:00:00' THEN 1 ELSE 2 END) " +
-                "FROM timetable_assignments ta JOIN timetable t ON ta.timetable_id = t.id " +
-                "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
-                "WHERE ta.user_id = ? AND t.schedule_date BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY)";
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, tId);
-            st.setTimestamp(2, start);
-            st.setTimestamp(3, start);
-            try (ResultSet rs = st.executeQuery()) {
-                return rs.next() ? rs.getInt(1) : 0;
-            }
-        }
-    }
-
-    public boolean isDayContiguous(Integer tId, String currentDay, Timestamp start) throws SQLException {
-        String sql = "SELECT DISTINCT ts.day_of_week FROM timetable_assignments ta " +
-                "JOIN timetable t ON ta.timetable_id = t.id JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
-                "WHERE ta.user_id = ? AND t.schedule_date BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY)";
-        List<String> days = new ArrayList<>();
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, tId);
-            st.setTimestamp(2, start);
-            st.setTimestamp(3, start);
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) days.add(rs.getString("day_of_week").toLowerCase());
-            }
-        }
-        if (days.isEmpty()) return true;
-        List<String> week = Arrays.asList("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
-        int currIdx = week.indexOf(currentDay.toLowerCase());
-        return days.stream().anyMatch(d -> Math.abs(currIdx - week.indexOf(d.toLowerCase())) <= 1);
-    }
-
-    public boolean isSameShiftAsPrevious(Integer tId, boolean currentIsMorning, Timestamp startDate) throws SQLException {
-        String timeCondition = currentIsMorning ? "ts.start_time < '12:00:00'" : "ts.start_time >= '12:00:00'";
-        String sql = "SELECT EXISTS(SELECT 1 FROM timetable_assignments ta JOIN timetable t ON ta.timetable_id = t.id " +
-                "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
-                "WHERE ta.user_id = ? AND t.schedule_date BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY) AND " + timeCondition + ")";
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, tId);
-            st.setTimestamp(2, startDate);
-            st.setTimestamp(3, startDate);
-            try (ResultSet rs = st.executeQuery()) {
-                return rs.next() && rs.getBoolean(1);
-            }
-        }
+        return list;
     }
 }

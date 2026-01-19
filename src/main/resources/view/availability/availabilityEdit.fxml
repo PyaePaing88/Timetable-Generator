@@ -26,13 +26,12 @@
             <TextField fx:id="statusField" promptText="Update status..."
                        GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="From (Date/Time):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <LocalDateTimeTextField fx:id="fromPicker" maxWidth="Infinity"
-                                    GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Day:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="dayComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-            <Label text="To (Date/Time):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <LocalDateTimeTextField fx:id="toPicker" maxWidth="Infinity"
-                                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label text="Period:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="periodComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"
+                      disable="true"/>
 
             <Label text="Remark:" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
             <TextArea fx:id="remarkArea" prefHeight="100" wrapText="true" promptText="Update notes..."

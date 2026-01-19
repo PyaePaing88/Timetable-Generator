@@ -38,8 +38,8 @@
                         <TableColumn fx:id="colTeacher" text="Teacher Name" prefWidth="150"/>
                         <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
                         <TableColumn fx:id="colRemark" text="Remark" prefWidth="250"/>
-                        <TableColumn fx:id="colFrom" text="From" prefWidth="250"/>
-                        <TableColumn fx:id="colTo" text="To" prefWidth="250"/>
+                        <TableColumn fx:id="colDay" text="Day" prefWidth="250"/>
+                        <TableColumn fx:id="colPeriod" text="Period" prefWidth="250"/>
                         <TableColumn fx:id="colActions" text="Actions" prefWidth="120"/>
                     </columns>
                     <columnResizePolicy>

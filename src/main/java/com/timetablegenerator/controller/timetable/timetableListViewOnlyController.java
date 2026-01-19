@@ -20,12 +20,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class timetableListController {
+public class timetableListViewOnlyController {
 
     @FXML
     private FlowPane cardContainer;
-    @FXML
-    private Button btnGenerateNew;
     @FXML
     private TextField searchField;
     @FXML
@@ -106,31 +104,29 @@ public class timetableListController {
     private VBox createCard(TimetableCardDTO data) {
         VBox card = new VBox(10);
         card.getStyleClass().add("timetable-card");
-
-        // Set a fixed height, but let the width be dynamic
-        card.setPrefHeight(170);
+        card.setPrefHeight(150);
         card.setAlignment(Pos.TOP_LEFT);
 
-        // DYNAMIC MATH:
-        // (Container Width - Paddings - (3 * HGaps) - Scrollbar Buffer) / 4
+        card.setPrefHeight(150);
+        card.setAlignment(Pos.TOP_LEFT);
+
         card.prefWidthProperty().bind(
                 cardContainer.widthProperty()
                         .subtract(cardContainer.getPadding().getLeft() + cardContainer.getPadding().getRight())
                         .subtract(cardContainer.getHgap() * 3)
-                        .subtract(20) // Buffer for the vertical scrollbar
+                        .subtract(25)
                         .divide(4)
         );
 
         Label lblDept = new Label(data.getDepartmentName());
         lblDept.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #2c3e50;");
         lblDept.setWrapText(true);
-        lblDept.setMinHeight(40); // Ensures text room for 2 lines
 
         Label lblClass = new Label(data.getClassName());
-        lblClass.setStyle("-fx-text-fill: #34495e;");
+        lblClass.getStyleClass().add("card-subtitle");
 
         Label lblYear = new Label("Year: " + data.getScheduleDate());
-        lblYear.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 12px;");
+        lblYear.setStyle("-fx-text-fill: #7f8c8d;");
 
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -142,24 +138,6 @@ public class timetableListController {
 
         card.getChildren().addAll(lblDept, lblClass, lblYear, spacer, btnView);
         return card;
-    }
-
-    @FXML
-    private void handleGenerateNew() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timetable/timetableCreate.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Generate New Timetable");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initOwner(btnGenerateNew.getScene().getWindow());
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            handleSearch();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void openDetailsModal(Integer timetableId) {

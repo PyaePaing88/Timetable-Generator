@@ -92,6 +92,28 @@ public class userRepo {
         return users;
     }
 
+    public int getTeacherWorkloadCountByCourse(Integer courseId) throws SQLException {
+
+        String sql = "SELECT COUNT(uc2.course_id) " +
+                "FROM user_course uc1 " +
+                "JOIN user_course uc2 ON uc1.user_id = uc2.user_id " +
+                "WHERE uc1.course_id = ? " +
+                "AND uc1.is_delete = 0 " +
+                "AND uc2.is_delete = 0";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, courseId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
     public void update(userModel user) throws SQLException {
         String sql = "UPDATE users SET name=?, phone=?, email=?, department_id=?, role=?, is_active=?, modify_by=?, modify_date=? WHERE id=?";
         try (Connection conn = dbConnection.getConnection();
@@ -130,21 +152,19 @@ public class userRepo {
     }
 
     public List<Integer> getTeachersByCourse(Integer courseId) throws SQLException {
-        List<Integer> teachersIds = new ArrayList<>();
-        String sql = "SELECT id FROM users WHERE is_delete = false AND role='teacher' AND department_id = ?";
+        List<Integer> teachers = new ArrayList<>();
+        String sql = "SELECT user_id FROM user_course WHERE course_id = ? AND is_delete = 0";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
-
             st.setInt(1, courseId);
-
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    teachersIds.add(rs.getInt("id"));
+                    teachers.add(rs.getInt("user_id"));
                 }
             }
         }
-        return teachersIds;
+        return teachers;
     }
 
     private userModel mapResultSetToModel(ResultSet rs) throws SQLException {

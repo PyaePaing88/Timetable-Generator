@@ -8,8 +8,18 @@ import com.timetablegenerator.service.userService;
 import com.timetablegenerator.service.departmentService;
 import com.timetablegenerator.service.classService;
 import com.timetablegenerator.service.courseService;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Arc;
+import javafx.util.Duration;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class dashboardController {
 
@@ -21,6 +31,13 @@ public class dashboardController {
     private Label totalClassLabel;
     @FXML
     private Label totalCourseLabel;
+    @FXML
+    private Label monthYearLabel;
+    @FXML
+    private GridPane calendarGrid;
+
+    @FXML
+    private Label secondLabel;
 
     private final userService userService = new userService(new userRepo());
     private final departmentService deptService = new departmentService(new departmentRepo());
@@ -30,6 +47,7 @@ public class dashboardController {
     @FXML
     public void initialize() {
         loadStatistics();
+        calendar();
     }
 
     private void loadStatistics() {
@@ -56,5 +74,41 @@ public class dashboardController {
         totalDeptLabel.setText("N/A");
         totalClassLabel.setText("N/A");
         totalCourseLabel.setText("N/A");
+    }
+
+    private void calendar() {
+        LocalDate now = LocalDate.now();
+        monthYearLabel.setText(now.getMonth().name() + " " + now.getYear());
+
+        String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+
+        // 1. Add Header Row
+        for (int i = 0; i < 7; i++) {
+            Label dayHead = new Label(daysOfWeek[i]);
+            dayHead.setStyle("-fx-font-weight: bold; -fx-text-fill: #7f8c8d;");
+            calendarGrid.add(dayHead, i, 0);
+        }
+
+        // 2. Calculate Dates
+        LocalDate firstOfMonth = now.withDayOfMonth(1);
+        int dayOffset = firstOfMonth.getDayOfWeek().getValue() % 7;
+        int daysInMonth = now.lengthOfMonth();
+
+        // 3. Fill Grid
+        for (int i = 0; i < daysInMonth; i++) {
+            int date = i + 1;
+            Label dayLabel = new Label(String.valueOf(date));
+            dayLabel.setMinWidth(30);
+            dayLabel.setAlignment(Pos.CENTER);
+
+            // Highlight today
+            if (date == now.getDayOfMonth()) {
+                dayLabel.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;");
+            }
+
+            int column = (i + dayOffset) % 7;
+            int row = (i + dayOffset) / 7 + 1;
+            calendarGrid.add(dayLabel, column, row);
+        }
     }
 }

@@ -6,8 +6,9 @@ public class availabilityModel {
     private Integer id;
     private String status;
     private String remark;
-    private Timestamp from;
-    private Timestamp to;
+    private Integer time_slot_id;
+    private day day_of_week;
+    private Integer period;
     private String teacher_name;
     private Integer created_by;
     private Timestamp created_date;
@@ -39,20 +40,28 @@ public class availabilityModel {
         this.remark = remark;
     }
 
-    public Timestamp getFrom() {
-        return from;
+    public Integer getTime_slot_id() {
+        return time_slot_id;
     }
 
-    public void setFrom(Timestamp from) {
-        this.from = from;
+    public void setTime_slot_id(Integer time_slot_id) {
+        this.time_slot_id = time_slot_id;
     }
 
-    public Timestamp getTo() {
-        return to;
+    public day getDay_of_week() {
+        return day_of_week;
     }
 
-    public void setTo(Timestamp to) {
-        this.to = to;
+    public void setDay_of_week(day day_of_week) {
+        this.day_of_week = day_of_week;
+    }
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
     }
 
     public String getTeacher_name() {

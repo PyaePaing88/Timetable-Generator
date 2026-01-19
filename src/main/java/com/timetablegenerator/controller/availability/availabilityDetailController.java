@@ -8,8 +8,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.text.SimpleDateFormat;
-
 public class availabilityDetailController {
 
     @FXML
@@ -18,32 +16,32 @@ public class availabilityDetailController {
     private TextField txtTeacher;
     @FXML
     private TextField txtStatus;
+    // Changed from txtFrom/txtTo to Day/Period
     @FXML
-    private TextField txtFrom;
+    private TextField txtDay;
     @FXML
-    private TextField txtTo;
+    private TextField txtPeriod;
     @FXML
     private TextArea txtRemark;
 
     private final availabilityService service = new availabilityService(new availabilityRepo());
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public void loadAvailabilityData(int id) {
         try {
             availabilityModel availability = service.getAvailabilityById(id);
             if (availability != null) {
                 txtId.setText(String.valueOf(availability.getId()));
-
                 txtTeacher.setText(availability.getTeacher_name());
-
                 txtStatus.setText(availability.getStatus());
 
-                if (availability.getFrom() != null) {
-                    txtFrom.setText(dateFormat.format(availability.getFrom()));
+                // Display Day and Period from the model
+                if (availability.getDay_of_week() != null) {
+                    // Formats "MONDAY" to "Monday" for better readability
+                    String dayName = availability.getDay_of_week().name().toLowerCase();
+                    txtDay.setText(dayName.substring(0, 1).toUpperCase() + dayName.substring(1));
                 }
-                if (availability.getTo() != null) {
-                    txtTo.setText(dateFormat.format(availability.getTo()));
-                }
+
+                txtPeriod.setText("Period " + availability.getPeriod());
 
                 txtRemark.setText(availability.getRemark());
             }
@@ -56,6 +54,6 @@ public class availabilityDetailController {
     @FXML
     private void closeWindow() {
         Stage stage = (Stage) txtId.getScene().getWindow();
-        stage.close();
+        if (stage != null) stage.close();
     }
 }

@@ -26,13 +26,13 @@
             <TextField fx:id="statusField" promptText="e.g. Medical Leave, Conference, Busy"
                        GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="From (Date &amp; Time):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <LocalDateTimeTextField fx:id="fromPicker" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                                    maxWidth="Infinity"/>
+            <Label text="Day of Week:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="dayComboBox" promptText="Select Day"
+                      GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-            <Label text="To (Date &amp; Time):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <LocalDateTimeTextField fx:id="toPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"
-                                    maxWidth="Infinity"/>
+            <Label text="Period:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="periodComboBox" promptText="Select Period"
+                      GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity" disable="true"/>
 
             <Label text="Remark:" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
             <TextArea fx:id="remarkArea" prefHeight="100" wrapText="true" promptText="Additional details..."
