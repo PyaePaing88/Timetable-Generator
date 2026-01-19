@@ -105,7 +105,8 @@ public class timetableRepo {
     public List<TimetableDetailDTO> findAssignmentsByTimetableId(Integer timetableId) throws SQLException {
         List<TimetableDetailDTO> list = new ArrayList<>();
         String sql = "SELECT ts.day_of_week, ts.period, ts.start_time, ts.end_time, " +
-                "u.name as teacher_name, co.course_name, co.subject_code " +
+                "u.name AS teacher_name, co.course_name, co.subject_code, " +
+                "ta.id, ta.user_id, ta.is_leave " +
                 "FROM timetable_assignments ta " +
                 "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
                 "JOIN users u ON ta.user_id = u.id " +
@@ -119,12 +120,15 @@ public class timetableRepo {
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
                     TimetableDetailDTO dto = new TimetableDetailDTO();
+                    dto.setId(rs.getInt("id"));
+                    dto.setTeacher_id(rs.getInt("user_id"));
                     dto.setDay(rs.getString("day_of_week"));
                     dto.setPeriod(rs.getInt("period"));
                     dto.setTime(rs.getString("start_time") + " - " + rs.getString("end_time"));
                     dto.setTeacherName(rs.getString("teacher_name"));
                     dto.setCourseName(rs.getString("course_name"));
                     dto.setSubjectCode(rs.getString("subject_code"));
+                    dto.setIs_leave(rs.getBoolean("is_leave"));
                     list.add(dto);
                 }
             }

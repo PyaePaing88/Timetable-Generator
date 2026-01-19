@@ -2,11 +2,17 @@ package com.timetablegenerator.controller.timetable;
 
 import com.timetablegenerator.model.TimetableDetailDTO;
 import com.timetablegenerator.service.timetableService;
+import com.timetablegenerator.util.authSession;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
@@ -43,23 +49,56 @@ public class timetableDetailController {
     }
 
     private VBox createCell(TimetableDetailDTO data) {
-        VBox box = new VBox(2);
+        VBox box = new VBox(0);
         box.setAlignment(Pos.CENTER);
-        box.setStyle("-fx-border-color: #bdc3c7; -fx-padding: 5; -fx-background-color: #ffffff;");
+        box.getStyleClass().add("timetable-cell");
+        box.setMinHeight(80);
 
-        Label course = new Label(data.getSubjectCode());
-        course.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        Label course = new Label(data.getSubjectCode().toUpperCase());
+        course.getStyleClass().add("course-label");
 
         Label teacher = new Label(data.getTeacherName());
-        teacher.setStyle("-fx-font-size: 10px; -fx-text-fill: #7f8c8d;");
+        teacher.getStyleClass().add("teacher-label");
 
         box.getChildren().addAll(course, teacher);
+
+        if (data.isIs_leave()) {
+            Label status = new Label("Leave");
+            status.setStyle("-fx-font-size: 9px; -fx-text-fill: #3498db; -fx-font-weight: bold;");
+            box.setStyle("-fx-background-color: #ffdfd6; -fx-border-color:#ffdfd6;");
+            box.getChildren().add(status);
+        }
+
+        var currentUser = authSession.getUser();
+        if (currentUser != null && data.getTeacher_id() == currentUser.getId()) {
+            box.getStyleClass().add("editable-cell");
+            box.setCursor(javafx.scene.Cursor.HAND);
+
+            box.setOnMouseClicked(event -> openEditPopup(data));
+        }
+
         return box;
     }
 
-    @FXML
-    private void handleClose() {
-        Stage stage = (Stage) timetableGrid.getScene().getWindow();
-        stage.close();
+    private void openEditPopup(TimetableDetailDTO data) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timetable/timetableEdit.fxml"));
+            Parent root = loader.load();
+
+            timetableEditController controller = loader.getController();
+            controller.initData(data);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Slot: " + data.getSubjectCode());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(timetableGrid.getScene().getWindow());
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            loadTimetableData(data.getId());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -184,6 +184,10 @@
                 <HBox spacing="25.0" VBox.vgrow="ALWAYS">
                     <children>
                         <VBox prefWidth="-Infinity" spacing="10" styleClass="chart-container" HBox.hgrow="SOMETIMES">
+
+                        </VBox>
+
+                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="10">
                                     <Label fx:id="monthYearLabel" text="January 2026" textFill="#2c3e50">
@@ -200,10 +204,6 @@
 
                                 <Region VBox.vgrow="ALWAYS"/>
                             </children>
-                        </VBox>
-
-                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
-
                         </VBox>
                     </children>
                 </HBox>

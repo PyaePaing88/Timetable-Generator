@@ -1,12 +1,23 @@
 package com.timetablegenerator.model;
 
 public class TimetableDetailDTO {
+    private Integer id;
     private String day;
     private int period;
     private String time;
+    private Integer teacher_id;
     private String teacherName;
     private String courseName;
     private String subjectCode;
+    private boolean is_leave;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getDay() {
         return day;
@@ -32,6 +43,14 @@ public class TimetableDetailDTO {
         this.time = time;
     }
 
+    public Integer getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(Integer teacher_id) {
+        this.teacher_id = teacher_id;
+    }
+
     public String getTeacherName() {
         return teacherName;
     }
@@ -54,5 +73,13 @@ public class TimetableDetailDTO {
 
     public void setSubjectCode(String subjectCode) {
         this.subjectCode = subjectCode;
+    }
+
+    public boolean isIs_leave() {
+        return is_leave;
+    }
+
+    public void setIs_leave(boolean is_leave) {
+        this.is_leave = is_leave;
     }
 }

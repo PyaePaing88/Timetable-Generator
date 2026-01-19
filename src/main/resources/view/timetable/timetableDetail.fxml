@@ -17,7 +17,6 @@
             <Label text="Full weekly breakdown of courses and instructors"
                    style="-fx-text-fill: #7f8c8d; -fx-font-size: 13px;"/>
         </VBox>
-        <Button text="Close" onAction="#handleClose" styleClass="tg-btn, tg-btn-outline"/>
     </HBox>
 
     <Separator/>
@@ -25,18 +24,19 @@
     <ScrollPane fitToWidth="true"
                 style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
         <content>
-            <GridPane fx:id="timetableGrid" styleClass="timetable-grid">
+            <GridPane fx:id="timetableGrid" styleClass="timetable-grid" alignment="TOP_CENTER">
                 <columnConstraints>
-                    <ColumnConstraints minWidth="100" prefWidth="100" hgrow="NEVER" halignment="CENTER"/>
-                    <ColumnConstraints minWidth="140" prefWidth="160" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="140" prefWidth="160" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="140" prefWidth="160" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="140" prefWidth="160" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="140" prefWidth="160" hgrow="SOMETIMES"/>
-                    <ColumnConstraints minWidth="140" prefWidth="160" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="100" prefWidth="110" hgrow="NEVER" halignment="CENTER"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
                 </columnConstraints>
 
-                <Label text="Day" styleClass="grid-header-cell" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Day\Period" styleClass="grid-header-day-period" GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"/>
                 <Label text="Period 1" styleClass="grid-header-cell" GridPane.columnIndex="1" GridPane.rowIndex="0"
                        maxWidth="Infinity"/>
                 <Label text="Period 2" styleClass="grid-header-cell" GridPane.columnIndex="2" GridPane.rowIndex="0"

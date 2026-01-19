@@ -6,6 +6,8 @@ public class timetableAssignmentModel {
     private Integer user_id;
     private Integer course_id;
     private Integer timeSlot_id;
+    private Boolean is_leave;
+    private String Remark;
 
     private Integer tempClassId;
 
@@ -55,5 +57,21 @@ public class timetableAssignmentModel {
 
     public void setTimeSlot_id(Integer timeSlot_id) {
         this.timeSlot_id = timeSlot_id;
+    }
+
+    public Boolean getIs_leave() {
+        return is_leave;
+    }
+
+    public void setIs_leave(Boolean is_leave) {
+        this.is_leave = is_leave;
+    }
+
+    public String getRemark() {
+        return Remark;
+    }
+
+    public void setRemark(String remark) {
+        Remark = remark;
     }
 }
