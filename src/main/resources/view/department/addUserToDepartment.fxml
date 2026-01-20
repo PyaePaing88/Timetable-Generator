@@ -3,44 +3,43 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox prefWidth="700.0" prefHeight="500.0" spacing="15" style="-fx-background-color: white;"
+<VBox prefWidth="750.0" prefHeight="550.0" spacing="15"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.timetablegenerator.controller.department.addUserToDeptController">
+      fx:controller="com.timetablegenerator.controller.department.addUserToDeptController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Add Teachers to Department" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    <Label text="Add Teachers to Department" styleClass="content-header"/>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
         <VBox spacing="5" HBox.hgrow="ALWAYS">
-            <Label text="Available Teachers (No Department)"/>
             <TableView fx:id="allUsersTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colAllUserName" text="Teacher Name" prefWidth="250"/>
+                    <TableColumn fx:id="colAllUserName" text="Available Teachers (No Department)" prefWidth="250"/>
                 </columns>
             </TableView>
         </VBox>
 
         <VBox alignment="CENTER" spacing="15">
-            <Button text="→" onAction="#moveToDept" prefWidth="40" style="-fx-font-weight: bold;"/>
-            <Button text="←" onAction="#moveFromDept" prefWidth="40" style="-fx-font-weight: bold;"/>
+            <Button text="→" onAction="#moveToDept" prefWidth="40" styleClass="tg-btn, tg-btn-success"/>
+            <Button text="←" onAction="#moveFromDept" prefWidth="40" styleClass="tg-btn, tg-btn-danger"/>
         </VBox>
 
         <VBox spacing="5" HBox.hgrow="ALWAYS">
-            <Label text="Department Teachers"/>
             <TableView fx:id="deptUsersTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colDeptUserName" text="Teacher Name" prefWidth="250"/>
+                    <TableColumn fx:id="colDeptUserName" text="Department Teachers" prefWidth="250"/>
                 </columns>
             </TableView>
         </VBox>
     </HBox>
 
     <HBox alignment="CENTER_RIGHT" spacing="10">
-        <Button text="Cancel" onAction="#handleCancel" prefWidth="80" styleClass="btn-secondary"/>
+        <Button text="Cancel" onAction="#handleCancel" prefWidth="80" styleClass="tg-btn, tg-btn-secondary"/>
         <Button text="Save Changes" onAction="#handleSave" prefWidth="120"
-                style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                styleClass="tg-btn, tg-btn-primary"/>
     </HBox>
 </VBox>

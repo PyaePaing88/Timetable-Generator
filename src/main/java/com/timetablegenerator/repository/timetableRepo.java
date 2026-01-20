@@ -135,4 +135,56 @@ public class timetableRepo {
         }
         return list;
     }
+
+    public TimetableDetailDTO findAssignmentsById(Integer id) throws SQLException {
+        TimetableDetailDTO dto = null;
+
+        String sql = "SELECT ts.day_of_week, ts.period, ts.start_time, ts.end_time, " +
+                "u.name AS teacher_name, co.course_name, co.subject_code, " +
+                "ta.id, ta.user_id, ta.is_leave, ta.remark " +
+                "FROM timetable_assignments ta " +
+                "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
+                "JOIN users u ON ta.user_id = u.id " +
+                "JOIN courses co ON ta.course_id = co.id " +
+                "WHERE ta.id = ? ";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setInt(1, id);
+
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    dto = new TimetableDetailDTO();
+                    dto.setId(rs.getInt("id"));
+                    dto.setTeacher_id(rs.getInt("user_id"));
+                    dto.setDay(rs.getString("day_of_week"));
+                    dto.setPeriod(rs.getInt("period"));
+                    dto.setTime(rs.getString("start_time") + " - " + rs.getString("end_time"));
+                    dto.setTeacherName(rs.getString("teacher_name"));
+                    dto.setCourseName(rs.getString("course_name"));
+                    dto.setSubjectCode(rs.getString("subject_code"));
+                    dto.setIs_leave(rs.getBoolean("is_leave"));
+                    dto.setRemark(rs.getString("remark"));
+                }
+            }
+        }
+        return dto;
+    }
+
+    public boolean updateTimetableAssignment(TimetableDetailDTO data) throws SQLException {
+        String sql = "UPDATE timetable_assignments SET is_leave = ?, remark = ? WHERE id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setBoolean(1, data.isIs_leave());
+            st.setString(2, data.getRemark());
+            st.setInt(3, data.getId());
+
+            int rowsAffected = st.executeUpdate();
+
+            return rowsAffected > 0;
+        }
+    }
 }

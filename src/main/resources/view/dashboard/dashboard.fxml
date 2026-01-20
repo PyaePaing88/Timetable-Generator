@@ -183,26 +183,55 @@
 
                 <HBox spacing="25.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <VBox prefWidth="-Infinity" spacing="10" styleClass="chart-container" HBox.hgrow="SOMETIMES">
-
+                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="15">
+                            <children>
+                                <Label text="Current Time" textFill="#7f8c8d">
+                                    <font>
+                                        <Font name="System Semibold" size="16.0"/>
+                                    </font>
+                                </Label>
+                                <StackPane prefHeight="200" prefWidth="200">
+                                    <children>
+                                        <Circle radius="80.0" fill="TRANSPARENT" stroke="#3498db" strokeWidth="8"/>
+                                        <VBox alignment="CENTER">
+                                            <Label fx:id="timeLabel" text="12:00:00" textFill="#2c3e50">
+                                                <font>
+                                                    <Font name="System Bold" size="28.0"/>
+                                                </font>
+                                            </Label>
+                                            <Label fx:id="amPmLabel" text="PM" textFill="#7f8c8d">
+                                                <font>
+                                                    <Font size="14.0"/>
+                                                </font>
+                                            </Label>
+                                        </VBox>
+                                    </children>
+                                </StackPane>
+                            </children>
                         </VBox>
 
-                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
+                        <VBox styleClass="chart-container" HBox.hgrow="ALWAYS" alignment="TOP_CENTER" spacing="20">
                             <children>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                <HBox alignment="CENTER_LEFT">
                                     <Label fx:id="monthYearLabel" text="January 2026" textFill="#2c3e50">
                                         <font>
                                             <Font name="System Bold" size="18.0"/>
                                         </font>
                                     </Label>
                                 </HBox>
-
                                 <Separator/>
-
-                                <GridPane fx:id="calendarGrid" alignment="CENTER" hgap="5" vgap="5">
+                                <GridPane fx:id="calendarGrid" alignment="CENTER" hgap="10" vgap="10"
+                                          VBox.vgrow="ALWAYS">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.28" halignment="CENTER"/>
+                                    </columnConstraints>
                                 </GridPane>
-
-                                <Region VBox.vgrow="ALWAYS"/>
                             </children>
                         </VBox>
                     </children>

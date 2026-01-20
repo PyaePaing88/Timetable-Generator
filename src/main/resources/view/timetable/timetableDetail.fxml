@@ -24,7 +24,8 @@
     <ScrollPane fitToWidth="true"
                 style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
         <content>
-            <GridPane fx:id="timetableGrid" styleClass="timetable-grid" alignment="TOP_CENTER">
+            <GridPane fx:id="timetableGrid" styleClass="timetable-grid" alignment="TOP_CENTER"
+            >
                 <columnConstraints>
                     <ColumnConstraints minWidth="100" prefWidth="110" hgrow="NEVER" halignment="CENTER"/>
                     <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
@@ -50,11 +51,16 @@
                 <Label text="Period 6" styleClass="grid-header-cell" GridPane.columnIndex="6" GridPane.rowIndex="0"
                        maxWidth="Infinity"/>
 
-                <Label text="MON" styleClass="day-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <Label text="TUE" styleClass="day-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <Label text="WED" styleClass="day-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <Label text="THU" styleClass="day-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <Label text="FRI" styleClass="day-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label text="MON" styleClass="day-label" style="-fx-background-color:#FAA18F" GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"/>
+                <Label text="TUE" styleClass="day-label" style="-fx-background-color:#8FFABD" GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"/>
+                <Label text="WED" styleClass="day-label" style="-fx-background-color:#8FB8FA" GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"/>
+                <Label text="THU" styleClass="day-label" style="-fx-background-color:#FAE88F" GridPane.columnIndex="0"
+                       GridPane.rowIndex="4"/>
+                <Label text="FRI" styleClass="day-label" style="-fx-background-color:#FCBBFA" GridPane.columnIndex="0"
+                       GridPane.rowIndex="5"/>
             </GridPane>
         </content>
     </ScrollPane>

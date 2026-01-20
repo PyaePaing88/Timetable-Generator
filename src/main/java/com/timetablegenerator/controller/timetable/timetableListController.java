@@ -107,24 +107,21 @@ public class timetableListController {
         VBox card = new VBox(10);
         card.getStyleClass().add("timetable-card");
 
-        // Set a fixed height, but let the width be dynamic
         card.setPrefHeight(170);
         card.setAlignment(Pos.TOP_LEFT);
 
-        // DYNAMIC MATH:
-        // (Container Width - Paddings - (3 * HGaps) - Scrollbar Buffer) / 4
         card.prefWidthProperty().bind(
                 cardContainer.widthProperty()
                         .subtract(cardContainer.getPadding().getLeft() + cardContainer.getPadding().getRight())
                         .subtract(cardContainer.getHgap() * 3)
-                        .subtract(20) // Buffer for the vertical scrollbar
+                        .subtract(20)
                         .divide(4)
         );
 
         Label lblDept = new Label(data.getDepartmentName());
         lblDept.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #2c3e50;");
         lblDept.setWrapText(true);
-        lblDept.setMinHeight(40); // Ensures text room for 2 lines
+        lblDept.setMinHeight(40);
 
         Label lblClass = new Label(data.getClassName());
         lblClass.setStyle("-fx-text-fill: #34495e;");
@@ -138,7 +135,7 @@ public class timetableListController {
         Button btnView = new Button("View timetable");
         btnView.getStyleClass().add("tg-btn-primary");
         btnView.setMaxWidth(Double.MAX_VALUE);
-        btnView.setOnAction(event -> openDetailsModal(data.getTimetableId()));
+        btnView.setOnAction(event -> openDetailsModal(data.getTimetableId(), data.getClassName()));
 
         card.getChildren().addAll(lblDept, lblClass, lblYear, spacer, btnView);
         return card;
@@ -162,12 +159,12 @@ public class timetableListController {
         }
     }
 
-    private void openDetailsModal(Integer timetableId) {
+    private void openDetailsModal(Integer timetableId, String class_name) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timetable/timetableDetail.fxml"));
             Parent root = loader.load();
             timetableDetailController controller = loader.getController();
-            controller.loadTimetableData(timetableId);
+            controller.loadTimetableData(timetableId, class_name);
 
             Stage stage = new Stage();
             stage.setTitle("Timetable Detailed View");

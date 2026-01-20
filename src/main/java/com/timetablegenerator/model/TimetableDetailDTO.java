@@ -10,6 +10,7 @@ public class TimetableDetailDTO {
     private String courseName;
     private String subjectCode;
     private boolean is_leave;
+    private String remark;
 
     public Integer getId() {
         return id;
@@ -81,5 +82,13 @@ public class TimetableDetailDTO {
 
     public void setIs_leave(boolean is_leave) {
         this.is_leave = is_leave;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Arc;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
@@ -37,7 +36,9 @@ public class dashboardController {
     private GridPane calendarGrid;
 
     @FXML
-    private Label secondLabel;
+    private Label timeLabel;
+    @FXML
+    private Label amPmLabel;
 
     private final userService userService = new userService(new userRepo());
     private final departmentService deptService = new departmentService(new departmentRepo());
@@ -48,6 +49,7 @@ public class dashboardController {
     public void initialize() {
         loadStatistics();
         calendar();
+        startClock();
     }
 
     private void loadStatistics() {
@@ -106,5 +108,19 @@ public class dashboardController {
             int row = (i + dayOffset) / 7 + 1;
             calendarGrid.add(dayLabel, column, row);
         }
+    }
+    
+    private void startClock() {
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            LocalTime now = LocalTime.now();
+            timeLabel.setText(String.format("%02d:%02d:%02d",
+                    (now.getHour() % 12 == 0) ? 12 : now.getHour() % 12,
+                    now.getMinute(),
+                    now.getSecond()));
+            amPmLabel.setText(now.getHour() >= 12 ? "PM" : "AM");
+        }), new KeyFrame(Duration.seconds(1)));
+
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
     }
 }

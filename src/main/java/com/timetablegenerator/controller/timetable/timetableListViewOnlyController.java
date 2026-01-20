@@ -134,18 +134,18 @@ public class timetableListViewOnlyController {
         Button btnView = new Button("View timetable");
         btnView.getStyleClass().add("tg-btn-primary");
         btnView.setMaxWidth(Double.MAX_VALUE);
-        btnView.setOnAction(event -> openDetailsModal(data.getTimetableId()));
+        btnView.setOnAction(event -> openDetailsModal(data.getTimetableId(), data.getClassName()));
 
         card.getChildren().addAll(lblDept, lblClass, lblYear, spacer, btnView);
         return card;
     }
 
-    private void openDetailsModal(Integer timetableId) {
+    private void openDetailsModal(Integer timetableId, String class_name) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/timetable/timetableDetail.fxml"));
             Parent root = loader.load();
             timetableDetailController controller = loader.getController();
-            controller.loadTimetableData(timetableId);
+            controller.loadTimetableData(timetableId, class_name);
 
             Stage stage = new Stage();
             stage.setTitle("Timetable Detailed View");

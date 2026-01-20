@@ -31,7 +31,17 @@ public class timetableDetailController {
             "Monday", 1, "Tuesday", 2, "Wednesday", 3, "Thursday", 4, "Friday", 5
     );
 
-    public void loadTimetableData(Integer timetableId) throws SQLException {
+    private Integer currentTimetableId;
+    private String currentClassName;
+
+    public void loadTimetableData(Integer timetableId, String class_name) throws SQLException {
+
+        this.currentTimetableId = timetableId;
+        this.currentClassName = class_name;
+
+        String displayName = (class_name != null) ? class_name.trim() : "Unknown Class";
+        lblHeaderInfo.setText("Weekly Timetable: " + displayName);
+
         timetableGrid.getChildren().removeIf(node -> node instanceof VBox);
 
         List<TimetableDetailDTO> details = service.getTimetableListByHeader(timetableId);
@@ -65,7 +75,7 @@ public class timetableDetailController {
         if (data.isIs_leave()) {
             Label status = new Label("Leave");
             status.setStyle("-fx-font-size: 9px; -fx-text-fill: #3498db; -fx-font-weight: bold;");
-            box.setStyle("-fx-background-color: #ffdfd6; -fx-border-color:#ffdfd6;");
+            box.setStyle("-fx-background-color: #ffdfd6; -fx-border-color: #FAA18F;");
             box.getChildren().add(status);
         }
 
@@ -86,16 +96,17 @@ public class timetableDetailController {
             Parent root = loader.load();
 
             timetableEditController controller = loader.getController();
-            controller.initData(data);
+            controller.initData(data.getId());
 
             Stage stage = new Stage();
-            stage.setTitle("Edit Slot: " + data.getSubjectCode());
+            stage.setTitle("Edit Timetable Status");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(timetableGrid.getScene().getWindow());
             stage.setScene(new Scene(root));
+
             stage.showAndWait();
 
-            loadTimetableData(data.getId());
+            loadTimetableData(currentTimetableId, currentClassName);
 
         } catch (Exception e) {
             e.printStackTrace();

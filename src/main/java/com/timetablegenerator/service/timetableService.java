@@ -171,4 +171,13 @@ public class timetableService {
     public List<TimetableCardDTO> getTimetablesPaginated(int page, int size, String search) throws SQLException {
         return repo.getTimetablesPaginated(page, size, search);
     }
+
+    public TimetableDetailDTO getTimetableAssignmentById(Integer id) throws SQLException {
+        return repo.findAssignmentsById(id);
+    }
+
+    public boolean updateTimetableAssignment(TimetableDetailDTO data) throws SQLException {
+        return repo.updateTimetableAssignment(data);
+    }
+
 }

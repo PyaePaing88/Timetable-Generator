@@ -3,38 +3,37 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox prefWidth="750.0" prefHeight="550.0" spacing="15" style="-fx-background-color: #f8f9fa;"
+<VBox prefWidth="750.0" prefHeight="550.0" spacing="15"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.timetablegenerator.controller.course.assignUserWithCourseController">
+      fx:controller="com.timetablegenerator.controller.course.assignUserWithCourseController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
 
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Manage Teacher Course" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+    <Label text="Assign Teacher to Course" styleClass="content-header"/>
 
     <HBox spacing="15" VBox.vgrow="ALWAYS">
         <VBox spacing="8" HBox.hgrow="ALWAYS">
-            <Label text="Available Teachers" style="-fx-font-weight: bold;"/>
             <TableView fx:id="allUserTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colAllUserName" text="Teachers" prefWidth="300"/>
+                    <TableColumn fx:id="colAllUserName" text="Available Teachers" prefWidth="300"/>
                 </columns>
             </TableView>
         </VBox>
 
         <VBox alignment="CENTER" spacing="20">
-            <Button text="Add →" onAction="#moveToCourse" prefWidth="80"
-                    style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"/>
-            <Button text="← Remove" onAction="#moveFromCourse" prefWidth="80"
-                    style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button text="→" onAction="#moveToCourse" prefWidth="80"
+                    styleClass="tg-btn, tg-btn-success"/>
+            <Button text="←" onAction="#moveFromCourse" prefWidth="80"
+                    styleClass="tg-btn, tg-btn-danger"/>
         </VBox>
 
         <VBox spacing="8" HBox.hgrow="ALWAYS">
-            <Label text="Teachers assign for this Course" style="-fx-font-weight: bold;"/>
             <TableView fx:id="courseUserTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colCourseUserName" text="Teachers" prefWidth="300"/>
+                    <TableColumn fx:id="colCourseUserName" text="Assigned Teachers" prefWidth="300"/>
                 </columns>
             </TableView>
         </VBox>
@@ -44,8 +43,8 @@
 
     <HBox alignment="CENTER_RIGHT" spacing="12">
         <Button text="Cancel" onAction="#handleCancel" prefWidth="100"
-                style="-fx-background-radius: 5;"/>
+                styleClass="tg-btn, tg-btn-secondary"/>
         <Button text="Save Changes" onAction="#handleSave" prefWidth="140"
-                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+                styleClass="tg-btn, tg-btn-primary"/>
     </HBox>
 </VBox>
