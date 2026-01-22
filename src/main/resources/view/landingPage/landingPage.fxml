@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane minHeight="600.0" minWidth="1000.0"
             prefHeight="600.0" prefWidth="1000.0"
             styleClass="body" stylesheets="@../../style/styles.css"
@@ -21,6 +23,11 @@
                 <Insets left="20" right="20"/>
             </padding>
 
+            <ImageView fitHeight="31.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../assets/icon/app_icon.png"/>
+                </image>
+            </ImageView>
             <Label styleClass="main-logo" text="Timetable Generator"/>
 
             <Region HBox.hgrow="ALWAYS"/>

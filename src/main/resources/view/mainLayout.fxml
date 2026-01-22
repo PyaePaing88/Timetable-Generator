@@ -12,20 +12,23 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="600.0" minWidth="1000.0"
-            prefHeight="600.0" prefWidth="1000.0"
-            styleClass="body" stylesheets="@../style/styles.css"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.timetablegenerator.controller.mainLayoutController">
+            prefHeight="600.0" prefWidth="1000.0" styleClass="body"
+            stylesheets="@../style/styles.css" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timetablegenerator.controller.mainLayoutController">
 
     <top>
         <HBox fx:id="header" alignment="CENTER_LEFT" spacing="15" styleClass="main-header">
+            <ImageView fitHeight="31.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/icon/app_icon.png"/>
+                </image>
+            </ImageView>
             <Label styleClass="main-logo" text="Timetable Generator"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="nameLabel" styleClass="main-username" text="Admin"/>
-            <Button onAction="#onLogout" styleClass="tg-btn, tg-btn-secondary" text="Logout"/>
+            <Button onAction="#onLogout" styleClass="tg-btn, tg-btn-danger" text="Logout"/>
         </HBox>
     </top>
 

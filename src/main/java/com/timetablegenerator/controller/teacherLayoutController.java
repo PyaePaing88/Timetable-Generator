@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -117,7 +119,14 @@ public class teacherLayoutController {
 
     @FXML
     private void onLogout() {
-        authSession.clear();
-        mainApp.getInstance().showLogin();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to log out?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Logout");
+        alert.setHeaderText(null);
+
+        alert.showAndWait().filter(response -> response == ButtonType.OK)
+                .ifPresent(response -> {
+                    authSession.clear();
+                    mainApp.getInstance().showLogin();
+                });
     }
 }

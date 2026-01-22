@@ -11,8 +11,10 @@ import javafx.scene.control.PasswordField;
 public class changePasswordController {
     @FXML
     private PasswordField newPasswordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private Label messageLabel;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private Label messageLabel;
 
     private final authService Service = new authService();
 
@@ -40,5 +42,10 @@ public class changePasswordController {
         } else {
             messageLabel.setText("Error updating password. Try again.");
         }
+    }
+
+    @FXML
+    private void goLandingPage() {
+        mainApp.getInstance().showLandingPage();
     }
 }

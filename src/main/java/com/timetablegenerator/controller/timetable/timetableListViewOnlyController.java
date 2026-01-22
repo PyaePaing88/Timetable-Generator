@@ -132,6 +132,7 @@ public class timetableListViewOnlyController {
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
         Button btnView = new Button("View timetable");
+        btnView.getStyleClass().add("tg-btn");
         btnView.getStyleClass().add("tg-btn-primary");
         btnView.setMaxWidth(Double.MAX_VALUE);
         btnView.setOnAction(event -> openDetailsModal(data.getTimetableId(), data.getClassName()));
