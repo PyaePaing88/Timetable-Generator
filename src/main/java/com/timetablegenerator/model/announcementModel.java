@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class announcementModel {
     private Integer id;
+    private announcementType type;
     private String title;
     private String message;
     private Integer created_by;
@@ -18,6 +19,14 @@ public class announcementModel {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public announcementType getType() {
+        return type;
+    }
+
+    public void setType(announcementType type) {
+        this.type = type;
     }
 
     public String getTitle() {

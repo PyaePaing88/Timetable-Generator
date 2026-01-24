@@ -11,7 +11,7 @@ public class classCourseRepo {
 
     public List<classModel> getUnlinkedClasses(int courseId) throws Exception {
         List<classModel> classes = new ArrayList<>();
-        String query = "SELECT * FROM classes WHERE id NOT IN " +
+        String query = "SELECT * FROM classes WHERE is_delete=false AND id NOT IN " +
                 "(SELECT class_id FROM class_course WHERE course_id = ? AND is_delete = false)";
 
         try (Connection conn = dbConnection.getConnection();

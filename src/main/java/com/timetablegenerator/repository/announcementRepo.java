@@ -1,6 +1,7 @@
 package com.timetablegenerator.repository;
 
 import com.timetablegenerator.model.announcementModel;
+import com.timetablegenerator.model.announcementType;
 import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
@@ -16,14 +17,15 @@ public class announcementRepo {
     }
 
     public void create(announcementModel announcement) throws SQLException {
-        String sql = "INSERT INTO announcements (title, message, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO announcements (type, title, message, is_delete, created_by, created_date) VALUES (?,?, ?, ?, ?, ?)";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setString(1, announcement.getTitle());
-            st.setString(2, announcement.getMessage());
-            st.setBoolean(3, false);
-            st.setInt(4, currentUser.getId());
-            st.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            st.setInt(1, announcement.getType().ordinal());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getMessage());
+            st.setBoolean(4, false);
+            st.setInt(5, currentUser.getId());
+            st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
             st.executeUpdate();
         }
     }
@@ -102,6 +104,8 @@ public class announcementRepo {
     private announcementModel mapResultSetToModel(ResultSet rs) throws SQLException {
         announcementModel model = new announcementModel();
         model.setId(rs.getInt("id"));
+        int typeIndex = rs.getInt("type");
+        model.setType(announcementType.values()[typeIndex]);
         model.setTitle(rs.getString("title"));
         model.setMessage(rs.getString("message"));
         model.setCreated_by(rs.getInt("created_by"));

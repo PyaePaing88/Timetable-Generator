@@ -32,7 +32,7 @@ public class timeSlotCreateController {
     public void initialize() {
         dayComboBox.setItems(FXCollections.observableArrayList(day.values()));
 
-        periodSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
+        periodSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 6, 1));
 
         startHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 9));
         endHour.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 12, 10));

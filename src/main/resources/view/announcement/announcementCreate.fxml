@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+
+<VBox spacing="15" prefWidth="500" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.timetablegenerator.controller.announcement.announcementCreateController"
+      styleClass="form-container" stylesheets="@../../style/styles.css">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Create New Announcement" styleClass="content-header"/>
+    <Separator/>
+
+    <GridPane hgap="15" vgap="15">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="250.0"/>
+        </columnConstraints>
+
+        <children>
+            <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="titleField" promptText="Enter announcement title"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+
+            <Label text="Announcement Type:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="typeCombo" prefWidth="Infinity" promptText="Select Type"
+                      GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Message:" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.valignment="TOP">
+                <GridPane.margin>
+                    <Insets top="5"/>
+                </GridPane.margin>
+            </Label>
+            <TextArea fx:id="subjectArea" promptText="Write your message here..."
+                      prefHeight="150" wrapText="true"
+                      GridPane.rowIndex="2" GridPane.columnIndex="1" HBox.hgrow="ALWAYS"/>
+        </children>
+    </GridPane>
+
+    <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel" prefWidth="100"
+                styleClass="tg-btn, tg-btn-secondary"/>
+        <Button text="Save Announcement" onAction="#handleSave" prefWidth="150"
+                styleClass="tg-btn, tg-btn-primary"/>
+    </HBox>
+</VBox>

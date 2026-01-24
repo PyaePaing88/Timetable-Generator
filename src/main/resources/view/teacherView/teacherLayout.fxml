@@ -33,7 +33,7 @@
                     </graphic>
                 </Button>
 
-                <Button onAction="#showAvailabilityList" styleClass="top-menu" text="  Availability">
+                <Button onAction="#showAvailabilityList" styleClass="top-menu" text="  Unavailability">
                     <graphic>
                         <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../../assets/icon/sidebar/normal/availability.png"/>

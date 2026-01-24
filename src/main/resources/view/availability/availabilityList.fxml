@@ -14,7 +14,7 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
             <children>
-                <Label text="Teacher Availability" styleClass="content-header"/>
+                <Label text="Teacher Unavailability" styleClass="content-header"/>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <TextField fx:id="searchField" prefWidth="300" promptText="Search by teacher, status or remark..."
                                onKeyReleased="#handleSearch" styleClass="search_field"/>

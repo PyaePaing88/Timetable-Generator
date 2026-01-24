@@ -11,7 +11,8 @@ public class userCourseRepo {
 
     public List<userModel> getUnlinkedUsers(int courseId) throws Exception {
         List<userModel> users = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE department_id = (SELECT department_id FROM courses WHERE id = ?) " +
+        String query = "SELECT * FROM users WHERE is_delete=false AND is_active=true AND" +
+                "department_id = (SELECT department_id FROM courses WHERE id = ?) " +
                 "AND is_delete = false " +
                 "AND id NOT IN (SELECT user_id FROM user_course WHERE course_id = ? AND is_delete = false)";
 
@@ -57,7 +58,6 @@ public class userCourseRepo {
             try {
                 conn.setAutoCommit(false);
 
-                // 1. Soft delete existing links for this course
                 String deleteQuery = "UPDATE user_course SET is_delete = true, modify_by = ?, modify_date = CURRENT_TIMESTAMP WHERE course_id = ?";
                 try (PreparedStatement st = conn.prepareStatement(deleteQuery)) {
                     st.setInt(1, currentAdminId);
@@ -65,7 +65,6 @@ public class userCourseRepo {
                     st.executeUpdate();
                 }
 
-                // 2. Insert new links
                 String insertQuery = "INSERT INTO user_course (user_id, course_id, created_by, created_date, is_delete) VALUES (?, ?, ?, CURRENT_TIMESTAMP, false)";
                 try (PreparedStatement st = conn.prepareStatement(insertQuery)) {
                     for (Integer userId : userIds) {

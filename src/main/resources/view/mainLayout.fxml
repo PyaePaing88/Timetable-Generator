@@ -104,7 +104,7 @@
                     </ImageView>
                 </graphic>
             </Button>
-            <Button onAction="#showAvailabilityList" styleClass="menu-btn" text="   Availability">
+            <Button onAction="#showAvailabilityList" styleClass="menu-btn" text="   Unavailability">
                 <graphic>
                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
                                styleClass="menu-icon">

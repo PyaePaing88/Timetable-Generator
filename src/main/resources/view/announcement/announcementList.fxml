@@ -15,11 +15,15 @@
         <Region HBox.hgrow="ALWAYS"/>
         <TextField fx:id="searchField" promptText="Search announcements..." onKeyReleased="#handleSearch"
                    prefWidth="250"/>
-        <Button text="Add New Announcement" styleClass="tg-btn, tg-btn-primary"/>
+        <Button onAction="#openCreateForm" text="Add New Announcement" styleClass="tg-btn, tg-btn-primary"/>
     </HBox>
 
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" styleClass="transparent-scroll">
-        <VBox fx:id="cardContainer" spacing="15">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true"
+                style="-fx-background: transparent; -fx-background-color: transparent;">
+        <VBox fx:id="cardContainer" spacing="20" style="-fx-background-color: transparent;">
+            <padding>
+                <Insets bottom="20" left="10" right="10" top="10"/>
+            </padding>
         </VBox>
     </ScrollPane>
 </VBox>

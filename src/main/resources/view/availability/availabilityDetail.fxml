@@ -11,7 +11,7 @@
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Availability Details" styleClass="content-header"/>
+    <Label text="Your Unavailability" styleClass="content-header"/>
     <Separator/>
 
     <GridPane hgap="15" vgap="12">
