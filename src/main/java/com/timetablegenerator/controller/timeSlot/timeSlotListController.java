@@ -1,6 +1,5 @@
 package com.timetablegenerator.controller.timeSlot;
 
-import com.timetablegenerator.model.departmentModel;
 import com.timetablegenerator.model.timeSlotModel;
 import com.timetablegenerator.repository.timeSlotRepo;
 import com.timetablegenerator.service.timeSlotService;
@@ -171,6 +170,7 @@ public class timeSlotListController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     timeSlotModel time = getTableView().getItems().get(getIndex());

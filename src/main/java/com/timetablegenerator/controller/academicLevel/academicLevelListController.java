@@ -120,6 +120,7 @@ public class academicLevelListController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     academicLevelModel al = getTableView().getItems().get(getIndex());

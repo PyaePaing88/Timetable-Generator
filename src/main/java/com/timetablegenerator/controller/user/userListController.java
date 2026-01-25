@@ -169,6 +169,7 @@ public class userListController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     userModel user = getTableView().getItems().get(getIndex());

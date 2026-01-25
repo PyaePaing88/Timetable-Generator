@@ -36,13 +36,27 @@
             <children>
                 <TableView fx:id="userTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                     <columns>
-                        <TableColumn fx:id="colId" text="ID" prefWidth="50.0" maxWidth="60.0" minWidth="40.0"/>
-                        <TableColumn fx:id="colDay" text="Day" prefWidth="120.0"/>
-                        <TableColumn fx:id="colPeriod" text="Period" prefWidth="100.0"/>
-                        <TableColumn fx:id="colStartTime" text="Start Time" prefWidth="130.0"/>
-                        <TableColumn fx:id="colEndTime" text="End Time" prefWidth="130.0"/>
-                        <TableColumn fx:id="colShift" text="Shift" prefWidth="120.0"/>
-                        <TableColumn fx:id="colActions" text="Actions" prefWidth="150.0"/>
+                        <TableColumn fx:id="colId" text="ID"
+                                     minWidth="60.0" prefWidth="60.0" maxWidth="60.0"/>
+
+                        <TableColumn fx:id="colActions" text="Actions"
+                                     minWidth="110.0" prefWidth="110.0" maxWidth="110.0"/>
+
+                        <TableColumn fx:id="colDay" text="Day"
+                                     minWidth="100.0" prefWidth="120.0" maxWidth="180.0"/>
+
+                        <TableColumn fx:id="colPeriod" text="Period"
+                                     minWidth="80.0" prefWidth="100.0" maxWidth="150.0"/>
+
+                        <TableColumn fx:id="colStartTime" text="Start Time"
+                                     minWidth="110.0" prefWidth="130.0" maxWidth="160.0"/>
+
+                        <TableColumn fx:id="colEndTime" text="End Time"
+                                     minWidth="110.0" prefWidth="130.0" maxWidth="160.0"/>
+
+                        <TableColumn fx:id="colShift" text="Shift"
+                                     minWidth="100.0" prefWidth="120.0" maxWidth="180.0"/>
+
                     </columns>
 
                     <columnResizePolicy>

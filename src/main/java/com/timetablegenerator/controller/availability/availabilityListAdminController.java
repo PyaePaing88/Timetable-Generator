@@ -131,6 +131,7 @@ public class availabilityListAdminController {
 
             {
                 actionMenu.getItems().addAll(viewItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     availabilityModel model = getTableView().getItems().get(getIndex());

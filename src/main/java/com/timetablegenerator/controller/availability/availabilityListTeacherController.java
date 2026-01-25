@@ -135,6 +135,7 @@ public class availabilityListTeacherController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     availabilityModel model = getTableView().getItems().get(getIndex());

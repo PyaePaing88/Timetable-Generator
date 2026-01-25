@@ -124,6 +124,7 @@ public class classListController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     classModel classes = getTableView().getItems().get(getIndex());

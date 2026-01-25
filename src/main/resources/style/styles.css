@@ -207,6 +207,19 @@
     -fx-background-color: #ced4da;
     -fx-background-radius: 10;
 }
+
+.table-options-button{
+    -fx-background-color: #f1f1f1;
+    -fx-padding: 1;
+    -fx-cursor: hand;
+    -fx-background-radius:6px;
+    -fx-border-color:#ddd;
+    -fx-border-radius:6px;
+}
+
+.table-options-button:hover {
+    -fx-background-color: #f1f5f9;
+}
 /*----data list style end----*/
 
 /*------button Style start------*/

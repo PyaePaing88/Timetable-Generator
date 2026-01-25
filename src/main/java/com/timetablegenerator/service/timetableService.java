@@ -30,7 +30,6 @@ public class timetableService {
         Map<Integer, List<timeSlotModel>> teacherSchedule = new HashMap<>();
         Map<Integer, Integer> workloadCache = new HashMap<>();
 
-        // Create a copy for shuffling
         List<timeSlotModel> shuffledSlots = new ArrayList<>(allSlots);
 
         for (Integer classId : classIds) {
@@ -48,7 +47,6 @@ public class timetableService {
                 int assignedForThisCourse = 0;
                 List<Integer> teachers = uRepo.getTeachersByCourse(courseId);
 
-                // KEY: Shuffle for every course to spread teachers across the week
                 Collections.shuffle(shuffledSlots);
 
                 for (timeSlotModel slot : shuffledSlots) {
@@ -65,7 +63,6 @@ public class timetableService {
 
                             assignments.add(assign);
 
-                            // Mark as busy
                             classBusySlots.computeIfAbsent(classId, k -> new HashSet<>()).add(slot.getId());
                             teacherBusySlots.computeIfAbsent(tId, k -> new HashSet<>()).add(slot.getId());
                             teacherSchedule.computeIfAbsent(tId, k -> new ArrayList<>()).add(slot);
@@ -73,7 +70,6 @@ public class timetableService {
                             assignedForThisCourse++;
                             break;
                         } else {
-                            // Debugging: Why did it fail?
                             if (teacherBusySlots.getOrDefault(tId, Collections.emptySet()).contains(slot.getId())) {
                                 // Teacher is teaching another class at this time
                             }

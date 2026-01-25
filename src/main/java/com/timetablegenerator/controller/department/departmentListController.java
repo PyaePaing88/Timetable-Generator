@@ -152,6 +152,7 @@ public class departmentListController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, addUser, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     departmentModel dept = getTableView().getItems().get(getIndex());

@@ -88,23 +88,7 @@ public class courseListController {
             return new Label();
         });
 
-        tableColumnWidth();
-
         handleSearch();
-    }
-
-    private void tableColumnWidth() {
-        courseTable.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double tableWidth = newVal.doubleValue();
-
-            colId.setPrefWidth(tableWidth * 0.05);
-            colName.setPrefWidth(tableWidth * 0.30);
-            colSubject_code.setPrefWidth(tableWidth * 0.15);
-            colDept.setPrefWidth(tableWidth * 0.20);
-            colLevel.setPrefWidth(tableWidth * 0.10);
-            colPeriodPerWeek.setPrefWidth(tableWidth * 0.10);
-            colActions.setPrefWidth(tableWidth * 0.10);
-        });
     }
 
     private void loadTableData(int pageIndex) {
@@ -157,6 +141,7 @@ public class courseListController {
 
             {
                 actionMenu.getItems().addAll(viewItem, editItem, linkClass, assignTeacher, deleteItem);
+                actionMenu.getStyleClass().add("table-options-button");
 
                 viewItem.setOnAction(event -> {
                     courseModel course = getTableView().getItems().get(getIndex());
