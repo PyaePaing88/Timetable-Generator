@@ -38,6 +38,8 @@ public class courseListController {
     @FXML
     private TableColumn<courseModel, String> colLevel;
     @FXML
+    private TableColumn<courseModel, Integer> colPeriodPerWeek;
+    @FXML
     private TableColumn<courseModel, Void> colActions;
 
     private courseService service;
@@ -47,8 +49,15 @@ public class courseListController {
         courseRepo repo = new courseRepo();
         this.service = new courseService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = courseTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCourse_name()));
@@ -61,6 +70,9 @@ public class courseListController {
 
         colLevel.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getAcademicLevel()));
+
+        colPeriodPerWeek.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getPeriod_per_week()));
 
         setupActionColumn();
 
@@ -76,7 +88,23 @@ public class courseListController {
             return new Label();
         });
 
+        tableColumnWidth();
+
         handleSearch();
+    }
+
+    private void tableColumnWidth() {
+        courseTable.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double tableWidth = newVal.doubleValue();
+
+            colId.setPrefWidth(tableWidth * 0.05);
+            colName.setPrefWidth(tableWidth * 0.30);
+            colSubject_code.setPrefWidth(tableWidth * 0.15);
+            colDept.setPrefWidth(tableWidth * 0.20);
+            colLevel.setPrefWidth(tableWidth * 0.10);
+            colPeriodPerWeek.setPrefWidth(tableWidth * 0.10);
+            colActions.setPrefWidth(tableWidth * 0.10);
+        });
     }
 
     private void loadTableData(int pageIndex) {

@@ -10,11 +10,9 @@ import com.timetablegenerator.service.academicLevelService;
 import com.timetablegenerator.service.courseService;
 import com.timetablegenerator.service.departmentService;
 import javafx.collections.FXCollections;
+import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.sql.Timestamp;
@@ -27,10 +25,12 @@ public class courseCreateController {
     private ComboBox<departmentModel> deptComboBox;
     @FXML
     private ComboBox<academicLevelModel> academicLevelComboBox;
+    @FXML
+    private Spinner<Integer> periodPerWeekSpinner;
 
     private final courseService service;
     private final departmentService deptService;
-    private final academicLevelService levelService; // Renamed for clarity
+    private final academicLevelService levelService;
 
     public courseCreateController() {
         this.service = new courseService(new courseRepo());
@@ -41,13 +41,13 @@ public class courseCreateController {
     @FXML
     public void initialize() {
         try {
-            // Load and Setup Department ComboBox
             deptComboBox.setItems(FXCollections.observableArrayList(deptService.getMinorDepartments()));
             deptComboBox.setConverter(createDeptConverter());
 
-            // Load and Setup Academic Level ComboBox
             academicLevelComboBox.setItems(FXCollections.observableArrayList(levelService.getAcademicLevelForCombo()));
             academicLevelComboBox.setConverter(createLevelConverter());
+
+            periodPerWeekSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 6, 1));
 
         } catch (Exception e) {
             showAlert("Error", "Could not load initial data: " + e.getMessage(), Alert.AlertType.ERROR);
@@ -66,10 +66,11 @@ public class courseCreateController {
                 newcourse.setCourse_name(nameField.getText().trim());
                 newcourse.setSubject_code(subjectCodeField.getText().trim());
                 newcourse.setDepartment_id(selectedDept.getId());
-                newcourse.setAcademicLevel_id(selectedLevel.getId()); // Connects the course to the level
+                newcourse.setAcademicLevel_id(selectedLevel.getId());
                 newcourse.setIs_delete(false);
-                newcourse.setCreated_by(1); // Set current user ID here
+                newcourse.setCreated_by(1);
                 newcourse.setCreated_date(new Timestamp(System.currentTimeMillis()));
+                newcourse.setPeriod_per_week(periodPerWeekSpinner.getValue());
 
                 service.saveCourses(newcourse);
 
@@ -98,7 +99,7 @@ public class courseCreateController {
         }
         return true;
     }
-    
+
     private StringConverter<departmentModel> createDeptConverter() {
         return new StringConverter<>() {
             @Override

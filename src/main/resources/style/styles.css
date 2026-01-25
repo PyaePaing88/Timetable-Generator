@@ -494,3 +494,28 @@
     -fx-border-color: #8FB8FA;
     -fx-text-fill: #fff;
 }
+
+/* Base badge shape */
+.status-badge {
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-text-fill: white;
+}
+
+.badge-success {
+    -fx-background-color: #28bf67;
+}
+
+.badge-danger {
+    -fx-background-color: #d62237;
+}
+
+.badge-warning {
+    -fx-background-color: #ff9100;
+}
+
+.badge-info {
+    -fx-background-color: #216dd9;
+}

@@ -49,8 +49,15 @@ public class availabilityListAdminController {
         availabilityRepo repo = new availabilityRepo();
         this.service = new availabilityService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = availabilityTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colTeacher.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTeacher_name()));

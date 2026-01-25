@@ -11,9 +11,7 @@ import com.timetablegenerator.service.courseService;
 import com.timetablegenerator.service.departmentService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -26,11 +24,13 @@ public class courseEditController {
     @FXML
     private ComboBox<departmentModel> deptComboBox;
     @FXML
-    private ComboBox<academicLevelModel> academicLevelComboBox; // Added Level ComboBox
+    private ComboBox<academicLevelModel> academicLevelComboBox;
+    @FXML
+    private Spinner<Integer> periodPerWeekSpinner;
 
     private final courseService service;
     private final departmentService deptService;
-    private final academicLevelService levelService; // Added Level Service
+    private final academicLevelService levelService;
 
     private courseModel currentCourse;
 
@@ -69,6 +69,9 @@ public class courseEditController {
                 }
             });
 
+            SpinnerValueFactory<Integer> valueFactory =
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 6, 1);
+            periodPerWeekSpinner.setValueFactory(valueFactory);
         } catch (Exception e) {
             showAlert("Error", "Could not load data: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -80,6 +83,10 @@ public class courseEditController {
             if (currentCourse != null) {
                 nameField.setText(currentCourse.getCourse_name());
                 subjectCodeField.setText(currentCourse.getSubject_code());
+
+                if (periodPerWeekSpinner.getValueFactory() != null) {
+                    periodPerWeekSpinner.getValueFactory().setValue(currentCourse.getPeriod_per_week());
+                }
 
                 for (departmentModel dept : deptComboBox.getItems()) {
                     if (dept.getId() == currentCourse.getDepartment_id()) {
@@ -119,6 +126,7 @@ public class courseEditController {
 
                 currentCourse.setModify_by(1);
                 currentCourse.setModify_date(new Timestamp(System.currentTimeMillis()));
+                currentCourse.setPeriod_per_week(periodPerWeekSpinner.getValue());
 
                 service.saveCourses(currentCourse);
 
@@ -136,6 +144,7 @@ public class courseEditController {
         if (subjectCodeField.getText().trim().isEmpty()) sb.append("- Subject Code cannot be empty!\n");
         if (deptComboBox.getValue() == null) sb.append("- Please select a department.\n");
         if (academicLevelComboBox.getValue() == null) sb.append("- Please select an academic level.\n");
+        if (periodPerWeekSpinner.getValue() == 0) sb.append("- Please select Period Per Week.\n");
 
         if (sb.length() > 0) {
             showAlert("Validation Error", sb.toString(), Alert.AlertType.WARNING);

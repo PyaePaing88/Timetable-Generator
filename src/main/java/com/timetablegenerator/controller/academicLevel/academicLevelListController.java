@@ -17,15 +17,22 @@ import java.util.List;
 
 public class academicLevelListController {
 
-    @FXML private TableView<academicLevelModel> academicLevelTable;
-    @FXML private TextField searchField;
-    @FXML private Pagination pagination;
-    @FXML private ComboBox<Integer> rowsPerPageCombo;
+    @FXML
+    private TableView<academicLevelModel> academicLevelTable;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<academicLevelModel, Integer> colId;
-    @FXML private TableColumn<academicLevelModel, String> colName;
-    @FXML private TableColumn<academicLevelModel, Void> colActions;
+    @FXML
+    private TableColumn<academicLevelModel, Integer> colId;
+    @FXML
+    private TableColumn<academicLevelModel, String> colName;
+    @FXML
+    private TableColumn<academicLevelModel, Void> colActions;
 
     private academicLevelService service;
 
@@ -34,8 +41,15 @@ public class academicLevelListController {
         academicLevelRepo repo = new academicLevelRepo();
         this.service = new academicLevelService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = academicLevelTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getYear()));

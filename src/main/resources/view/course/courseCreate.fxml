@@ -37,6 +37,10 @@
             <Label text="Academic Level:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
             <ComboBox fx:id="academicLevelComboBox" prefWidth="250" promptText="Select Academic Level"
                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Period Number:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <Spinner fx:id="periodPerWeekSpinner" prefWidth="100" editable="true"
+                     GridPane.rowIndex="4" GridPane.columnIndex="1"/>
         </children>
     </GridPane>
 

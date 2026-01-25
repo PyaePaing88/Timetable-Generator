@@ -17,7 +17,7 @@ public class courseRepo {
     private final userModel currentUser = authSession.getUser();
 
     public void create(courseModel course) throws SQLException {
-        String sql = "INSERT INTO courses (course_name, subject_code, department_id, academicLevel_id, is_delete, created_by, created_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO courses (course_name, subject_code, department_id, academicLevel_id, is_delete, created_by, created_date, period_per_week) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, course.getCourse_name());
@@ -26,7 +26,8 @@ public class courseRepo {
             st.setInt(4, course.getAcademicLevel_id()); // Added
             st.setBoolean(5, false);
             st.setInt(6, currentUser.getId());
-            st.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+            st.setInt(7, course.getPeriod_per_week());
+            st.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
             st.executeUpdate();
         }
     }
@@ -113,16 +114,17 @@ public class courseRepo {
     }
 
     public void update(courseModel course) throws SQLException {
-        String sql = "UPDATE courses SET course_name=?, subject_code=?, department_id=?, academicLevel_id=?, modify_by=?, modify_date=? WHERE id=?";
+        String sql = "UPDATE courses SET course_name=?, subject_code=?, department_id=?, academicLevel_id=?, modify_by=?, modify_date=?, period_per_week=? WHERE id=?";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, course.getCourse_name());
             st.setString(2, course.getSubject_code());
             st.setInt(3, course.getDepartment_id());
-            st.setInt(4, course.getAcademicLevel_id()); // Added
+            st.setInt(4, course.getAcademicLevel_id());
             st.setInt(5, currentUser.getId());
             st.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-            st.setInt(7, course.getId());
+            st.setInt(7, course.getPeriod_per_week());
+            st.setInt(8, course.getId());
             st.executeUpdate();
         }
     }
@@ -176,6 +178,7 @@ public class courseRepo {
         c.setCreated_date(rs.getTimestamp("created_date"));
         c.setModify_by(rs.getInt("modify_by"));
         c.setModify_date(rs.getTimestamp("modify_date"));
+        c.setPeriod_per_week(rs.getInt("period_per_week"));
         return c;
     }
 }

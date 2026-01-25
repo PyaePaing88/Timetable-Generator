@@ -1,6 +1,7 @@
 package com.timetablegenerator.controller.department;
 
 import com.timetablegenerator.model.departmentModel;
+import com.timetablegenerator.model.userModel;
 import com.timetablegenerator.repository.departmentRepo;
 import com.timetablegenerator.service.departmentService;
 import javafx.collections.FXCollections;
@@ -43,15 +44,46 @@ public class departmentListController {
         departmentRepo repo = new departmentRepo();
         this.service = new departmentService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = departmentTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDepartment_name()));
 
-        colMinor.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().isIs_minor() ? "Minor" : "Major"));
+        colMinor.setCellFactory(column -> new TableCell<departmentModel, String>() {
+            private final Label badge = new Label();
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    boolean isMinor = getTableRow().getItem().isIs_minor();
+
+                    badge.setText(isMinor ? "Minor" : "Major");
+
+                    badge.getStyleClass().removeAll("badge-warning", "badge-info");
+                    badge.getStyleClass().add("status-badge");
+
+                    if (isMinor) {
+                        badge.getStyleClass().add("badge-warning");
+                    } else {
+                        badge.getStyleClass().add("badge-info");
+                    }
+
+                    setGraphic(badge);
+                }
+            }
+        });
 
 
         setupActionColumn();

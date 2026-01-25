@@ -49,8 +49,15 @@ public class userListController {
         userRepo repo = new userRepo();
         this.service = new userService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = userTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
@@ -65,9 +72,37 @@ public class userListController {
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getRole() != null ? cellData.getValue().getRole().name() : ""));
 
-        colActive.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().isIs_active() ? "Active" : "Inactive"));
+//        colActive.setCellValueFactory(cellData ->
+//                new javafx.beans.property.SimpleStringProperty(
+//                        cellData.getValue().isIs_active() ? "Active" : "Inactive"));
+
+        colActive.setCellFactory(column -> new TableCell<userModel, String>() {
+            private final Label badge = new Label();
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    boolean isActive = getTableRow().getItem().isIs_active();
+
+                    badge.setText(isActive ? "Active" : "Inactive");
+
+                    badge.getStyleClass().removeAll("badge-success", "badge-danger");
+                    badge.getStyleClass().add("status-badge");
+
+                    if (isActive) {
+                        badge.getStyleClass().add("badge-success");
+                    } else {
+                        badge.getStyleClass().add("badge-danger");
+                    }
+
+                    setGraphic(badge);
+                }
+            }
+        });
 
         setupActionColumn();
 

@@ -17,16 +17,24 @@ import java.util.List;
 
 public class classListController {
 
-    @FXML private TableView<classModel> classTable;
-    @FXML private TextField searchField;
-    @FXML private Pagination pagination;
-    @FXML private ComboBox<Integer> rowsPerPageCombo;
+    @FXML
+    private TableView<classModel> classTable;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private ComboBox<Integer> rowsPerPageCombo;
     private int rowsPerPage = 10;
 
-    @FXML private TableColumn<classModel, Integer> colId;
-    @FXML private TableColumn<classModel, String> colName;
-    @FXML private TableColumn<classModel, String> colDept;
-    @FXML private TableColumn<classModel, Void> colActions;
+    @FXML
+    private TableColumn<classModel, Integer> colId;
+    @FXML
+    private TableColumn<classModel, String> colName;
+    @FXML
+    private TableColumn<classModel, String> colDept;
+    @FXML
+    private TableColumn<classModel, Void> colActions;
 
     private classService service;
 
@@ -35,8 +43,15 @@ public class classListController {
         classRepo repo = new classRepo();
         this.service = new classService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = classTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClass_name()));

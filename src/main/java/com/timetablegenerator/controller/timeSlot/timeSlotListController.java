@@ -1,5 +1,6 @@
 package com.timetablegenerator.controller.timeSlot;
 
+import com.timetablegenerator.model.departmentModel;
 import com.timetablegenerator.model.timeSlotModel;
 import com.timetablegenerator.repository.timeSlotRepo;
 import com.timetablegenerator.service.timeSlotService;
@@ -49,8 +50,15 @@ public class timeSlotListController {
         timeSlotRepo repo = new timeSlotRepo();
         this.service = new timeSlotService(repo);
 
-        colId.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getId()));
+        colId.setCellValueFactory(cellData -> {
+            int currentPage = pagination.getCurrentPageIndex();
+
+            int rowIdx = userTable.getItems().indexOf(cellData.getValue());
+
+            int continuousIndex = (currentPage * rowsPerPage) + rowIdx + 1;
+
+            return new javafx.beans.property.SimpleObjectProperty<>(continuousIndex);
+        });
 
         colDay.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
@@ -65,9 +73,37 @@ public class timeSlotListController {
         colEndTime.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(String.valueOf(cellData.getValue().getEnd_time())));
 
-        colShift.setCellValueFactory(cellData -> {
-            boolean isMorning = cellData.getValue().isIs_morning_shift();
-            return new javafx.beans.property.SimpleStringProperty(isMorning ? "Morning" : "Evening");
+//        colShift.setCellValueFactory(cellData -> {
+//            boolean isMorning = cellData.getValue().isIs_morning_shift();
+//            return new javafx.beans.property.SimpleStringProperty(isMorning ? "Morning" : "Evening");
+//        });
+
+        colShift.setCellFactory(column -> new TableCell<timeSlotModel, String>() {
+            private final Label badge = new Label();
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    boolean isMorning = getTableRow().getItem().isIs_morning_shift();
+
+                    badge.setText(isMorning ? "Morning" : "Evening");
+
+                    badge.getStyleClass().removeAll("badge-warning", "badge-info");
+                    badge.getStyleClass().add("status-badge");
+
+                    if (isMorning) {
+                        badge.getStyleClass().add("badge-warning");
+                    } else {
+                        badge.getStyleClass().add("badge-info");
+                    }
+
+                    setGraphic(badge);
+                }
+            }
         });
 
         setupActionColumn();

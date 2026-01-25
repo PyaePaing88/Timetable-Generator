@@ -15,6 +15,7 @@ public class courseModel {
     private Timestamp created_date;
     private int modify_by;
     private Timestamp modify_date;
+    private Integer period_per_week;
 
     public Integer getId() {
         return id;
@@ -110,5 +111,13 @@ public class courseModel {
 
     public void setModify_date(Timestamp modify_date) {
         this.modify_date = modify_date;
+    }
+
+    public Integer getPeriod_per_week() {
+        return period_per_week;
+    }
+
+    public void setPeriod_per_week(Integer period_per_week) {
+        this.period_per_week = period_per_week;
     }
 }
