@@ -92,27 +92,33 @@ public class userRepo {
         return users;
     }
 
-    public int getTeacherWorkloadCountByCourse(Integer courseId) throws SQLException {
+    public List<Integer> getTeachersByWorkload(Integer deptId) throws SQLException {
 
-        String sql = "SELECT COUNT(uc2.course_id) " +
-                "FROM user_course uc1 " +
-                "JOIN user_course uc2 ON uc1.user_id = uc2.user_id " +
-                "WHERE uc1.course_id = ? " +
-                "AND uc1.is_delete = 0 " +
-                "AND uc2.is_delete = 0";
+        List<Integer> sortedTeacherIds = new ArrayList<>();
+
+        String sql = "SELECT u.id, COUNT(uc.course_id) as workload " +
+                "FROM users u " +
+                "LEFT JOIN user_course uc ON u.id = uc.user_id " +
+                "WHERE u.department_id = ? " +
+                "AND u.is_delete = false " +
+                "AND u.is_active = true " +
+                "GROUP BY u.id " +
+                "ORDER BY workload DESC";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
-            st.setInt(1, courseId);
+
+            st.setInt(1, deptId);
 
             try (ResultSet rs = st.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
+                while (rs.next()) {
+                    sortedTeacherIds.add(rs.getInt("id"));
                 }
             }
         }
-        return 0;
+        return sortedTeacherIds;
     }
+
 
     public void update(userModel user) throws SQLException {
         String sql = "UPDATE users SET name=?, phone=?, email=?, department_id=?, role=?, is_active=?, modify_by=?, modify_date=? WHERE id=?";

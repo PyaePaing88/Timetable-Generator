@@ -482,6 +482,15 @@
     -fx-border-weight: 1;
 }
 
+.timetable-cell-library {
+    -fx-background-color: #e9f5ce;
+    -fx-padding: 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #a7cc50;
+    -fx-border-weight: 1;
+}
+
 .course-label {
     -fx-font-weight: bold;
     -fx-text-fill: #2c3e50;

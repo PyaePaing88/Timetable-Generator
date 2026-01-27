@@ -7,8 +7,7 @@ import com.timetablegenerator.util.authSession;
 import com.timetablegenerator.util.dbConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class availabilityRepo {
 
@@ -72,6 +71,26 @@ public class availabilityRepo {
             }
         }
         return list;
+    }
+
+    public Map<Integer, Set<Integer>> getUnavailableMap() throws SQLException {
+        Map<Integer, Set<Integer>> teacherBlacklist = new HashMap<>();
+
+        String sql = "SELECT created_by, time_slot_id FROM availabilities WHERE is_delete = false";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+
+            while (rs.next()) {
+                int teacherId = rs.getInt("created_by");
+                int blockedId = rs.getInt("time_slot_id");
+
+                teacherBlacklist.computeIfAbsent(teacherId, k -> new HashSet<>())
+                        .add(blockedId);
+            }
+        }
+        return teacherBlacklist;
     }
 
     public int getTotalCountByTeacher(String search) throws Exception {

@@ -1,6 +1,7 @@
 package com.timetablegenerator.controller.announcement;
 
 import com.timetablegenerator.model.announcementModel;
+import com.timetablegenerator.model.role;
 import com.timetablegenerator.repository.announcementRepo;
 import com.timetablegenerator.service.announcementService;
 import com.timetablegenerator.util.authSession; // Ensure this is imported
@@ -43,10 +44,9 @@ public class announcementListController {
 
     @FXML
     public void initialize() {
-        String role = authSession.getUser().getRole().toString();
-        this.isTeacher = "teacher".equalsIgnoreCase(role);
+        String loginRole = authSession.getUser().getRole().toString();
 
-        if (isTeacher && addNewBtn != null) {
+        if (role.teacher.toString().equals(loginRole) && addNewBtn != null) {
             addNewBtn.setVisible(false);
             addNewBtn.setManaged(false);
         }

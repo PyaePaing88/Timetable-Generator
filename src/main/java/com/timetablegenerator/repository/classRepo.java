@@ -77,22 +77,23 @@ public class classRepo {
         return clas;
     }
 
-    public List<Integer> getClassesIdByDepartment(Integer deptId) throws SQLException {
-        List<Integer> classIds = new ArrayList<>();
-        String sql = "SELECT id FROM classes WHERE is_delete = false AND department_id = ?";
+    public List<classModel> getClassesByDepartment(Integer deptId) throws SQLException {
+        List<classModel> clas = new ArrayList<>();
+        String sql = "SELECT c.*, d.department_name " +
+                "FROM classes c " +
+                "INNER JOIN departments d ON c.department_id = d.id " +
+                "WHERE c.is_delete = false AND c.department_id=?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)) {
-
             st.setInt(1, deptId);
 
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    classIds.add(rs.getInt("id"));
-                }
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                clas.add(mapResultSetToModel(rs));
             }
         }
-        return classIds;
+        return clas;
     }
 
     public void update(classModel clas) throws SQLException {

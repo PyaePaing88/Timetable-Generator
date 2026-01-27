@@ -12,6 +12,28 @@ public class timetableRepo {
         try (Connection conn = dbConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
+                String checkSql = "SELECT COUNT(*) FROM timetable WHERE department_id = ? AND class_id = ? AND schedule_date = ?";
+                List<String> existingClasses = new ArrayList<>();
+
+                for (timetableModel header : headers) {
+                    try (PreparedStatement checkSt = conn.prepareStatement(checkSql)) {
+                        checkSt.setInt(1, header.getDepartment_id());
+                        checkSt.setInt(2, header.getClass_id());
+                        checkSt.setInt(3, header.getSchedule_date());
+
+                        try (ResultSet rs = checkSt.executeQuery()) {
+                            if (rs.next() && rs.getInt(1) > 0) {
+                                existingClasses.add("Class ID: " + header.getClass_id());
+                            }
+                        }
+                    }
+                }
+
+                if (!existingClasses.isEmpty()) {
+                    conn.rollback();
+                    throw new SQLException("Timetables already exist for the following: " + String.join(", ", existingClasses));
+                }
+
                 String headerSql = "INSERT INTO timetable (department_id, class_id, schedule_date) VALUES (?, ?, ?)";
                 String assignSql = "INSERT INTO timetable_assignments (timetable_id, user_id, course_id, timeSlot_id) VALUES (?, ?, ?, ?)";
 
@@ -22,29 +44,44 @@ public class timetableRepo {
                         hSt.setInt(3, header.getSchedule_date());
                         hSt.executeUpdate();
 
+                        int hId;
                         try (ResultSet rs = hSt.getGeneratedKeys()) {
                             if (rs.next()) {
-                                int hId = rs.getInt(1);
-                                try (PreparedStatement aSt = conn.prepareStatement(assignSql)) {
-                                    for (timetableAssignmentModel a : assignments) {
-                                        if (a.getTempClassId().equals(header.getClass_id())) {
-                                            aSt.setInt(1, hId);
-                                            aSt.setInt(2, a.getUser_id());
-                                            aSt.setInt(3, a.getCourse_id());
-                                            aSt.setInt(4, a.getTimeSlot_id());
-                                            aSt.addBatch();
-                                        }
+                                hId = rs.getInt(1);
+                            } else {
+                                throw new SQLException("Creating timetable header failed, no ID obtained.");
+                            }
+                        }
+
+                        // Inside the assignments loop
+                        try (PreparedStatement aSt = conn.prepareStatement(assignSql)) {
+                            for (timetableAssignmentModel a : assignments) {
+                                if (a.getTempClassId().equals(header.getClass_id())) {
+                                    aSt.setInt(1, hId);
+
+                                    if (a.getUser_id() == null || a.getUser_id() == 0) {
+                                        aSt.setNull(2, java.sql.Types.INTEGER);
+                                    } else {
+                                        aSt.setInt(2, a.getUser_id());
                                     }
-                                    aSt.executeBatch();
+                                    aSt.setInt(3, a.getCourse_id());
+                                    aSt.setInt(4, a.getTimeSlot_id());
+                                    aSt.addBatch();
                                 }
                             }
+                            aSt.executeBatch();
                         }
                     }
                 }
+
                 conn.commit();
+                System.out.println("Timetable saved successfully.");
+
             } catch (SQLException e) {
                 conn.rollback();
                 throw e;
+            } finally {
+                conn.setAutoCommit(true);
             }
         }
     }
@@ -104,13 +141,14 @@ public class timetableRepo {
 
     public List<TimetableDetailDTO> findAssignmentsByTimetableId(Integer timetableId) throws SQLException {
         List<TimetableDetailDTO> list = new ArrayList<>();
+        // Use LEFT JOIN so we get the assignment even if teacher or course is missing/null
         String sql = "SELECT ts.day_of_week, ts.period, ts.start_time, ts.end_time, " +
                 "u.name AS teacher_name, co.course_name, co.subject_code, " +
                 "ta.id, ta.user_id, ta.is_leave " +
                 "FROM timetable_assignments ta " +
                 "JOIN time_slots ts ON ta.timeSlot_id = ts.id " +
-                "JOIN users u ON ta.user_id = u.id " +
-                "JOIN courses co ON ta.course_id = co.id " +
+                "LEFT JOIN users u ON ta.user_id = u.id " +
+                "LEFT JOIN courses co ON ta.course_id = co.id " +
                 "WHERE ta.timetable_id = ? " +
                 "ORDER BY ts.day_of_week, ts.period";
 
@@ -121,13 +159,18 @@ public class timetableRepo {
                 while (rs.next()) {
                     TimetableDetailDTO dto = new TimetableDetailDTO();
                     dto.setId(rs.getInt("id"));
-                    dto.setTeacher_id(rs.getInt("user_id"));
+
+                    Integer userId = rs.getInt("user_id");
+                    dto.setTeacher_id(rs.wasNull() ? null : userId);
+
                     dto.setDay(rs.getString("day_of_week"));
                     dto.setPeriod(rs.getInt("period"));
                     dto.setTime(rs.getString("start_time") + " - " + rs.getString("end_time"));
+
                     dto.setTeacherName(rs.getString("teacher_name"));
                     dto.setCourseName(rs.getString("course_name"));
                     dto.setSubjectCode(rs.getString("subject_code"));
+
                     dto.setIs_leave(rs.getBoolean("is_leave"));
                     list.add(dto);
                 }

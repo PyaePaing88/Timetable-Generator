@@ -47,14 +47,26 @@ public class timetableDetailController {
         List<TimetableDetailDTO> details = service.getTimetableListByHeader(timetableId);
 
         for (TimetableDetailDTO slot : details) {
-            VBox cell = createCell(slot);
+            if (slot.getTeacher_id() == null && slot.getCourseName() == null) {
+                VBox cell = createLibraryCell(slot);
 
-            int column = slot.getPeriod();
-            Integer row = dayToRow.get(slot.getDay());
+                int column = slot.getPeriod();
+                Integer row = dayToRow.get(slot.getDay());
 
-            if (row != null && column >= 1) {
-                timetableGrid.add(cell, column, row);
+                if (row != null && column >= 1) {
+                    timetableGrid.add(cell, column, row);
+                }
+            } else {
+                VBox cell = createCell(slot);
+
+                int column = slot.getPeriod();
+                Integer row = dayToRow.get(slot.getDay());
+
+                if (row != null && column >= 1) {
+                    timetableGrid.add(cell, column, row);
+                }
             }
+
         }
     }
 
@@ -64,7 +76,7 @@ public class timetableDetailController {
         box.getStyleClass().add("timetable-cell");
         box.setMinHeight(80);
 
-        Label course = new Label(data.getSubjectCode().toUpperCase());
+        Label course = new Label(data.getCourseName().toUpperCase());
         course.getStyleClass().add("course-label");
 
         Label teacher = new Label(data.getTeacherName());
@@ -86,6 +98,20 @@ public class timetableDetailController {
 
             box.setOnMouseClicked(event -> openEditPopup(data));
         }
+
+        return box;
+    }
+
+    private VBox createLibraryCell(TimetableDetailDTO data) {
+        VBox box = new VBox(0);
+        box.setAlignment(Pos.CENTER);
+        box.getStyleClass().add("timetable-cell-library");
+        box.setMinHeight(80);
+
+        Label course = new Label("Library");
+        course.getStyleClass().add("course-label");
+
+        box.getChildren().addAll(course);
 
         return box;
     }

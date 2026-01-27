@@ -15,7 +15,8 @@
         <Region HBox.hgrow="ALWAYS"/>
         <TextField fx:id="searchField" promptText="Search announcements..." onKeyReleased="#handleSearch"
                    prefWidth="250"/>
-        <Button onAction="#openCreateForm" text="Add New Announcement" styleClass="tg-btn, tg-btn-primary"/>
+        <Button fx:id="addNewBtn" onAction="#openCreateForm" text="Add New Announcement"
+                styleClass="tg-btn, tg-btn-primary"/>
     </HBox>
 
     <ScrollPane fx:id="scrollPane" fitToWidth="true"

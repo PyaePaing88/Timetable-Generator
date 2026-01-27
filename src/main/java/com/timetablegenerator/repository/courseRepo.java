@@ -90,9 +90,9 @@ public class courseRepo {
         return courses;
     }
 
-    public List<Integer> getCourseIdByClass(Integer classId) throws SQLException {
-        List<Integer> courseIds = new ArrayList<>();
-        String sql = "SELECT c.id " +
+    public List<courseModel> getCoursesByClass(Integer classId) throws SQLException {
+        List<courseModel> courses = new ArrayList<>();
+        String sql = "SELECT c.* " +
                 "FROM courses c " +
                 "JOIN class_course cc ON c.id = cc.course_id " +
                 "WHERE cc.class_id = ? " +
@@ -106,11 +106,11 @@ public class courseRepo {
 
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    courseIds.add(rs.getInt("id"));
+                    courses.add(mapResultSetToModel(rs));
                 }
             }
         }
-        return courseIds;
+        return courses;
     }
 
     public void update(courseModel course) throws SQLException {
