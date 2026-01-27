@@ -23,11 +23,11 @@ public class courseRepo {
             st.setString(1, course.getCourse_name());
             st.setString(2, course.getSubject_code());
             st.setInt(3, course.getDepartment_id());
-            st.setInt(4, course.getAcademicLevel_id()); // Added
+            st.setInt(4, course.getAcademicLevel_id());
             st.setBoolean(5, false);
             st.setInt(6, currentUser.getId());
-            st.setInt(7, course.getPeriod_per_week());
-            st.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
+            st.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+            st.setInt(8, course.getPeriod_per_week());
             st.executeUpdate();
         }
     }

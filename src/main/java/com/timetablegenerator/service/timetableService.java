@@ -15,9 +15,9 @@ public class timetableService {
     private final userRepo uRepo = new userRepo();
 
     public void generateWeeklyTimetable(Integer departmentId) throws SQLException {
-        List<Integer> classIds = cRepo.getClassesIdByDepartment(departmentId);
-        List<timeSlotModel> allSlots = tsRepo.findAllForTimetable();
-        int generationYear = Year.now().getValue();
+        List<Integer> classIds = cRepo.getClassesIdByDepartment(departmentId);//fetch classes by dept id
+        List<timeSlotModel> allSlots = tsRepo.findAllForTimetable();//fetch timeslot.
+        int generationYear = Year.now().getValue();//for timetable year
 
         System.out.println("\n--- STARTING TIMETABLE GENERATION ---");
         System.out.println("Target: " + (classIds.size() * 30) + " total assignments.");

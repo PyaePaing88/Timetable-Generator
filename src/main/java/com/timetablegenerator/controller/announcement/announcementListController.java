@@ -81,7 +81,7 @@ public class announcementListController {
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
 
-        Label dateLabel = new Label("📅 " + dateFormat.format(item.getCreated_date()));
+        Label dateLabel = new Label(dateFormat.format(item.getCreated_date()));
         dateLabel.getStyleClass().add("card-date");
 
         Region spacer = new Region();

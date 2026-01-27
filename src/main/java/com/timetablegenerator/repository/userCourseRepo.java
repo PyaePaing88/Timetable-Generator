@@ -11,7 +11,7 @@ public class userCourseRepo {
 
     public List<userModel> getUnlinkedUsers(int courseId) throws Exception {
         List<userModel> users = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE is_delete=false AND is_active=true AND" +
+        String query = "SELECT * FROM users WHERE is_delete=false AND is_active=true AND " +
                 "department_id = (SELECT department_id FROM courses WHERE id = ?) " +
                 "AND is_delete = false " +
                 "AND id NOT IN (SELECT user_id FROM user_course WHERE course_id = ? AND is_delete = false)";

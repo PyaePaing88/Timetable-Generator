@@ -8,7 +8,6 @@ public class timetableAssignmentModel {
     private Integer timeSlot_id;
     private Boolean is_leave;
     private String Remark;
-
     private Integer tempClassId;
 
     public Integer getTempClassId() {

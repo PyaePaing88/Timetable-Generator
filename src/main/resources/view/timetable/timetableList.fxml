@@ -52,7 +52,6 @@
 
                         <VBox fx:id="noResultsPlaceholder" alignment="CENTER" spacing="15" visible="false">
                             <Label text="No timetables found" style="-fx-font-size: 18; -fx-text-fill: #bdc3c7;"/>
-                            <Button text="Clear Filters" styleClass="tg-btn, tg-btn-outline"/>
                         </VBox>
                     </children>
                 </StackPane>
