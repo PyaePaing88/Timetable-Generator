@@ -31,7 +31,7 @@ public class teacherLayoutController {
         userModel user = authSession.getUser();
         nameLabel.setText(user != null ? "Hello: " + user.getName() : "No user logged in");
 
-        loadView("/view/timetable/timetableListViewOnly.fxml", null);
+        loadView("/view/timetable/timetableForTeacher.fxml", null);
 
         autoSelectButton("Timetable");
     }
@@ -109,7 +109,7 @@ public class teacherLayoutController {
 
     @FXML
     private void showTimetable(ActionEvent event) {
-        loadView("/view/timetable/timetableListViewOnly.fxml", event);
+        loadView("/view/timetable/timetableForTeacher.fxml", event);
     }
 
     @FXML

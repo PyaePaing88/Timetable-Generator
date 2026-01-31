@@ -230,4 +230,56 @@ public class timetableRepo {
             return rowsAffected > 0;
         }
     }
+
+    public List<TimetableDetailDTO> findAssignmentsByTeacherId(Integer teacherId) throws SQLException {
+        List<TimetableDetailDTO> list = new ArrayList<>();
+        // We start from time_slots to ensure every period is represented
+        String sql = "SELECT " +
+                "ts.day_of_week, ts.period, ts.start_time, ts.end_time, " +
+                "ta.id, ta.user_id, ta.is_leave, " +
+                "u.name AS teacher_name, " +
+                "co.course_name, co.subject_code, " +
+                "th.class_id, c.class_name " +
+                "FROM time_slots ts " +
+                "LEFT JOIN timetable_assignments ta ON ts.id = ta.timeSlot_id AND ta.user_id = ? " +
+                "LEFT JOIN timetable th ON ta.timetable_id = th.id " +
+                "LEFT JOIN classes c ON th.class_id = c.id " +
+                "LEFT JOIN users u ON ta.user_id = u.id " +
+                "LEFT JOIN courses co ON ta.course_id = co.id " +
+                "ORDER BY FIELD(ts.day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'), ts.period";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setInt(1, teacherId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    TimetableDetailDTO dto = new TimetableDetailDTO();
+
+                    dto.setDay(rs.getString("day_of_week"));
+                    dto.setPeriod(rs.getInt("period"));
+                    dto.setTime(rs.getString("start_time") + " - " + rs.getString("end_time"));
+
+                    int assignmentId = rs.getInt("id");
+                    if (rs.wasNull()) {
+                        dto.setId(null);
+                        dto.setTeacher_id(null);
+                        dto.setCourseName(null);
+                    } else {
+                        dto.setId(assignmentId);
+                        dto.setTeacher_id(rs.getInt("user_id"));
+                        dto.setTeacherName(rs.getString("teacher_name"));
+                        dto.setCourseName(rs.getString("course_name"));
+                        dto.setSubjectCode(rs.getString("subject_code"));
+                        dto.setIs_leave(rs.getBoolean("is_leave"));
+                        dto.setClass_id(rs.getInt("class_id"));
+                        dto.setClass_name(rs.getString("class_name"));
+                    }
+                    list.add(dto);
+                }
+            }
+        }
+        return list;
+    }
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" styleClass="form-container" stylesheets="@../../style/styles.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.timetablegenerator.controller.timetable.timetableForTeacherController">
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label fx:id="lblHeaderInfo" text="My Weekly Schedule"
+                   styleClass="content-header" style="-fx-font-size: 22px;"/>
+        </VBox>
+    </HBox>
+
+    <Separator/>
+
+    <ScrollPane fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+        <content>
+            <GridPane fx:id="timetableGrid" styleClass="timetable-grid" alignment="TOP_CENTER">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100" prefWidth="110" hgrow="NEVER" halignment="CENTER"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="180" hgrow="SOMETIMES"/>
+                </columnConstraints>
+
+                <Label text="Day\Period" styleClass="grid-header-day-period" GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"/>
+                <Label text="Period 1" styleClass="grid-header-cell" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                       maxWidth="Infinity"/>
+                <Label text="Period 2" styleClass="grid-header-cell" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                       maxWidth="Infinity"/>
+                <Label text="Period 3" styleClass="grid-header-cell" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                       maxWidth="Infinity"/>
+                <Label text="Period 4" styleClass="grid-header-cell" GridPane.columnIndex="4" GridPane.rowIndex="0"
+                       maxWidth="Infinity"/>
+                <Label text="Period 5" styleClass="grid-header-cell" GridPane.columnIndex="5" GridPane.rowIndex="0"
+                       maxWidth="Infinity"/>
+                <Label text="Period 6" styleClass="grid-header-cell" GridPane.columnIndex="6" GridPane.rowIndex="0"
+                       maxWidth="Infinity"/>
+
+                <Label text="MON" styleClass="day-label" style="-fx-background-color:#FAA18F" GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"/>
+                <Label text="TUE" styleClass="day-label" style="-fx-background-color:#8FFABD" GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"/>
+                <Label text="WED" styleClass="day-label" style="-fx-background-color:#8FB8FA" GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"/>
+                <Label text="THU" styleClass="day-label" style="-fx-background-color:#FAE88F" GridPane.columnIndex="0"
+                       GridPane.rowIndex="4"/>
+                <Label text="FRI" styleClass="day-label" style="-fx-background-color:#FCBBFA" GridPane.columnIndex="0"
+                       GridPane.rowIndex="5"/>
+            </GridPane>
+        </content>
+    </ScrollPane>
+</VBox>

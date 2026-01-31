@@ -2,6 +2,7 @@ package com.timetablegenerator.service;
 
 import com.timetablegenerator.model.*;
 import com.timetablegenerator.repository.*;
+import com.timetablegenerator.util.authSession;
 
 import java.sql.SQLException;
 import java.time.Year;
@@ -262,5 +263,9 @@ public class timetableService {
 
     public boolean updateTimetableAssignment(TimetableDetailDTO data) throws SQLException {
         return repo.updateTimetableAssignment(data);
+    }
+
+    public List<TimetableDetailDTO> getTimetableListTeacher() throws SQLException {
+        return repo.findAssignmentsByTeacherId(authSession.getUser().getId());
     }
 }

@@ -36,6 +36,8 @@ public class mainApp extends Application {
         stage.setTitle("Timetable Generator");
         showLandingPage();
         stage.show();
+        stage.setMinWidth(stage.getWidth());
+        stage.setMinHeight(stage.getHeight());
     }
 
     private void setScene(String fxmlPath) {
