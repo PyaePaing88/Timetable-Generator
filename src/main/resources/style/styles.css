@@ -536,5 +536,8 @@
 }
 
 .badge-info {
+/*
     -fx-background-color: green;
+*/
+    -fx-background-color: #216dd9;
 }
