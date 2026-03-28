@@ -40,19 +40,21 @@ public class mainApp extends Application {
         stage.setMinHeight(stage.getHeight());
     }
 
+    /// test git changes
     private void setScene(String fxmlPath) {
         try {
             URL url = getClass().getResource(fxmlPath);
+            e.printStackTrace();
 
-            FXMLLoader loader = new FXMLLoader(url);
-            Scene scene = new Scene(loader.load());
             primaryStage.setScene(scene);
+            public void showLandingPage() {
+                setScene("/view/landingPage/landingPage.fxml");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     public void showLandingPage() {
         setScene("/view/landingPage/landingPage.fxml");
     }

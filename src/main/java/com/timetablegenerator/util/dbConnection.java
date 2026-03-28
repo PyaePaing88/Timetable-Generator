@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class dbConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/timetable_generator?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String URL = "JDBC:mysql://localhost:3306/timetable_generator?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "admin77";
 
     private static Connection connection = null;
 
